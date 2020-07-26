@@ -1,0 +1,931 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform">
+  <meta http-equiv="Cache-Control" content="no-siteapp">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  <!-- Color theme for statusbar -->
+  <meta name="theme-color" content="#000000">
+  <!-- 强制页面在当前窗口以独立页面显示,防止别人在框架里调用页面 -->
+  <meta http-equiv="window-target" content="_top">
+  
+  
+  <title>Latex cheatsheet | Hexo</title>
+  <meta name="description" content="1. 命令介绍 无参数命令：主要是以\command的形式输入，例如\hline 有n个参数命令：主要是以\command{parameter 1}{parameter 2}⋯⋯{parameter n}的形式输入，例如\begin{equation}。 有备选参数的命令：主要是以\command[arg] {parameter 1}{parameter 2}⋯⋯{parameter n}的形式输">
+<meta name="keywords" content="latex">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Latex cheatsheet">
+<meta property="og:url" content="http://blog.ifool.top/2020/03/25/Latex-cheatsheet/index.html">
+<meta property="og:site_name" content="ifool的博客">
+<meta property="og:description" content="1. 命令介绍 无参数命令：主要是以\command的形式输入，例如\hline 有n个参数命令：主要是以\command{parameter 1}{parameter 2}⋯⋯{parameter n}的形式输入，例如\begin{equation}。 有备选参数的命令：主要是以\command[arg] {parameter 1}{parameter 2}⋯⋯{parameter n}的形式输">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://blog.ifool.top/2020/03/25/Latex-cheatsheet/1684731-20191001201036695-731894541.png">
+<meta property="og:updated_time" content="2020-03-25T13:25:05.946Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Latex cheatsheet">
+<meta name="twitter:description" content="1. 命令介绍 无参数命令：主要是以\command的形式输入，例如\hline 有n个参数命令：主要是以\command{parameter 1}{parameter 2}⋯⋯{parameter n}的形式输入，例如\begin{equation}。 有备选参数的命令：主要是以\command[arg] {parameter 1}{parameter 2}⋯⋯{parameter n}的形式输">
+<meta name="twitter:image" content="http://blog.ifool.top/2020/03/25/Latex-cheatsheet/1684731-20191001201036695-731894541.png">
+  <!-- Canonical links -->
+  <link rel="canonical" href="http://blog.ifool.top/2020/03/25/Latex-cheatsheet/index.html">
+  
+    <link rel="alternate" href="/atom.xml" title="ifool的博客" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png" type="image/x-icon">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+    <link href="//cdn.jsdelivr.net/npm/katex@0.9.0/dist/katex.min.css" rel="stylesheet">
+  
+  
+  
+  
+</head>
+
+
+<body class="main-center theme-blue" itemscope itemtype="http://schema.org/WebPage">
+  <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+  <div class="slimContent">
+    <div class="navbar-header">
+      
+      
+      <div class="profile-block text-center">
+        <a id="avatar" href="https://github.com/XinliNiu" target="_blank">
+          <img class="img-circle img-rotate" src="/images/avatar.jpg" width="200" height="200">
+        </a>
+        <h2 id="name" class="hidden-xs hidden-sm">ifool</h2>
+        <h3 id="title" class="hidden-xs hidden-sm hidden-md">金融IT民工</h3>
+        <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i> Beijing, China</small>
+      </div>
+      
+      <div class="search" id="search-form-wrap">
+
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="Search">
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i class="icon icon-search"></i></button>
+            </span>
+        </div>
+    </form>
+    <div class="ins-search">
+  <div class="ins-search-mask"></div>
+  <div class="ins-search-container">
+    <div class="ins-input-wrapper">
+      <input type="text" class="ins-search-input" placeholder="Type something..." x-webkit-speech>
+      <button type="button" class="close ins-close ins-selectable" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="ins-section-wrapper">
+      <div class="ins-section-container"></div>
+    </div>
+  </div>
+</div>
+
+
+</div>
+      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+      <ul class="nav navbar-nav main-nav ">
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/.">
+            
+            <i class="icon icon-home-fill"></i>
+            
+            <span class="menu-title">Home</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives">
+            
+            <i class="icon icon-archives-fill"></i>
+            
+            <span class="menu-title">Archives</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories">
+            
+            <i class="icon icon-folder"></i>
+            
+            <span class="menu-title">Categories</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags">
+            
+            <i class="icon icon-tags"></i>
+            
+            <span class="menu-title">Tags</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-repository">
+          <a href="/repository">
+            
+            <i class="icon icon-project"></i>
+            
+            <span class="menu-title">Repository</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-books">
+          <a href="/books">
+            
+            <i class="icon icon-book-fill"></i>
+            
+            <span class="menu-title">Books</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-links">
+          <a href="/links">
+            
+            <i class="icon icon-friendship"></i>
+            
+            <span class="menu-title">Links</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about">
+            
+            <i class="icon icon-cup-fill"></i>
+            
+            <span class="menu-title">About</span>
+          </a>
+        </li>
+        
+      </ul>
+      
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/cofess" target="_blank" title="Github" data-toggle="tooltip" data-placement="top"><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="http://weibo.com/cofess" target="_blank" title="Weibo" data-toggle="tooltip" data-placement="top"><i class="icon icon-weibo"></i></a></li>
+        
+        <li><a href="https://twitter.com/iwebued" target="_blank" title="Twitter" data-toggle="tooltip" data-placement="top"><i class="icon icon-twitter"></i></a></li>
+        
+        <li><a href="https://www.behance.net/cofess" target="_blank" title="Behance" data-toggle="tooltip" data-placement="top"><i class="icon icon-behance"></i></a></li>
+        
+        <li><a href="/atom.xml" target="_blank" title="Rss" data-toggle="tooltip" data-placement="top"><i class="icon icon-rss"></i></a></li>
+        
+    </ul>
+
+    </nav>
+  </div>
+</header>
+
+  
+    <aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title">Board</h3>
+    <div class="widget-body">
+        <div id="board">
+            <div class="content">
+                <p>欢迎交流与分享经验!</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget-body">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Java和JVM/">Java和JVM</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Python/">Python</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Web与移动端安全/">Web与移动端安全</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/工具与效率/">工具与效率</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/数学与机器学习/">数学与机器学习</a><span class="category-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget-body">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Dubbo-拥堵-NIO-Netty-TCP缓冲区/">Dubbo,拥堵,NIO,Netty,TCP缓冲区</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hexo-mathjax/">Hexo,mathjax</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JVM-Btrace-Arthas-在线调试-生产案例/">JVM,Btrace, Arthas, 在线调试, 生产案例</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-IO-IO模型-NIO-Netty-Redis-IO多路复用-阻塞IO-非阻塞IO-异步IO-同步IO/">Java IO,IO模型,NIO,Netty,Redis,IO多路复用,阻塞IO,非阻塞IO,异步IO,同步IO</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-排序-Arrays-sort-TimSort-LegacyMergeSort/">Java, 排序, Arrays.sort, TimSort, LegacyMergeSort</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux-工具软件使用/">Linux,工具软件使用</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Python-Iterable-Iterator-Generator-迭代器-可迭代对象-生成器/">Python,Iterable,Iterator,Generator,迭代器,可迭代对象,生成器</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Python-推导式-python-list-comprehension-生成器-列表推导/">Python,推导式,python list comprehension, 生成器, 列表推导</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Typora-Hexo-Markdown-图片/">Typora, Hexo, Markdown, 图片</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android-adb/">android, adb</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android-root/">android,root</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/latex/">latex</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/代理-Fiddler-安全-抓包/">代理,Fiddler,安全,抓包</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/压缩图片/">压缩图片</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/概率-人工智能-机器学习-分类-朴素贝叶斯-贝叶斯公式-MINIST，手写数字/">概率,人工智能,机器学习,分类,朴素贝叶斯,贝叶斯公式,MINIST，手写数字</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/设计模式-单例-Singleton-DCL/">设计模式, 单例, Singleton, DCL</a><span class="tag-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget-body tagcloud">
+      <a href="/tags/Dubbo-拥堵-NIO-Netty-TCP缓冲区/" style="font-size: 13px;">Dubbo,拥堵,NIO,Netty,TCP缓冲区</a> <a href="/tags/Hexo-mathjax/" style="font-size: 13px;">Hexo,mathjax</a> <a href="/tags/JVM-Btrace-Arthas-在线调试-生产案例/" style="font-size: 13px;">JVM,Btrace, Arthas, 在线调试, 生产案例</a> <a href="/tags/Java-IO-IO模型-NIO-Netty-Redis-IO多路复用-阻塞IO-非阻塞IO-异步IO-同步IO/" style="font-size: 13px;">Java IO,IO模型,NIO,Netty,Redis,IO多路复用,阻塞IO,非阻塞IO,异步IO,同步IO</a> <a href="/tags/Java-排序-Arrays-sort-TimSort-LegacyMergeSort/" style="font-size: 13px;">Java, 排序, Arrays.sort, TimSort, LegacyMergeSort</a> <a href="/tags/Linux-工具软件使用/" style="font-size: 13px;">Linux,工具软件使用</a> <a href="/tags/Python-Iterable-Iterator-Generator-迭代器-可迭代对象-生成器/" style="font-size: 13px;">Python,Iterable,Iterator,Generator,迭代器,可迭代对象,生成器</a> <a href="/tags/Python-推导式-python-list-comprehension-生成器-列表推导/" style="font-size: 13px;">Python,推导式,python list comprehension, 生成器, 列表推导</a> <a href="/tags/Typora-Hexo-Markdown-图片/" style="font-size: 13px;">Typora, Hexo, Markdown, 图片</a> <a href="/tags/android-adb/" style="font-size: 13px;">android, adb</a> <a href="/tags/android-root/" style="font-size: 13px;">android,root</a> <a href="/tags/latex/" style="font-size: 13px;">latex</a> <a href="/tags/代理-Fiddler-安全-抓包/" style="font-size: 13px;">代理,Fiddler,安全,抓包</a> <a href="/tags/压缩图片/" style="font-size: 13px;">压缩图片</a> <a href="/tags/概率-人工智能-机器学习-分类-朴素贝叶斯-贝叶斯公式-MINIST，手写数字/" style="font-size: 13px;">概率,人工智能,机器学习,分类,朴素贝叶斯,贝叶斯公式,MINIST，手写数字</a> <a href="/tags/设计模式-单例-Singleton-DCL/" style="font-size: 13px;">设计模式, 单例, Singleton, DCL</a>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Archive</h3>
+    <div class="widget-body">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/07/">July 2020</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/05/">May 2020</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/04/">April 2020</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/03/">March 2020</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">October 2019</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/07/">July 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">March 2019</a><span class="archive-list-count">4</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget-body">
+      <ul class="recent-post-list list-unstyled no-thumbnail">
+        
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/Java和JVM/">Java和JVM</a>
+              </p>
+              <p class="item-title">
+                <a href="/2020/07/11/Dubbo/" class="title">一次Dubbo拥堵分析</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2020-07-11T07:43:27.000Z" itemprop="datePublished">2020-07-11</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2020/07/08/Java排序的一个问题/" class="title">Java排序的一个问题</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2020-07-08T14:27:36.000Z" itemprop="datePublished">2020-07-08</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/数学与机器学习/">数学与机器学习</a>
+              </p>
+              <p class="item-title">
+                <a href="/2020/05/07/贝叶斯公式与朴素贝叶斯分类/" class="title">基础机器学习算法：贝叶斯公式与朴素贝叶斯分类</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2020-05-07T09:09:37.000Z" itemprop="datePublished">2020-05-07</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/工具与效率/">工具与效率</a>
+              </p>
+              <p class="item-title">
+                <a href="/2020/04/20/压缩图片方法大全/" class="title">压缩图片方法大全</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2020-04-20T03:48:59.000Z" itemprop="datePublished">2020-04-20</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/Web与移动端安全/">Web与移动端安全</a>
+              </p>
+              <p class="item-title">
+                <a href="/2020/04/19/Fiddler安装与使用/" class="title">Fiddler安装与使用</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2020-04-19T10:15:09.000Z" itemprop="datePublished">2020-04-19</time>
+              </p>
+            </div>
+          </li>
+          
+      </ul>
+    </div>
+  </div>
+  
+
+    
+  </div>
+</aside>
+
+  
+  
+<main class="main" role="main">
+  <div class="content">
+  <article id="post-Latex-cheatsheet" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Latex cheatsheet
+    </h1>
+  
+
+      
+      <div class="article-meta">
+        <span class="article-date">
+    <i class="icon icon-calendar-check"></i>
+	<a href="/2020/03/25/Latex-cheatsheet/" class="article-date">
+	  <time datetime="2020-03-25T12:22:35.000Z" itemprop="datePublished">2020-03-25</time>
+	</a>
+</span>
+        
+  <span class="article-category">
+    <i class="icon icon-folder"></i>
+    <a class="article-category-link" href="/categories/工具与效率/">工具与效率</a>
+  </span>
+
+        
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>
+	<a class="article-tag-link" href="/tags/latex/">latex</a>
+  </span>
+
+
+        
+
+	<span class="article-read hidden-xs">
+    	<i class="icon icon-eye-fill" aria-hidden="true"></i>
+    	<span id="/2020/03/25/Latex-cheatsheet/" class="leancloud_visitors" data-flag-title="Latex cheatsheet">
+			<span class="leancloud-visitors-count">0</span>
+		</span>
+    </span>
+
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2020/03/25/Latex-cheatsheet/#comments" class="article-comment-link">Comments</a></span>
+        
+	
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">Word Count: 3k(words)</span>
+	
+	
+		<span class="post-readcount hidden-xs" itemprop="timeRequired">Read Count: 14(minutes)</span>
+	
+
+      </div>
+    </div>
+    <div class="article-entry marked-body" itemprop="articleBody">
+      
+        <h2 id="1-命令介绍"><a href="#1-命令介绍" class="headerlink" title="1. 命令介绍"></a>1. 命令介绍</h2><ul>
+<li><strong>无参数命令：</strong>主要是以\command的形式输入，例如<code>\hline</code></li>
+<li><strong>有n个参数命令：</strong>主要是以\command{parameter 1}{parameter 2}⋯⋯{parameter n}的形式输入，例如<code>\begin{equation}</code>。</li>
+<li><strong>有备选参数的命令：</strong>主要是以\command[arg] {parameter 1}{parameter 2}⋯⋯{parameter n}的形式输入，例如<code>\sqrt[n]{x^2 + y^2}</code></li>
+</ul>
+<h2 id="2-公式输入"><a href="#2-公式输入" class="headerlink" title="2. 公式输入"></a>2. 公式输入</h2><p>  在latex中，有多种公式输入的方式，比如说行内公式与行间公式，又或者直接使用<code>\begin{}</code>和<code>\end{}</code>的命令</p>
+<h3 id="2-1-无编号公式"><a href="#2-1-无编号公式" class="headerlink" title="2.1 无编号公式"></a>2.1 无编号公式</h3><p>  我通常使用的都是无编号公式，毕竟不是在写论文，基本都不需要对公式进行编号<img src="/2020/03/25/Latex-cheatsheet/1684731-20191001201036695-731894541.png" alt="流汗">，而无编号公式主要分为两种输入方式。</p>
+<h4 id="2-1-1-行内公式"><a href="#2-1-1-行内公式" class="headerlink" title="2.1.1 行内公式"></a>2.1.1 行内公式</h4><p>  直接使用一组<code>$</code>包着想要输入的内容，来具体看一个例子：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">随机变量$X$的分布函数为$F(x)$，求出它的对应的密度函数$f(x)$</span><br></pre></td></tr></table></figure>
+<p><strong>显示效果：</strong><br>随机变量$X$的分布函数为$F(x)$，求出它的对应的密度函数$f(x)$。</p>
+<h4 id="2-1-2-行间公式"><a href="#2-1-2-行间公式" class="headerlink" title="2.1.2 行间公式"></a>2.1.2 行间公式</h4><p>  与行内公式稍有不同，行间公式是使用一组<code>$$</code>包着想要输入的内容，来具体看一个例子：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">我们熟知的勾股定理是：$$a^2 + b^2 = c^2$$</span><br></pre></td></tr></table></figure>
+<p><strong>显示效果：</strong><br>我们熟知的勾股定理是：</p>
+<script type="math/tex; mode=display">
+a^2 + b^2 = c^2</script><hr>
+<h3 id="2-2-有编号公式（这个一般在写论文时用，网站上不一定显示编号"><a href="#2-2-有编号公式（这个一般在写论文时用，网站上不一定显示编号" class="headerlink" title="2.2 有编号公式（这个一般在写论文时用，网站上不一定显示编号)"></a>2.2 有编号公式（这个一般在写论文时用，网站上不一定显示编号)</h3><p>  有时我们在写论文的时候，要对公式进行编号标注，这时可以使用以下几种方式：</p>
+<h4 id="2-2-1-手动编号"><a href="#2-2-1-手动编号" class="headerlink" title="2.2.1 手动编号"></a>2.2.1 手动编号</h4><p>  比较简便的方法就是在公式里直接加上<code>\tag{}</code>，其中<code>{}</code>里放编号。这种方式的好处是，我们能够对编号进行多样的设置</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$$a^2 + b^2 = c^2 \tag&#123;1.1&#125;$$</span><br><span class="line">$$a^2 + b^2 = c^2 \tag&#123;no.1&#125;$$</span><br></pre></td></tr></table></figure>
+<p><strong>显示效果：</strong></p>
+<script type="math/tex; mode=display">
+a^2 + b^2 = c^2 \tag{1.1}</script><script type="math/tex; mode=display">
+a^2 + b^2 = c^2 \tag{no.1}</script><h4 id="2-2-2自动编号"><a href="#2-2-2自动编号" class="headerlink" title="2.2.2自动编号"></a>2.2.2自动编号</h4><p>  我们可以使用<code>\begin{equation}</code>和<code>\end{equation}</code>进行公式输入，其中要注意的是begin和end是一组命令，要同时使用，并且编号不能够修改。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">\begin&#123;equation&#125;</span><br><span class="line">    a^2 + b^2 = c^2</span><br><span class="line">\end&#123;equation&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>显示效果：</strong></p>
+<script type="math/tex; mode=display">
+\begin{equation}
+    a^2 + b^2 = c^2
+\end{equation}</script><p>此外，在有的支持latex的编辑器中，也可以使用<code>\label{}</code>来添加公式标签，使用<code>\ref{}</code>来引用编号</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">\begin&#123;equation&#125;\label&#123;eq2&#125;</span><br><span class="line">    a^2 + b^2 = c^2</span><br><span class="line">\end&#123;equation&#125; \\</span><br><span class="line">这是第(\ref&#123;eq2&#125;)个公式</span><br></pre></td></tr></table></figure>
+<p><strong>显示效果：</strong></p>
+<script type="math/tex; mode=display">
+\begin{equation}\label{eq2}
+    a^2 + b^2 = c^2
+\end{equation} \\
+这是第(\ref{eq2})个公式</script><h4 id="2-2-3-等式对齐"><a href="#2-2-3-等式对齐" class="headerlink" title="2.2.3 等式对齐"></a>2.2.3 等式对齐</h4><p>  当我们需要输入多个有编号的公式，并且要让它们自动对齐时，可以使用参数<code>align</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&lt;!--不加align参数--&gt;</span><br><span class="line">\begin&#123;equation&#125;</span><br><span class="line">    x +  y = 1\\\\</span><br><span class="line">    2x + y \neq 1\\\\</span><br><span class="line">    3x +4y \leq 2\\\\</span><br><span class="line">    4x \geq y</span><br><span class="line">\end&#123;equation&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>显示效果：</strong></p>
+<script type="math/tex; mode=display">
+<!--不加align参数-->
+\begin{equation}
+    x +  y = 1\\\\
+    2x + y \neq 1\\\\
+    3x +4y \leq 2\\\\
+    4x \geq y
+\end{equation}</script><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&lt;!--使用align参数--&gt;</span><br><span class="line">\begin&#123;align&#125;</span><br><span class="line">    x +  y = 1\\</span><br><span class="line">    2x + y \neq 1\\</span><br><span class="line">    3x +4y \leq 2\\</span><br><span class="line">    4x \geq y</span><br><span class="line">\end&#123;align&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>显示效果：</strong></p>
+<script type="math/tex; mode=display">
+\begin{align}
+    x +  y = 1\\
+    2x + y \neq 1\\
+    3x +4y \leq 2\\
+    4x \geq y
+\end{align}</script><h4 id="2-2-4-分开输入"><a href="#2-2-4-分开输入" class="headerlink" title="2.2.4 分开输入"></a>2.2.4 分开输入</h4><p>  当公式很长，无法在一行中显示；又或者在分步计算时，需要将公式拆分，这时可以使用<code>split</code>参数</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">\begin&#123;equation&#125;</span><br><span class="line">    \begin&#123;split&#125;</span><br><span class="line">        (x + y)(x + 4y) &amp; = x^2 + 4xy + xy + 4y^2 \\</span><br><span class="line">                &amp; = x^2 +5xy + 4y^2</span><br><span class="line">    \end&#123;split&#125;</span><br><span class="line">\end&#123;equation&#125;</span><br></pre></td></tr></table></figure>
+<script type="math/tex; mode=display">
+\begin{equation}
+    \begin{split}
+        (x + y)(x + 4y) & = x^2 + 4xy + xy + 4y^2 \\\\
+                & = x^2 +5xy + 4y^2
+    \end{split}
+\end{equation}</script><h4 id="2-2-5-分类输入"><a href="#2-2-5-分类输入" class="headerlink" title="2.2.5 分类输入"></a>2.2.5 分类输入</h4><p>当一个公式是分段函数时，就需要使用<code>cases</code>参数</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">\begin&#123;equation&#125;</span><br><span class="line">    a_&#123;i1&#125;A_&#123;j1&#125; + a_&#123;i2&#125;A_&#123;j2&#125; + \cdots + a_&#123;in&#125;A_&#123;jn&#125; = </span><br><span class="line">    \begin&#123;cases&#125;</span><br><span class="line">        \begin&#123;vmatrix&#125;A\end&#123;vmatrix&#125;，&amp; i =j\\</span><br><span class="line">        0, &amp; i \neq j</span><br><span class="line">    \end&#123;cases&#125;</span><br><span class="line">\end&#123;equation&#125;</span><br></pre></td></tr></table></figure>
+<script type="math/tex; mode=display">
+\begin{equation}
+    a_{i1}A_{j1} + a_{i2}A_{j2} + \cdots + a_{in}A_{jn} = 
+    \begin{cases}
+        \begin{vmatrix}A\end{vmatrix}，& i =j\\
+        0, & i \neq j
+    \end{cases}
+\end{equation}</script><h2 id="3-常用语法"><a href="#3-常用语法" class="headerlink" title="3. 常用语法"></a>3. 常用语法</h2><h3 id="3-1-希腊字母"><a href="#3-1-希腊字母" class="headerlink" title="3.1 希腊字母"></a>3.1 希腊字母</h3><p>有时我们的公式里会包含一些希腊字母，而在latex中，其实只要会读希腊字母基本就会写出来。下面总结一些常用的希腊字母：</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:center">希腊字母</th>
+<th style="text-align:center">对应的代码</th>
+<th style="text-align:center">希腊字母</th>
+<th style="text-align:center">对应的代码</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">α</td>
+<td style="text-align:center"><code>$\alpha$</code></td>
+<td style="text-align:center">μ</td>
+<td style="text-align:center"><code>$\mu$</code></td>
+</tr>
+<tr>
+<td style="text-align:center">β</td>
+<td style="text-align:center"><code>$\beta$</code></td>
+<td style="text-align:center">σ</td>
+<td style="text-align:center"><code>$\sigma$</code></td>
+</tr>
+<tr>
+<td style="text-align:center">γ</td>
+<td style="text-align:center"><code>$\gamma$</code></td>
+<td style="text-align:center">ε</td>
+<td style="text-align:center"><code>$\varepsilon$</code></td>
+</tr>
+<tr>
+<td style="text-align:center">θ</td>
+<td style="text-align:center"><code>$theta$</code></td>
+<td style="text-align:center">χ</td>
+<td style="text-align:center"><code>$\chi$</code></td>
+</tr>
+<tr>
+<td style="text-align:center">ζ</td>
+<td style="text-align:center"><code>$\zeta$</code></td>
+<td style="text-align:center">τ</td>
+<td style="text-align:center"><code>$\tau$</code></td>
+</tr>
+<tr>
+<td style="text-align:center">η</td>
+<td style="text-align:center"><code>$\eta$</code></td>
+<td style="text-align:center">ρ</td>
+<td style="text-align:center"><code>$\rho$</code></td>
+</tr>
+<tr>
+<td style="text-align:center">ξ</td>
+<td style="text-align:center"><code>$\xi$</code></td>
+<td style="text-align:center">ψ</td>
+<td style="text-align:center"><code>$\psi$</code></td>
+</tr>
+<tr>
+<td style="text-align:center">π</td>
+<td style="text-align:center"><code>$\pi$</code></td>
+<td style="text-align:center">ϕ</td>
+<td style="text-align:center"><code>$\phi$</code></td>
+</tr>
+</tbody>
+</table>
+</div>
+<h3 id="3-2-上下标"><a href="#3-2-上下标" class="headerlink" title="3.2 上下标"></a>3.2 上下标</h3><p>  数学公式中的字母经常是带上标（幂/转置/导数等）和下标（矩阵元素位置/参数个数等）的，而用latex解决这个问题十分简单。可以使用<code>^</code>表示上标，使用<code>_</code>表示下标。当然要值得注意的是，当上下标的有多个（2个及以上）字符时，要用<code>{}</code>括起来。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;!--来直接看几个例子--&gt;</span><br><span class="line">$$</span><br><span class="line">Y = \beta_0 + \beta_1X_1 + \beta_2X_2^2 \\</span><br><span class="line">a_&#123;11&#125; + a_&#123;12&#125;^2 + a_&#123;13&#125;^3 = 0</span><br><span class="line">$$</span><br></pre></td></tr></table></figure>
+<p>效果</p>
+<script type="math/tex; mode=display">
+Y = \beta_0 + \beta_1X_1 + \beta_2X_2^2 \\
+a_{11} + a_{12}^2 + a_{13}^3 = 0</script><ul>
+<li><p>tip1：有时我们想使用的标记在字母的正上方，例如$\bar X$。这种无法直接用上下标来表示，需要使用其他的方法。</p>
+</li>
+<li><p>tip2：</p>
+<p>在这里列举一些常用的用法：</p>
+<ul>
+<li>$\bar X$(X拔)的表示方法是：<code>$\bar X$</code>，这个通常是用来表示变量的均值</li>
+<li>$\hat Y$(Y帽)的表示方法是：<code>$\hat Y$</code>，这个通常是用来表示变量的预测值</li>
+<li>$\underline X$的表示方式是：<code>$\underline X$</code>，可以用来表示下限</li>
+<li>还有其他像$\widetilde X$的表示方式是：<code>$\widetilde X$</code></li>
+</ul>
+</li>
+</ul>
+<h3 id="3-3-分式"><a href="#3-3-分式" class="headerlink" title="3.3 分式"></a>3.3 分式</h3><p>直接使用<code>\frac{}{}</code>来表示分式，其中第一个<code>{}</code>表示分子，第二个<code>{}</code>表示分母</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$$f(x, y) = \frac&#123;x + y&#125;&#123;x - y&#125;$$</span><br></pre></td></tr></table></figure>
+<p>效果</p>
+<script type="math/tex; mode=display">
+f(x, y) = \frac{x + y}{x - y}</script><h3 id="3-4-根式"><a href="#3-4-根式" class="headerlink" title="3.4 根式"></a>3.4 根式</h3><p>直接使用<code>sqrt[]{}</code>来表示分式，其中<code>[]</code>用来放开方的次数，<code>{}</code>用来放要被开方的公式</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$$f(x, y) = \sqrt[n]&#123;\frac&#123;x^2 + y^2&#125;&#123;x^2 - y^2&#125;&#125;$$</span><br></pre></td></tr></table></figure>
+<p>效果</p>
+<script type="math/tex; mode=display">
+f(x, y) = \sqrt[n]{\frac{x^2 + y^2}{x^2 - y^2}}</script><h3 id="3-5-求和与连乘"><a href="#3-5-求和与连乘" class="headerlink" title="3.5 求和与连乘"></a>3.5 求和与连乘</h3><p> 对于连加的情况，我们通常使用∑来表示。它的使用用法也很简单，但是通常都要添加上下标，像<code>$\sum_{}^{}$</code>形式。除了连加，我们有时也使用连乘，虽然没有连加使用得多（连乘都能通过对数写成连加），它只要以<code>$\prod_{}^{}$</code>的形式表示。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;!--连加--&gt;</span><br><span class="line">$$\sum_&#123;i = 1&#125;^&#123;n&#125;x_i$$</span><br><span class="line"></span><br><span class="line">&lt;!--连乘--&gt;</span><br><span class="line">$$\prod_&#123;i = 1&#125;^&#123;n&#125;x_i$$</span><br></pre></td></tr></table></figure>
+<p>效果</p>
+<script type="math/tex; mode=display">
+\sum_{i = 1}^{n}x_i \\
+\prod_{i = 1}^{n}x_i</script><p><strong>tip1：</strong>在latex中，默认情况下上标和下表不是在上下方，需要加上<code>\displaystyle</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&lt;!--连加--&gt;</span><br><span class="line">$\sum_&#123;i = 1&#125;^&#123;n&#125;x_i$</span><br><span class="line">$\displaystyle\sum_&#123;i = 1&#125;^&#123;n&#125;x_i$</span><br><span class="line"></span><br><span class="line">&lt;!--连乘--&gt;</span><br><span class="line">$\prod_&#123;i = 1&#125;^&#123;n&#125;x_i$</span><br><span class="line">$\displaystyle\prod_&#123;i = 1&#125;^&#123;n&#125;x_i$</span><br></pre></td></tr></table></figure>
+<p>效果</p>
+<script type="math/tex; mode=display">
+\sum_{i = 1}^{n}x_i \\
+\displaystyle\sum_{i = 1}^{n}x_i \\
+\prod_{i = 1}^{n}x_i \\
+\displaystyle\prod_{i = 1}^{n}x_i</script><h3 id="3-6-极限"><a href="#3-6-极限" class="headerlink" title="3.6 极限"></a>3.6 极限</h3><p>极限用<code>\lim</code>表示</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;!--来看看两个重要极限--&gt;</span><br><span class="line">$$\displaystyle\lim_&#123;x \rightarrow 0&#125;\frac&#123;\sin x&#125;&#123;x&#125; = 1$$</span><br><span class="line"></span><br><span class="line">$$\displaystyle\lim_&#123;x \rightarrow + \infty&#125;(1 + \frac&#123;1&#125;&#123;x&#125;)^x = e$$</span><br></pre></td></tr></table></figure>
+<p>效果</p>
+<script type="math/tex; mode=display">
+\displaystyle\lim_{x \rightarrow 0}\frac{\sin x}{x} = 1 \\
+\displaystyle\lim_{x \rightarrow + \infty}(1 + \frac{1}{x})^x = e</script><h3 id="3-7-积分"><a href="#3-7-积分" class="headerlink" title="3.7 积分"></a>3.7 积分</h3><p>如果想要输入积分，则需要使用<code>\int_{}^{}</code>来表示</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$$\int_0^1 x^2 dx$$</span><br><span class="line">&lt;!--来看一个更加复杂的例子--&gt;</span><br><span class="line">&lt;!--正态分布的分布函数--&gt;</span><br><span class="line">$$F(x) = \int_&#123;- \infty&#125;^&#123;+ \infty&#125; \frac&#123;1&#125;&#123;\sqrt&#123;2\pi&#125;\sigma&#125;e^&#123;-(\frac&#123;x-\mu&#125;&#123;\sigma&#125;)^2&#125; dx$$</span><br></pre></td></tr></table></figure>
+<p>效果</p>
+<script type="math/tex; mode=display">
+\int_0^1 x^2 dx \\
+F(x) = \int_{- \infty}^{+ \infty} \frac{1}{\sqrt{2\pi}\sigma}e^{-(\frac{x-\mu}{\sigma})^2} dx</script><h3 id="3-8-导数"><a href="#3-8-导数" class="headerlink" title="3.8 导数"></a>3.8 导数</h3><p>使用<code>$\mathrm{d}$</code>来表示求导符号，<code>$\partial$</code>来表示求偏导</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">$\frac &#123;\mathrm&#123;d&#125;L(\beta)&#125;&#123;\beta&#125;$</span><br><span class="line"></span><br><span class="line">&lt;!--直接用d来表示求导符的效果--&gt;</span><br><span class="line">$\frac &#123;dL(\beta)&#125;&#123;\beta&#125;$</span><br><span class="line"></span><br><span class="line">&lt;!--偏导--&gt;</span><br><span class="line">$\frac &#123;\partial L(\beta_0, \beta_1)&#125;&#123;\partial \beta_0&#125;$</span><br></pre></td></tr></table></figure>
+<p>效果</p>
+<script type="math/tex; mode=display">
+\frac {\mathrm{d}L(\beta)}{\beta} \\
+\frac {dL(\beta)}{\beta} \\
+\frac {\partial L(\beta_0, \beta_1)}{\partial \beta_0}</script><h3 id="3-9-波浪线、垂直和平行符号"><a href="#3-9-波浪线、垂直和平行符号" class="headerlink" title="3.9 波浪线、垂直和平行符号"></a>3.9 波浪线、垂直和平行符号</h3><p>可以使用<code>$\sim$</code>来表示波浪线</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$$\varepsilon \sim N(0, \sigma^2I_n)$$</span><br></pre></td></tr></table></figure>
+<p>效果</p>
+<script type="math/tex; mode=display">
+\varepsilon \sim N(0, \sigma^2I_n)</script><ul>
+<li>垂直：使用<code>\perp</code>，效果为⊥</li>
+<li>平行：可以直接用<code>//</code>或<code>$//$</code>，也可以使用<code>$\parallel$</code>，不过这个是显示竖直的形式<code>||</code></li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$$</span><br><span class="line">\perp \\</span><br><span class="line">\parallel</span><br><span class="line">$$</span><br></pre></td></tr></table></figure>
+<p>效果</p>
+<script type="math/tex; mode=display">
+\perp \\
+\parallel</script><h3 id="3-10-把符号放正下方"><a href="#3-10-把符号放正下方" class="headerlink" title="3.10 把符号放正下方"></a>3.10 把符号放正下方</h3><p>有时我们需要把文本放在正下方，这是我们就可以使用<code>$\underset$</code>，有时也可以使用<code>$\limits$</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$$\hat \beta = \underset&#123;\beta&#125;&#123;\arg \min&#125; L(\beta)$$</span><br><span class="line">$$\hat \beta = \arg \min \limits_&#123;\beta&#125; L(\beta)$$</span><br></pre></td></tr></table></figure>
+<p>效果</p>
+<script type="math/tex; mode=display">
+\hat \beta = \underset{\beta}{\arg \min} L(\beta) \\
+\hat \beta = \arg \min \limits_{\beta} L(\beta)</script><h3 id="3-11-集合"><a href="#3-11-集合" class="headerlink" title="3.11 集合"></a>3.11 集合</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">&lt;!--真包含--&gt;</span><br><span class="line">$$\subset$$</span><br><span class="line"></span><br><span class="line">&lt;!--包含--&gt;</span><br><span class="line">$$\subseteq$$</span><br><span class="line"></span><br><span class="line">&lt;!--属于和不属于--&gt;</span><br><span class="line">$$\in$$</span><br><span class="line">$$\notin$$</span><br><span class="line"></span><br><span class="line">&lt;!--交集和并集--&gt;</span><br><span class="line">$$\cap$$</span><br><span class="line">$$\cup$$</span><br><span class="line"></span><br><span class="line">&lt;!--其他--&gt;</span><br><span class="line">$$\mid$$</span><br><span class="line">$$\supset$$</span><br></pre></td></tr></table></figure>
+<p>效果</p>
+<script type="math/tex; mode=display">
+\subset \\
+\subseteq \\
+\in \\
+\notin \\
+\cap \\
+\cup \\
+\mid \\
+\subset</script><h3 id="3-12-成正比"><a href="#3-12-成正比" class="headerlink" title="3.12 成正比"></a>3.12 成正比</h3><p>使用<code>$\propto$</code>来表示</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$$ a \propto b $$</span><br></pre></td></tr></table></figure>
+<p>效果</p>
+<script type="math/tex; mode=display">
+a \propto b</script><h3 id="3-13-矩阵"><a href="#3-13-矩阵" class="headerlink" title="3.13 矩阵"></a>3.13 矩阵</h3><h4 id="3-13-1-复杂写法"><a href="#3-13-1-复杂写法" class="headerlink" title="3.13.1 复杂写法"></a>3.13.1 复杂写法</h4><p>在latex中，我们可以使用<code>array</code>参数来输入一个矩阵</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">\begin&#123;array&#125;&#123;ccc&#125;</span><br><span class="line">    1 &amp; 0 &amp; 0\\</span><br><span class="line">    0 &amp; 1 &amp; 0\\</span><br><span class="line">    0 &amp; 0 &amp; 1\\</span><br><span class="line">\end&#123;array&#125;</span><br></pre></td></tr></table></figure>
+<script type="math/tex; mode=display">
+\begin{array}{ccc}
+    1 & 0 & 0\\
+    0 & 1 & 0\\
+    0 & 0 & 1\\
+\end{array}</script><p><strong>tip：</strong>{ccc}是指元素的对齐方法（居中），此外还有<code>l</code>和<code>r</code>的参数可选，分别表示左和右</p>
+<p>但是没有括号，我们可以用<code>\left</code>和<code>\right</code>加上括号，可以用[],(),{},||</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">$$</span><br><span class="line">\left[</span><br><span class="line">    \begin&#123;array&#125;&#123;ccc&#125;</span><br><span class="line">        1 &amp; 0 &amp; 0\\</span><br><span class="line">        0 &amp; 1 &amp; 0\\</span><br><span class="line">        0 &amp; 0 &amp; 1\\</span><br><span class="line">    \end&#123;array&#125;</span><br><span class="line">\right] </span><br><span class="line">\left\&#123;</span><br><span class="line">    \begin&#123;array&#125;&#123;ccc&#125;</span><br><span class="line">        1 &amp; 0 &amp; 0\\</span><br><span class="line">        0 &amp; 1 &amp; 0\\</span><br><span class="line">        0 &amp; 0 &amp; 1\\</span><br><span class="line">    \end&#123;array&#125;</span><br><span class="line">\right\&#125;</span><br><span class="line">\left|</span><br><span class="line">    \begin&#123;array&#125;&#123;ccc&#125;</span><br><span class="line">        1 &amp; 0 &amp; 0\\</span><br><span class="line">        0 &amp; 1 &amp; 0\\</span><br><span class="line">        0 &amp; 0 &amp; 1\\</span><br><span class="line">    \end&#123;array&#125;</span><br><span class="line">\right|</span><br><span class="line">$$</span><br></pre></td></tr></table></figure>
+<script type="math/tex; mode=display">
+\left[
+    \begin{array}{ccc}
+        1 & 0 & 0\\
+        0 & 1 & 0\\
+        0 & 0 & 1\\
+    \end{array}
+\right] 
+\left\{
+    \begin{array}{ccc}
+        1 & 0 & 0\\
+        0 & 1 & 0\\
+        0 & 0 & 1\\
+    \end{array}
+\right\}
+\left|
+    \begin{array}{ccc}
+        1 & 0 & 0\\
+        0 & 1 & 0\\
+        0 & 0 & 1\\
+    \end{array}
+\right|</script><h4 id="3-13-2-简单写法"><a href="#3-13-2-简单写法" class="headerlink" title="3.13.2 简单写法"></a>3.13.2 简单写法</h4><p> 如果每次输入矩阵的时候都加上个<code>\left(</code>和<code>\right)</code>，确实会很烦。但其实latex中，有一些专门的参数可以生成矩阵，像<code>pmatrix</code>(带<code>()</code>的矩阵)、<code>bmatrix</code>(带<code>[]</code>的矩阵)、<code>vmatrix</code>(行列式)</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">&lt;!--带`()`的矩阵--&gt;</span><br><span class="line">\begin&#123;pmatrix&#125;</span><br><span class="line">    1 &amp; 0 &amp; 0\\\\</span><br><span class="line">    0 &amp; 1 &amp; 0\\\\</span><br><span class="line">    0 &amp; 0 &amp; 1\\\\</span><br><span class="line">\end&#123;pmatrix&#125;</span><br><span class="line"></span><br><span class="line">&lt;!--带`[]`的矩阵--&gt;</span><br><span class="line">\begin&#123;bmatrix&#125;</span><br><span class="line">    1 &amp; 0 &amp; 0\\\\</span><br><span class="line">    0 &amp; 1 &amp; 0\\\\</span><br><span class="line">    0 &amp; 0 &amp; 1\\\\</span><br><span class="line">\end&#123;bmatrix&#125;</span><br><span class="line"></span><br><span class="line">&lt;!--行列式--&gt;</span><br><span class="line">\begin&#123;vmatrix&#125;</span><br><span class="line">    1 &amp; 0 &amp; 0\\\\</span><br><span class="line">    0 &amp; 1 &amp; 0\\\\</span><br><span class="line">    0 &amp; 0 &amp; 1\\\\</span><br><span class="line">\end&#123;vmatrix&#125;</span><br></pre></td></tr></table></figure>
+<script type="math/tex; mode=display">
+\begin{pmatrix}
+    1 & 0 & 0\\
+    0 & 1 & 0\\
+    0 & 0 & 1\\
+\end{pmatrix}
+\begin{bmatrix}
+    1 & 0 & 0\\
+    0 & 1 & 0\\
+    0 & 0 & 1\\
+\end{bmatrix}
+\begin{vmatrix}
+    1 & 0 & 0\\
+    0 & 1 & 0\\
+    0 & 0 & 1\\
+\end{vmatrix}</script><h4 id="3-13-3-复杂矩阵"><a href="#3-13-3-复杂矩阵" class="headerlink" title="3.13.3 复杂矩阵"></a>3.13.3 复杂矩阵</h4><p>有时我们需要输入一些比较复杂的矩阵或者只有字母的矩阵</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">$$A = </span><br><span class="line">    \begin&#123;pmatrix&#125;</span><br><span class="line">        a_&#123;11&#125; &amp; a_&#123;12&#125; &amp; \cdots &amp; a_&#123;1n&#125;\\</span><br><span class="line">        a_&#123;21&#125; &amp; a_&#123;22&#125; &amp; \cdots &amp; a_&#123;2n&#125;\\</span><br><span class="line">        \vdots &amp; \vdots &amp; \ddots &amp; \vdots\\</span><br><span class="line">        a_&#123;n1&#125; &amp; a_&#123;n2&#125; &amp; \cdots &amp; a_&#123;nn&#125;\\</span><br><span class="line">    \end&#123;pmatrix&#125;$$</span><br></pre></td></tr></table></figure>
+<script type="math/tex; mode=display">
+ \begin{pmatrix}
+        a_{11} & a_{12} & \cdots & a_{1n}\\
+        a_{21} & a_{22} & \cdots & a_{2n}\\
+        \vdots & \vdots & \ddots & \vdots\\
+        a_{n1} & a_{n2} & \cdots & a_{nn}\\
+    \end{pmatrix}</script><p><strong>tip：</strong>横排列的点 ⋯用<code>$\cdots$</code>表示，列排列的点 ⋮ 用<code>$\vdots$</code>表示，斜排列的点 ⋱ 用<code>$\ddots$</code>表示</p>
+<h3 id="3-14-表格"><a href="#3-14-表格" class="headerlink" title="3.14 表格"></a>3.14 表格</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">\begin&#123;array&#125;&#123;|c|c|&#125;</span><br><span class="line">        \hline</span><br><span class="line">        0 &amp; 1 \\\\\hline</span><br><span class="line">        1 &amp; 0 \\\\\hline</span><br><span class="line">\end&#123;array&#125;</span><br></pre></td></tr></table></figure>
+<script type="math/tex; mode=display">
+\begin{array}{|c|c|}
+        \hline
+        0 & 1 \\\hline
+        1 & 0 \\\hline
+\end{array}</script><p>对齐</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">\begin&#123;array&#125;&#123;cc&#125;</span><br><span class="line">        (A)\quad 4 &amp; \hspace&#123;4cm&#125;(B)\quad 3\\\\</span><br><span class="line">        (B)\quad 2 &amp; \hspace&#123;4cm&#125;(D)\quad 1</span><br><span class="line">\end&#123;array&#125;</span><br></pre></td></tr></table></figure>
+<script type="math/tex; mode=display">
+\begin{array}{cc}
+        (A)\quad 4 & \hspace{4cm}(B)\quad 3\\\\
+        (B)\quad 2 & \hspace{4cm}(D)\quad 1
+\end{array}</script><p><strong>tip：</strong><code>\quad</code>和<code>\hspace{}</code>都是表示空格，但是空的个数不同</p>
+
+      
+    </div>
+    <div class="article-footer">
+      <blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    
+    <li class="post-copyright-link hidden-xs">
+      <strong>本文链接：</strong>
+      <a href="http://blog.ifool.top/2020/03/25/Latex-cheatsheet/" title="Latex cheatsheet" target="_blank" rel="external">http://blog.ifool.top/2020/03/25/Latex-cheatsheet/</a>
+    </li>
+    
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong> 本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN协议</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+</blockquote>
+
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="https://github.com/XinliNiu" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="/images/avatar.jpg" class="img-rounded w-full" alt>
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="https://github.com/XinliNiu" target="_blank"><span class="text-dark">ifool</span><small class="ml-1x">金融IT民工</small></a></h3>
+        <div>Java工程师，对机器学习、云计算、安全都感兴趣</div>
+      </div>
+    </figure>
+  </div>
+</div>
+
+
+    </div>
+  </article>
+  
+    
+  <section id="comments">
+  	
+      <div id="vcomments"></div>
+    
+  </section>
+
+
+  
+</div>
+
+  <nav class="bar bar-footer clearfix" data-stick-bottom>
+  <div class="bar-inner">
+  
+  <ul class="pager pull-left">
+    
+    <li class="prev">
+      <a href="/2020/04/19/Fiddler安装与使用/" title="Fiddler安装与使用"><i class="icon icon-angle-left" aria-hidden="true"></i><span>&nbsp;&nbsp;Newer</span></a>
+    </li>
+    
+    
+    <li class="next">
+      <a href="/2020/03/25/Python推导式详解/" title="Python推导式详解"><span>Older&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
+    </li>
+    
+    
+  </ul>
+  
+  
+  <!-- Button trigger modal -->
+  <button type="button" class="btn btn-fancy btn-donate pop-onhover bg-gradient-warning" data-toggle="modal" data-target="#donateModal"><span>$</span></button>
+  <!-- <div class="wave-icon wave-icon-danger btn-donate" data-toggle="modal" data-target="#donateModal">
+    <div class="wave-circle"><span class="icon"><i class="icon icon-bill"></i></span></div>
+  </div> -->
+  
+  
+  <div class="bar-right">
+    
+    <div class="share-component" data-sites="weibo,qq,wechat,facebook,twitter" data-mobile-sites="weibo,qq,qzone"></div>
+    
+  </div>
+  </div>
+</nav>
+  
+<!-- Modal -->
+<div class="modal modal-center modal-small modal-xs-full fade" id="donateModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content donate">
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      <div class="modal-body">
+        <div class="donate-box">
+          <div class="donate-head">
+            <p>Maybe you could buy me a cup of coffee.</p>
+          </div>
+          <div class="tab-content">
+            <div role="tabpanel" class="tab-pane fade active in" id="alipay">
+              <div class="donate-payimg">
+                <img src="/images/donate/alipayimg.png" alt="Scan Qrcode" title="Scan">
+              </div>
+              <p class="text-muted mv">Scan this qrcode</p>
+              <p class="text-grey">Open alipay app scan this qrcode, buy me a coffee!</p>
+            </div>
+            <div role="tabpanel" class="tab-pane fade" id="wechatpay">
+              <div class="donate-payimg">
+                <img src="/images/donate/wechatpayimg.png" alt="Scan Qrcode" title="Scan">
+              </div>
+              <p class="text-muted mv">Scan this qrcode</p>
+              <p class="text-grey">Open wechat app scan this qrcode, buy me a coffee!</p>
+            </div>
+          </div>
+          <div class="donate-footer">
+            <ul class="nav nav-tabs nav-justified" role="tablist">
+              <li role="presentation" class="active">
+                <a href="#alipay" id="alipay-tab" role="tab" data-toggle="tab" aria-controls="alipay" aria-expanded="true"><i class="icon icon-alipay"></i> alipay</a>
+              </li>
+              <li role="presentation" class>
+                <a href="#wechatpay" role="tab" id="wechatpay-tab" data-toggle="tab" aria-controls="wechatpay" aria-expanded="false"><i class="icon icon-wepay"></i> wechat payment</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+</main>
+
+  <footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
+	
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/cofess" target="_blank" title="Github" data-toggle="tooltip" data-placement="top"><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="http://weibo.com/cofess" target="_blank" title="Weibo" data-toggle="tooltip" data-placement="top"><i class="icon icon-weibo"></i></a></li>
+        
+        <li><a href="https://twitter.com/iwebued" target="_blank" title="Twitter" data-toggle="tooltip" data-placement="top"><i class="icon icon-twitter"></i></a></li>
+        
+        <li><a href="https://www.behance.net/cofess" target="_blank" title="Behance" data-toggle="tooltip" data-placement="top"><i class="icon icon-behance"></i></a></li>
+        
+        <li><a href="/atom.xml" target="_blank" title="Rss" data-toggle="tooltip" data-placement="top"><i class="icon icon-rss"></i></a></li>
+        
+    </ul>
+
+    <div class="copyright">
+    	
+        <div class="publishby">
+        	Theme by <a href="https://github.com/cofess" target="_blank"> cofess </a>base on <a href="https://github.com/cofess/hexo-theme-pure" target="_blank">pure</a>.
+        </div>
+    </div>
+</footer>
+  <script src="//cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
+<script>
+window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+<script src="/js/plugin.min.js"></script>
+<script src="/js/application.js"></script>
+
+    <script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: 'Posts',
+            PAGES: 'Pages',
+            CATEGORIES: 'Categories',
+            TAGS: 'Tags',
+            UNTITLED: '(Untitled)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+<script src="/js/insight.js"></script>
+
+
+
+
+
+   
+
+
+
+
+   
+    
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/valine"></script>
+  <script type="text/javascript">
+  var GUEST = ['nick', 'mail', 'link'];
+  var meta = 'nick,mail,link';
+  meta = meta.split(',').filter(function(item) {
+    return GUEST.indexOf(item) > -1;
+  });
+  new Valine({
+    el: '#vcomments',
+    verify: false,
+    notify: false,
+    appId: 'rYClA1GFcOx37vpfNFDdtd1k-gzGzoHsz',
+    appKey: '6EzBL1zBskv6x5onoyDYQGiQ',
+    placeholder: 'Just go go',
+    avatar: 'mm',
+    meta: meta,
+    pageSize: '10' || 10,
+    visitor: true
+  });
+  </script>
+
+     
+
+
+
+
+
+
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<!-- <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script> -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+</body>
+</html>

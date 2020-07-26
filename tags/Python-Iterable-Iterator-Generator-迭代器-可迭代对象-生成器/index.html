@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform">
+  <meta http-equiv="Cache-Control" content="no-siteapp">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  <!-- Color theme for statusbar -->
+  <meta name="theme-color" content="#000000">
+  <!-- 强制页面在当前窗口以独立页面显示,防止别人在框架里调用页面 -->
+  <meta http-equiv="window-target" content="_top">
+  
+  
+  <title>Tag: Python,Iterable,Iterator,Generator,迭代器,可迭代对象,生成器 | Hexo</title>
+  <meta property="og:type" content="website">
+<meta property="og:title" content="ifool的博客">
+<meta property="og:url" content="http://blog.ifool.top/tags/Python-Iterable-Iterator-Generator-迭代器-可迭代对象-生成器/index.html">
+<meta property="og:site_name" content="ifool的博客">
+<meta property="og:locale" content="zh-Hans">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="ifool的博客">
+  <!-- Canonical links -->
+  <link rel="canonical" href="http://blog.ifool.top/tags/Python-Iterable-Iterator-Generator-迭代器-可迭代对象-生成器/index.html">
+  
+    <link rel="alternate" href="/atom.xml" title="ifool的博客" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png" type="image/x-icon">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+  
+  
+  
+</head>
+
+
+<body class="main-center theme-blue" itemscope itemtype="http://schema.org/WebPage">
+  <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+  <div class="slimContent">
+    <div class="navbar-header">
+      
+      
+      <div class="profile-block text-center">
+        <a id="avatar" href="https://github.com/XinliNiu" target="_blank">
+          <img class="img-circle img-rotate" src="/images/avatar.jpg" width="200" height="200">
+        </a>
+        <h2 id="name" class="hidden-xs hidden-sm">ifool</h2>
+        <h3 id="title" class="hidden-xs hidden-sm hidden-md">金融IT民工</h3>
+        <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i> Beijing, China</small>
+      </div>
+      
+      <div class="search" id="search-form-wrap">
+
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="Search">
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i class="icon icon-search"></i></button>
+            </span>
+        </div>
+    </form>
+    <div class="ins-search">
+  <div class="ins-search-mask"></div>
+  <div class="ins-search-container">
+    <div class="ins-input-wrapper">
+      <input type="text" class="ins-search-input" placeholder="Type something..." x-webkit-speech>
+      <button type="button" class="close ins-close ins-selectable" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="ins-section-wrapper">
+      <div class="ins-section-container"></div>
+    </div>
+  </div>
+</div>
+
+
+</div>
+      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+      <ul class="nav navbar-nav main-nav ">
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/.">
+            
+            <i class="icon icon-home-fill"></i>
+            
+            <span class="menu-title">Home</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives">
+            
+            <i class="icon icon-archives-fill"></i>
+            
+            <span class="menu-title">Archives</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories">
+            
+            <i class="icon icon-folder"></i>
+            
+            <span class="menu-title">Categories</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags">
+            
+            <i class="icon icon-tags"></i>
+            
+            <span class="menu-title">Tags</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-repository">
+          <a href="/repository">
+            
+            <i class="icon icon-project"></i>
+            
+            <span class="menu-title">Repository</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-books">
+          <a href="/books">
+            
+            <i class="icon icon-book-fill"></i>
+            
+            <span class="menu-title">Books</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-links">
+          <a href="/links">
+            
+            <i class="icon icon-friendship"></i>
+            
+            <span class="menu-title">Links</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about">
+            
+            <i class="icon icon-cup-fill"></i>
+            
+            <span class="menu-title">About</span>
+          </a>
+        </li>
+        
+      </ul>
+      
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/cofess" target="_blank" title="Github" data-toggle="tooltip" data-placement="top"><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="http://weibo.com/cofess" target="_blank" title="Weibo" data-toggle="tooltip" data-placement="top"><i class="icon icon-weibo"></i></a></li>
+        
+        <li><a href="https://twitter.com/iwebued" target="_blank" title="Twitter" data-toggle="tooltip" data-placement="top"><i class="icon icon-twitter"></i></a></li>
+        
+        <li><a href="https://www.behance.net/cofess" target="_blank" title="Behance" data-toggle="tooltip" data-placement="top"><i class="icon icon-behance"></i></a></li>
+        
+        <li><a href="/atom.xml" target="_blank" title="Rss" data-toggle="tooltip" data-placement="top"><i class="icon icon-rss"></i></a></li>
+        
+    </ul>
+
+    </nav>
+  </div>
+</header>
+
+  
+    <aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title">Board</h3>
+    <div class="widget-body">
+        <div id="board">
+            <div class="content">
+                <p>欢迎交流与分享经验!</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget-body">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Java和JVM/">Java和JVM</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Python/">Python</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Web与移动端安全/">Web与移动端安全</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/工具与效率/">工具与效率</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/数学与机器学习/">数学与机器学习</a><span class="category-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget-body">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Dubbo-拥堵-NIO-Netty-TCP缓冲区/">Dubbo,拥堵,NIO,Netty,TCP缓冲区</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hexo-mathjax/">Hexo,mathjax</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JVM-Btrace-Arthas-在线调试-生产案例/">JVM,Btrace, Arthas, 在线调试, 生产案例</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-IO-IO模型-NIO-Netty-Redis-IO多路复用-阻塞IO-非阻塞IO-异步IO-同步IO/">Java IO,IO模型,NIO,Netty,Redis,IO多路复用,阻塞IO,非阻塞IO,异步IO,同步IO</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-排序-Arrays-sort-TimSort-LegacyMergeSort/">Java, 排序, Arrays.sort, TimSort, LegacyMergeSort</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux-工具软件使用/">Linux,工具软件使用</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Python-Iterable-Iterator-Generator-迭代器-可迭代对象-生成器/">Python,Iterable,Iterator,Generator,迭代器,可迭代对象,生成器</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Python-推导式-python-list-comprehension-生成器-列表推导/">Python,推导式,python list comprehension, 生成器, 列表推导</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Typora-Hexo-Markdown-图片/">Typora, Hexo, Markdown, 图片</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android-adb/">android, adb</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android-root/">android,root</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/latex/">latex</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/代理-Fiddler-安全-抓包/">代理,Fiddler,安全,抓包</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/压缩图片/">压缩图片</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/概率-人工智能-机器学习-分类-朴素贝叶斯-贝叶斯公式-MINIST，手写数字/">概率,人工智能,机器学习,分类,朴素贝叶斯,贝叶斯公式,MINIST，手写数字</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/设计模式-单例-Singleton-DCL/">设计模式, 单例, Singleton, DCL</a><span class="tag-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget-body tagcloud">
+      <a href="/tags/Dubbo-拥堵-NIO-Netty-TCP缓冲区/" style="font-size: 13px;">Dubbo,拥堵,NIO,Netty,TCP缓冲区</a> <a href="/tags/Hexo-mathjax/" style="font-size: 13px;">Hexo,mathjax</a> <a href="/tags/JVM-Btrace-Arthas-在线调试-生产案例/" style="font-size: 13px;">JVM,Btrace, Arthas, 在线调试, 生产案例</a> <a href="/tags/Java-IO-IO模型-NIO-Netty-Redis-IO多路复用-阻塞IO-非阻塞IO-异步IO-同步IO/" style="font-size: 13px;">Java IO,IO模型,NIO,Netty,Redis,IO多路复用,阻塞IO,非阻塞IO,异步IO,同步IO</a> <a href="/tags/Java-排序-Arrays-sort-TimSort-LegacyMergeSort/" style="font-size: 13px;">Java, 排序, Arrays.sort, TimSort, LegacyMergeSort</a> <a href="/tags/Linux-工具软件使用/" style="font-size: 13px;">Linux,工具软件使用</a> <a href="/tags/Python-Iterable-Iterator-Generator-迭代器-可迭代对象-生成器/" style="font-size: 13px;">Python,Iterable,Iterator,Generator,迭代器,可迭代对象,生成器</a> <a href="/tags/Python-推导式-python-list-comprehension-生成器-列表推导/" style="font-size: 13px;">Python,推导式,python list comprehension, 生成器, 列表推导</a> <a href="/tags/Typora-Hexo-Markdown-图片/" style="font-size: 13px;">Typora, Hexo, Markdown, 图片</a> <a href="/tags/android-adb/" style="font-size: 13px;">android, adb</a> <a href="/tags/android-root/" style="font-size: 13px;">android,root</a> <a href="/tags/latex/" style="font-size: 13px;">latex</a> <a href="/tags/代理-Fiddler-安全-抓包/" style="font-size: 13px;">代理,Fiddler,安全,抓包</a> <a href="/tags/压缩图片/" style="font-size: 13px;">压缩图片</a> <a href="/tags/概率-人工智能-机器学习-分类-朴素贝叶斯-贝叶斯公式-MINIST，手写数字/" style="font-size: 13px;">概率,人工智能,机器学习,分类,朴素贝叶斯,贝叶斯公式,MINIST，手写数字</a> <a href="/tags/设计模式-单例-Singleton-DCL/" style="font-size: 13px;">设计模式, 单例, Singleton, DCL</a>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Archive</h3>
+    <div class="widget-body">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/07/">July 2020</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/05/">May 2020</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/04/">April 2020</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/03/">March 2020</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">October 2019</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/07/">July 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">March 2019</a><span class="archive-list-count">4</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget-body">
+      <ul class="recent-post-list list-unstyled no-thumbnail">
+        
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/Java和JVM/">Java和JVM</a>
+              </p>
+              <p class="item-title">
+                <a href="/2020/07/11/Dubbo/" class="title">一次Dubbo拥堵分析</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2020-07-11T07:43:27.000Z" itemprop="datePublished">2020-07-11</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2020/07/08/Java排序的一个问题/" class="title">Java排序的一个问题</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2020-07-08T14:27:36.000Z" itemprop="datePublished">2020-07-08</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/数学与机器学习/">数学与机器学习</a>
+              </p>
+              <p class="item-title">
+                <a href="/2020/05/07/贝叶斯公式与朴素贝叶斯分类/" class="title">基础机器学习算法：贝叶斯公式与朴素贝叶斯分类</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2020-05-07T09:09:37.000Z" itemprop="datePublished">2020-05-07</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/工具与效率/">工具与效率</a>
+              </p>
+              <p class="item-title">
+                <a href="/2020/04/20/压缩图片方法大全/" class="title">压缩图片方法大全</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2020-04-20T03:48:59.000Z" itemprop="datePublished">2020-04-20</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/Web与移动端安全/">Web与移动端安全</a>
+              </p>
+              <p class="item-title">
+                <a href="/2020/04/19/Fiddler安装与使用/" class="title">Fiddler安装与使用</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2020-04-19T10:15:09.000Z" itemprop="datePublished">2020-04-19</time>
+              </p>
+            </div>
+          </li>
+          
+      </ul>
+    </div>
+  </div>
+  
+
+    
+  </div>
+</aside>
+
+  
+  <main class="main" role="main">
+  <article class="content article article-tags post-type-list" itemscope>
+    <header class="article-header">
+      <h1 itemprop="name" class="hidden-xs">Tag: Python,Iterable,Iterator,Generator,迭代器,可迭代对象,生成器</h1>
+      <p class="text-muted hidden-xs">Total 1 articles</p>
+      <nav role="navigation" id="nav-main" class="okayNav">
+        <ul>
+          <li><a href="/tags">All</a></li>
+          
+          <li><a href="/tags/Hexo-mathjax/">Hexo,mathjax</a></li>
+          
+          <li><a href="/tags/Dubbo-拥堵-NIO-Netty-TCP缓冲区/">Dubbo,拥堵,NIO,Netty,TCP缓冲区</a></li>
+          
+          <li><a href="/tags/代理-Fiddler-安全-抓包/">代理,Fiddler,安全,抓包</a></li>
+          
+          <li><a href="/tags/Java-排序-Arrays-sort-TimSort-LegacyMergeSort/">Java, 排序, Arrays.sort, TimSort, LegacyMergeSort</a></li>
+          
+          <li><a href="/tags/latex/">latex</a></li>
+          
+          <li><a href="/tags/Python-推导式-python-list-comprehension-生成器-列表推导/">Python,推导式,python list comprehension, 生成器, 列表推导</a></li>
+          
+          <li><a href="/tags/Python-Iterable-Iterator-Generator-迭代器-可迭代对象-生成器/">Python,Iterable,Iterator,Generator,迭代器,可迭代对象,生成器</a></li>
+          
+          <li><a href="/tags/JVM-Btrace-Arthas-在线调试-生产案例/">JVM,Btrace, Arthas, 在线调试, 生产案例</a></li>
+          
+          <li><a href="/tags/压缩图片/">压缩图片</a></li>
+          
+          <li><a href="/tags/android-adb/">android, adb</a></li>
+          
+          <li><a href="/tags/android-root/">android,root</a></li>
+          
+          <li><a href="/tags/Typora-Hexo-Markdown-图片/">Typora, Hexo, Markdown, 图片</a></li>
+          
+          <li><a href="/tags/Linux-工具软件使用/">Linux,工具软件使用</a></li>
+          
+          <li><a href="/tags/设计模式-单例-Singleton-DCL/">设计模式, 单例, Singleton, DCL</a></li>
+          
+          <li><a href="/tags/概率-人工智能-机器学习-分类-朴素贝叶斯-贝叶斯公式-MINIST，手写数字/">概率,人工智能,机器学习,分类,朴素贝叶斯,贝叶斯公式,MINIST，手写数字</a></li>
+          
+          <li><a href="/tags/Java-IO-IO模型-NIO-Netty-Redis-IO多路复用-阻塞IO-非阻塞IO-异步IO-同步IO/">Java IO,IO模型,NIO,Netty,Redis,IO多路复用,阻塞IO,非阻塞IO,异步IO,同步IO</a></li>
+          
+          <li><a href="/tags/用户行为分析-日志分析-hadoop-mapreduce/">用户行为分析,日志分析,hadoop,mapreduce</a></li>
+          
+          <li><a href="/tags/android-反编译-apk-dex-dex2jar-apktools/">android, 反编译, apk, dex, dex2jar, apktools</a></li>
+          
+          <li><a href="/tags/ELK-elasticsearch-kibana-logstash-filebeat/">ELK,elasticsearch, kibana, logstash, filebeat</a></li>
+          
+          <li><a href="/tags/JVM-Java-类加载-类初始化/">JVM, Java, 类加载, 类初始化</a></li>
+          
+        </ul>
+      </nav>
+    </header>
+    <!-- /header -->
+    <div class="article-body">
+      <div class="row">
+        
+<div class="col-md-6">
+    
+<article class="panel panel-default hover-shadow hover-grow" itemscope itemtype="http://schema.org/BlogPosting">
+  <div class="panel-body">
+     <div class="article-meta">
+       <time datetime="2020-03-25T11:45:43.000Z" itemprop="datePublished">2020-03-25</time>
+     </div>
+     <h3 class="article-title" itemprop="name">
+       <a class="article-link" href="/2020/03/25/Python迭代器详解/">Python迭代器详解</a>
+     </h3>
+   </div>
+   
+   <div class="panel-footer">
+     
+      <a href="/tags/Python-Iterable-Iterator-Generator-迭代器-可迭代对象-生成器/" class="label label-default mb">Python,Iterable,Iterator,Generator,迭代器,可迭代对象,生成器</a>
+     
+     
+   </div>
+   
+</article>
+
+
+</div>
+
+      </div>
+    </div>
+  </article>
+   
+</main>
+
+  <footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
+	
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/cofess" target="_blank" title="Github" data-toggle="tooltip" data-placement="top"><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="http://weibo.com/cofess" target="_blank" title="Weibo" data-toggle="tooltip" data-placement="top"><i class="icon icon-weibo"></i></a></li>
+        
+        <li><a href="https://twitter.com/iwebued" target="_blank" title="Twitter" data-toggle="tooltip" data-placement="top"><i class="icon icon-twitter"></i></a></li>
+        
+        <li><a href="https://www.behance.net/cofess" target="_blank" title="Behance" data-toggle="tooltip" data-placement="top"><i class="icon icon-behance"></i></a></li>
+        
+        <li><a href="/atom.xml" target="_blank" title="Rss" data-toggle="tooltip" data-placement="top"><i class="icon icon-rss"></i></a></li>
+        
+    </ul>
+
+    <div class="copyright">
+    	
+        <div class="publishby">
+        	Theme by <a href="https://github.com/cofess" target="_blank"> cofess </a>base on <a href="https://github.com/cofess/hexo-theme-pure" target="_blank">pure</a>.
+        </div>
+    </div>
+</footer>
+  <script src="//cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
+<script>
+window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+<script src="/js/plugin.min.js"></script>
+<script src="/js/application.js"></script>
+
+    <script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: 'Posts',
+            PAGES: 'Pages',
+            CATEGORIES: 'Categories',
+            TAGS: 'Tags',
+            UNTITLED: '(Untitled)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+<script src="/js/insight.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<!-- <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script> -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+</body>
+</html>

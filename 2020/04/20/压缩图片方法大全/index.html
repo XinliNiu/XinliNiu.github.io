@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform">
+  <meta http-equiv="Cache-Control" content="no-siteapp">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  <!-- Color theme for statusbar -->
+  <meta name="theme-color" content="#000000">
+  <!-- 强制页面在当前窗口以独立页面显示,防止别人在框架里调用页面 -->
+  <meta http-equiv="window-target" content="_top">
+  
+  
+  <title>压缩图片方法大全 | Hexo</title>
+  <meta name="description" content="我们在日常工作中经常需要用到压缩图片，比如写博客，拍的照片或者截的图比较大，上传到githubpages后，加载很慢。 以下收集各种压缩图片的方法。 使用tinypng进行批量压缩Tinypng 网站提供在线图片压缩服务，是所有图片压缩工具中最好用的之一，但它有所限制：批量最多处理 20 张，且每张大小不允许超过 5 M。  这个网站非常良心，开放了免费的 API ，API 取消了每张大小的限制，">
+<meta name="keywords" content="压缩图片">
+<meta property="og:type" content="article">
+<meta property="og:title" content="压缩图片方法大全">
+<meta property="og:url" content="http://blog.ifool.top/2020/04/20/压缩图片方法大全/index.html">
+<meta property="og:site_name" content="ifool的博客">
+<meta property="og:description" content="我们在日常工作中经常需要用到压缩图片，比如写博客，拍的照片或者截的图比较大，上传到githubpages后，加载很慢。 以下收集各种压缩图片的方法。 使用tinypng进行批量压缩Tinypng 网站提供在线图片压缩服务，是所有图片压缩工具中最好用的之一，但它有所限制：批量最多处理 20 张，且每张大小不允许超过 5 M。  这个网站非常良心，开放了免费的 API ，API 取消了每张大小的限制，">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://blog.ifool.top/2020/04/20/压缩图片方法大全/68b02e3bgy1g2rzifbr5fj215n0kg1c3.jpg">
+<meta property="og:updated_time" content="2020-04-20T03:54:02.651Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="压缩图片方法大全">
+<meta name="twitter:description" content="我们在日常工作中经常需要用到压缩图片，比如写博客，拍的照片或者截的图比较大，上传到githubpages后，加载很慢。 以下收集各种压缩图片的方法。 使用tinypng进行批量压缩Tinypng 网站提供在线图片压缩服务，是所有图片压缩工具中最好用的之一，但它有所限制：批量最多处理 20 张，且每张大小不允许超过 5 M。  这个网站非常良心，开放了免费的 API ，API 取消了每张大小的限制，">
+<meta name="twitter:image" content="http://blog.ifool.top/2020/04/20/压缩图片方法大全/68b02e3bgy1g2rzifbr5fj215n0kg1c3.jpg">
+  <!-- Canonical links -->
+  <link rel="canonical" href="http://blog.ifool.top/2020/04/20/压缩图片方法大全/index.html">
+  
+    <link rel="alternate" href="/atom.xml" title="ifool的博客" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png" type="image/x-icon">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+  
+  
+  
+</head>
+
+
+<body class="main-center theme-blue" itemscope itemtype="http://schema.org/WebPage">
+  <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+  <div class="slimContent">
+    <div class="navbar-header">
+      
+      
+      <div class="profile-block text-center">
+        <a id="avatar" href="https://github.com/XinliNiu" target="_blank">
+          <img class="img-circle img-rotate" src="/images/avatar.jpg" width="200" height="200">
+        </a>
+        <h2 id="name" class="hidden-xs hidden-sm">ifool</h2>
+        <h3 id="title" class="hidden-xs hidden-sm hidden-md">金融IT民工</h3>
+        <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i> Beijing, China</small>
+      </div>
+      
+      <div class="search" id="search-form-wrap">
+
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="Search">
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i class="icon icon-search"></i></button>
+            </span>
+        </div>
+    </form>
+    <div class="ins-search">
+  <div class="ins-search-mask"></div>
+  <div class="ins-search-container">
+    <div class="ins-input-wrapper">
+      <input type="text" class="ins-search-input" placeholder="Type something..." x-webkit-speech>
+      <button type="button" class="close ins-close ins-selectable" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="ins-section-wrapper">
+      <div class="ins-section-container"></div>
+    </div>
+  </div>
+</div>
+
+
+</div>
+      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+      <ul class="nav navbar-nav main-nav ">
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/.">
+            
+            <i class="icon icon-home-fill"></i>
+            
+            <span class="menu-title">Home</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives">
+            
+            <i class="icon icon-archives-fill"></i>
+            
+            <span class="menu-title">Archives</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories">
+            
+            <i class="icon icon-folder"></i>
+            
+            <span class="menu-title">Categories</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags">
+            
+            <i class="icon icon-tags"></i>
+            
+            <span class="menu-title">Tags</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-repository">
+          <a href="/repository">
+            
+            <i class="icon icon-project"></i>
+            
+            <span class="menu-title">Repository</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-books">
+          <a href="/books">
+            
+            <i class="icon icon-book-fill"></i>
+            
+            <span class="menu-title">Books</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-links">
+          <a href="/links">
+            
+            <i class="icon icon-friendship"></i>
+            
+            <span class="menu-title">Links</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about">
+            
+            <i class="icon icon-cup-fill"></i>
+            
+            <span class="menu-title">About</span>
+          </a>
+        </li>
+        
+      </ul>
+      
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/cofess" target="_blank" title="Github" data-toggle="tooltip" data-placement="top"><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="http://weibo.com/cofess" target="_blank" title="Weibo" data-toggle="tooltip" data-placement="top"><i class="icon icon-weibo"></i></a></li>
+        
+        <li><a href="https://twitter.com/iwebued" target="_blank" title="Twitter" data-toggle="tooltip" data-placement="top"><i class="icon icon-twitter"></i></a></li>
+        
+        <li><a href="https://www.behance.net/cofess" target="_blank" title="Behance" data-toggle="tooltip" data-placement="top"><i class="icon icon-behance"></i></a></li>
+        
+        <li><a href="/atom.xml" target="_blank" title="Rss" data-toggle="tooltip" data-placement="top"><i class="icon icon-rss"></i></a></li>
+        
+    </ul>
+
+    </nav>
+  </div>
+</header>
+
+  
+    <aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title">Board</h3>
+    <div class="widget-body">
+        <div id="board">
+            <div class="content">
+                <p>欢迎交流与分享经验!</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget-body">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Java和JVM/">Java和JVM</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Python/">Python</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Web与移动端安全/">Web与移动端安全</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/工具与效率/">工具与效率</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/数学与机器学习/">数学与机器学习</a><span class="category-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget-body">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Dubbo-拥堵-NIO-Netty-TCP缓冲区/">Dubbo,拥堵,NIO,Netty,TCP缓冲区</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hexo-mathjax/">Hexo,mathjax</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JVM-Btrace-Arthas-在线调试-生产案例/">JVM,Btrace, Arthas, 在线调试, 生产案例</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-IO-IO模型-NIO-Netty-Redis-IO多路复用-阻塞IO-非阻塞IO-异步IO-同步IO/">Java IO,IO模型,NIO,Netty,Redis,IO多路复用,阻塞IO,非阻塞IO,异步IO,同步IO</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-排序-Arrays-sort-TimSort-LegacyMergeSort/">Java, 排序, Arrays.sort, TimSort, LegacyMergeSort</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux-工具软件使用/">Linux,工具软件使用</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Python-Iterable-Iterator-Generator-迭代器-可迭代对象-生成器/">Python,Iterable,Iterator,Generator,迭代器,可迭代对象,生成器</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Python-推导式-python-list-comprehension-生成器-列表推导/">Python,推导式,python list comprehension, 生成器, 列表推导</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Typora-Hexo-Markdown-图片/">Typora, Hexo, Markdown, 图片</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android-adb/">android, adb</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android-root/">android,root</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/latex/">latex</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/代理-Fiddler-安全-抓包/">代理,Fiddler,安全,抓包</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/压缩图片/">压缩图片</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/概率-人工智能-机器学习-分类-朴素贝叶斯-贝叶斯公式-MINIST，手写数字/">概率,人工智能,机器学习,分类,朴素贝叶斯,贝叶斯公式,MINIST，手写数字</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/设计模式-单例-Singleton-DCL/">设计模式, 单例, Singleton, DCL</a><span class="tag-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget-body tagcloud">
+      <a href="/tags/Dubbo-拥堵-NIO-Netty-TCP缓冲区/" style="font-size: 13px;">Dubbo,拥堵,NIO,Netty,TCP缓冲区</a> <a href="/tags/Hexo-mathjax/" style="font-size: 13px;">Hexo,mathjax</a> <a href="/tags/JVM-Btrace-Arthas-在线调试-生产案例/" style="font-size: 13px;">JVM,Btrace, Arthas, 在线调试, 生产案例</a> <a href="/tags/Java-IO-IO模型-NIO-Netty-Redis-IO多路复用-阻塞IO-非阻塞IO-异步IO-同步IO/" style="font-size: 13px;">Java IO,IO模型,NIO,Netty,Redis,IO多路复用,阻塞IO,非阻塞IO,异步IO,同步IO</a> <a href="/tags/Java-排序-Arrays-sort-TimSort-LegacyMergeSort/" style="font-size: 13px;">Java, 排序, Arrays.sort, TimSort, LegacyMergeSort</a> <a href="/tags/Linux-工具软件使用/" style="font-size: 13px;">Linux,工具软件使用</a> <a href="/tags/Python-Iterable-Iterator-Generator-迭代器-可迭代对象-生成器/" style="font-size: 13px;">Python,Iterable,Iterator,Generator,迭代器,可迭代对象,生成器</a> <a href="/tags/Python-推导式-python-list-comprehension-生成器-列表推导/" style="font-size: 13px;">Python,推导式,python list comprehension, 生成器, 列表推导</a> <a href="/tags/Typora-Hexo-Markdown-图片/" style="font-size: 13px;">Typora, Hexo, Markdown, 图片</a> <a href="/tags/android-adb/" style="font-size: 13px;">android, adb</a> <a href="/tags/android-root/" style="font-size: 13px;">android,root</a> <a href="/tags/latex/" style="font-size: 13px;">latex</a> <a href="/tags/代理-Fiddler-安全-抓包/" style="font-size: 13px;">代理,Fiddler,安全,抓包</a> <a href="/tags/压缩图片/" style="font-size: 13px;">压缩图片</a> <a href="/tags/概率-人工智能-机器学习-分类-朴素贝叶斯-贝叶斯公式-MINIST，手写数字/" style="font-size: 13px;">概率,人工智能,机器学习,分类,朴素贝叶斯,贝叶斯公式,MINIST，手写数字</a> <a href="/tags/设计模式-单例-Singleton-DCL/" style="font-size: 13px;">设计模式, 单例, Singleton, DCL</a>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Archive</h3>
+    <div class="widget-body">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/07/">July 2020</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/05/">May 2020</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/04/">April 2020</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/03/">March 2020</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">October 2019</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/07/">July 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">March 2019</a><span class="archive-list-count">4</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget-body">
+      <ul class="recent-post-list list-unstyled no-thumbnail">
+        
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/Java和JVM/">Java和JVM</a>
+              </p>
+              <p class="item-title">
+                <a href="/2020/07/11/Dubbo/" class="title">一次Dubbo拥堵分析</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2020-07-11T07:43:27.000Z" itemprop="datePublished">2020-07-11</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2020/07/08/Java排序的一个问题/" class="title">Java排序的一个问题</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2020-07-08T14:27:36.000Z" itemprop="datePublished">2020-07-08</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/数学与机器学习/">数学与机器学习</a>
+              </p>
+              <p class="item-title">
+                <a href="/2020/05/07/贝叶斯公式与朴素贝叶斯分类/" class="title">基础机器学习算法：贝叶斯公式与朴素贝叶斯分类</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2020-05-07T09:09:37.000Z" itemprop="datePublished">2020-05-07</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/工具与效率/">工具与效率</a>
+              </p>
+              <p class="item-title">
+                <a href="/2020/04/20/压缩图片方法大全/" class="title">压缩图片方法大全</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2020-04-20T03:48:59.000Z" itemprop="datePublished">2020-04-20</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/Web与移动端安全/">Web与移动端安全</a>
+              </p>
+              <p class="item-title">
+                <a href="/2020/04/19/Fiddler安装与使用/" class="title">Fiddler安装与使用</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2020-04-19T10:15:09.000Z" itemprop="datePublished">2020-04-19</time>
+              </p>
+            </div>
+          </li>
+          
+      </ul>
+    </div>
+  </div>
+  
+
+    
+  </div>
+</aside>
+
+  
+  
+<main class="main" role="main">
+  <div class="content">
+  <article id="post-压缩图片方法大全" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      
+        
+  
+    <h1 class="article-title" itemprop="name">
+      压缩图片方法大全
+    </h1>
+  
+
+      
+      <div class="article-meta">
+        <span class="article-date">
+    <i class="icon icon-calendar-check"></i>
+	<a href="/2020/04/20/压缩图片方法大全/" class="article-date">
+	  <time datetime="2020-04-20T03:48:59.000Z" itemprop="datePublished">2020-04-20</time>
+	</a>
+</span>
+        
+  <span class="article-category">
+    <i class="icon icon-folder"></i>
+    <a class="article-category-link" href="/categories/工具与效率/">工具与效率</a>
+  </span>
+
+        
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>
+	<a class="article-tag-link" href="/tags/压缩图片/">压缩图片</a>
+  </span>
+
+
+        
+
+	<span class="article-read hidden-xs">
+    	<i class="icon icon-eye-fill" aria-hidden="true"></i>
+    	<span id="/2020/04/20/压缩图片方法大全/" class="leancloud_visitors" data-flag-title="压缩图片方法大全">
+			<span class="leancloud-visitors-count">0</span>
+		</span>
+    </span>
+
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2020/04/20/压缩图片方法大全/#comments" class="article-comment-link">Comments</a></span>
+        
+	
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">Word Count: 321(words)</span>
+	
+	
+		<span class="post-readcount hidden-xs" itemprop="timeRequired">Read Count: 1(minutes)</span>
+	
+
+      </div>
+    </div>
+    <div class="article-entry marked-body" itemprop="articleBody">
+      
+        <p>我们在日常工作中经常需要用到压缩图片，比如写博客，拍的照片或者截的图比较大，上传到githubpages后，加载很慢。</p>
+<p>以下收集各种压缩图片的方法。</p>
+<h1 id="使用tinypng进行批量压缩"><a href="#使用tinypng进行批量压缩" class="headerlink" title="使用tinypng进行批量压缩"></a>使用tinypng进行批量压缩</h1><p>Tinypng 网站提供在线图片压缩服务，是所有图片压缩工具中最好用的之一，但它有所限制：批量最多处理 20 张，且每张大小不允许超过 5 M。</p>
+<p><img src="/2020/04/20/压缩图片方法大全/68b02e3bgy1g2rzifbr5fj215n0kg1c3.jpg" alt="img"></p>
+<p>这个网站非常良心，开放了免费的 API ，API 取消了每张大小的限制，只限定每个月处理 500 张图片。这对我来说，已经足足有余了。</p>
+<p>下面介绍怎么使用它。第一步是在它网站上注册，获得专属的 API_KEY。使用的是邮箱注册，很简单。</p>
+<p>安装tinify</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install tinify</span><br></pre></td></tr></table></figure>
+<p>写代码批量压缩文件</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> tinify</span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"></span><br><span class="line">tinify.key = <span class="string">'此处填入你的key'</span></span><br><span class="line">path = <span class="string">"pictures"</span> <span class="comment"># 图片存放的路径</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> dirpath, dirs, files <span class="keyword">in</span> os.walk(path):</span><br><span class="line">    <span class="keyword">for</span> file <span class="keyword">in</span> files:</span><br><span class="line">        imgpath = os.path.join(dirpath, file)</span><br><span class="line">        print(<span class="string">"compressing ..."</span>+ imgpath)</span><br><span class="line">        tinify.from_file(imgpath).to_file(imgpath)</span><br></pre></td></tr></table></figure>
+<p>还是挺好用的，每月免费500张，够用了。它的 API 还提供图片裁剪、加水印、保存压缩图片至云服务商（亚马逊云、谷歌云）等功能，非常强大。</p>
+
+      
+    </div>
+    <div class="article-footer">
+      <blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    
+    <li class="post-copyright-link hidden-xs">
+      <strong>本文链接：</strong>
+      <a href="http://blog.ifool.top/2020/04/20/压缩图片方法大全/" title="压缩图片方法大全" target="_blank" rel="external">http://blog.ifool.top/2020/04/20/压缩图片方法大全/</a>
+    </li>
+    
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong> 本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN协议</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+</blockquote>
+
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="https://github.com/XinliNiu" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="/images/avatar.jpg" class="img-rounded w-full" alt>
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="https://github.com/XinliNiu" target="_blank"><span class="text-dark">ifool</span><small class="ml-1x">金融IT民工</small></a></h3>
+        <div>Java工程师，对机器学习、云计算、安全都感兴趣</div>
+      </div>
+    </figure>
+  </div>
+</div>
+
+
+    </div>
+  </article>
+  
+    
+  <section id="comments">
+  	
+      <div id="vcomments"></div>
+    
+  </section>
+
+
+  
+</div>
+
+  <nav class="bar bar-footer clearfix" data-stick-bottom>
+  <div class="bar-inner">
+  
+  <ul class="pager pull-left">
+    
+    <li class="prev">
+      <a href="/2020/05/07/贝叶斯公式与朴素贝叶斯分类/" title="基础机器学习算法：贝叶斯公式与朴素贝叶斯分类"><i class="icon icon-angle-left" aria-hidden="true"></i><span>&nbsp;&nbsp;Newer</span></a>
+    </li>
+    
+    
+    <li class="next">
+      <a href="/2020/04/19/Fiddler安装与使用/" title="Fiddler安装与使用"><span>Older&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
+    </li>
+    
+    
+  </ul>
+  
+  
+  <!-- Button trigger modal -->
+  <button type="button" class="btn btn-fancy btn-donate pop-onhover bg-gradient-warning" data-toggle="modal" data-target="#donateModal"><span>$</span></button>
+  <!-- <div class="wave-icon wave-icon-danger btn-donate" data-toggle="modal" data-target="#donateModal">
+    <div class="wave-circle"><span class="icon"><i class="icon icon-bill"></i></span></div>
+  </div> -->
+  
+  
+  <div class="bar-right">
+    
+    <div class="share-component" data-sites="weibo,qq,wechat,facebook,twitter" data-mobile-sites="weibo,qq,qzone"></div>
+    
+  </div>
+  </div>
+</nav>
+  
+<!-- Modal -->
+<div class="modal modal-center modal-small modal-xs-full fade" id="donateModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content donate">
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      <div class="modal-body">
+        <div class="donate-box">
+          <div class="donate-head">
+            <p>Maybe you could buy me a cup of coffee.</p>
+          </div>
+          <div class="tab-content">
+            <div role="tabpanel" class="tab-pane fade active in" id="alipay">
+              <div class="donate-payimg">
+                <img src="/images/donate/alipayimg.png" alt="Scan Qrcode" title="Scan">
+              </div>
+              <p class="text-muted mv">Scan this qrcode</p>
+              <p class="text-grey">Open alipay app scan this qrcode, buy me a coffee!</p>
+            </div>
+            <div role="tabpanel" class="tab-pane fade" id="wechatpay">
+              <div class="donate-payimg">
+                <img src="/images/donate/wechatpayimg.png" alt="Scan Qrcode" title="Scan">
+              </div>
+              <p class="text-muted mv">Scan this qrcode</p>
+              <p class="text-grey">Open wechat app scan this qrcode, buy me a coffee!</p>
+            </div>
+          </div>
+          <div class="donate-footer">
+            <ul class="nav nav-tabs nav-justified" role="tablist">
+              <li role="presentation" class="active">
+                <a href="#alipay" id="alipay-tab" role="tab" data-toggle="tab" aria-controls="alipay" aria-expanded="true"><i class="icon icon-alipay"></i> alipay</a>
+              </li>
+              <li role="presentation" class>
+                <a href="#wechatpay" role="tab" id="wechatpay-tab" data-toggle="tab" aria-controls="wechatpay" aria-expanded="false"><i class="icon icon-wepay"></i> wechat payment</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+</main>
+
+  <footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
+	
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/cofess" target="_blank" title="Github" data-toggle="tooltip" data-placement="top"><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="http://weibo.com/cofess" target="_blank" title="Weibo" data-toggle="tooltip" data-placement="top"><i class="icon icon-weibo"></i></a></li>
+        
+        <li><a href="https://twitter.com/iwebued" target="_blank" title="Twitter" data-toggle="tooltip" data-placement="top"><i class="icon icon-twitter"></i></a></li>
+        
+        <li><a href="https://www.behance.net/cofess" target="_blank" title="Behance" data-toggle="tooltip" data-placement="top"><i class="icon icon-behance"></i></a></li>
+        
+        <li><a href="/atom.xml" target="_blank" title="Rss" data-toggle="tooltip" data-placement="top"><i class="icon icon-rss"></i></a></li>
+        
+    </ul>
+
+    <div class="copyright">
+    	
+        <div class="publishby">
+        	Theme by <a href="https://github.com/cofess" target="_blank"> cofess </a>base on <a href="https://github.com/cofess/hexo-theme-pure" target="_blank">pure</a>.
+        </div>
+    </div>
+</footer>
+  <script src="//cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
+<script>
+window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+<script src="/js/plugin.min.js"></script>
+<script src="/js/application.js"></script>
+
+    <script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: 'Posts',
+            PAGES: 'Pages',
+            CATEGORIES: 'Categories',
+            TAGS: 'Tags',
+            UNTITLED: '(Untitled)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+<script src="/js/insight.js"></script>
+
+
+
+
+
+   
+
+
+
+
+   
+    
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/valine"></script>
+  <script type="text/javascript">
+  var GUEST = ['nick', 'mail', 'link'];
+  var meta = 'nick,mail,link';
+  meta = meta.split(',').filter(function(item) {
+    return GUEST.indexOf(item) > -1;
+  });
+  new Valine({
+    el: '#vcomments',
+    verify: false,
+    notify: false,
+    appId: 'rYClA1GFcOx37vpfNFDdtd1k-gzGzoHsz',
+    appKey: '6EzBL1zBskv6x5onoyDYQGiQ',
+    placeholder: 'Just go go',
+    avatar: 'mm',
+    meta: meta,
+    pageSize: '10' || 10,
+    visitor: true
+  });
+  </script>
+
+     
+
+
+
+
+
+
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<!-- <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script> -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+</body>
+</html>

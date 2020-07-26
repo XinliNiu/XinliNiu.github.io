@@ -1,0 +1,1042 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform">
+  <meta http-equiv="Cache-Control" content="no-siteapp">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  <!-- Color theme for statusbar -->
+  <meta name="theme-color" content="#000000">
+  <!-- 强制页面在当前窗口以独立页面显示,防止别人在框架里调用页面 -->
+  <meta http-equiv="window-target" content="_top">
+  
+  
+  <title>基础机器学习算法：贝叶斯公式与朴素贝叶斯分类 | Hexo</title>
+  <meta name="description" content="概率知识条件概率 用韦恩图可以比较方便的理解条件概率。我们以掷骰子出现的点数为例，总的样本空间集合为S={1,2,3,4,5,6}，假设事件A为点数为偶数，那么A集合就是A={2,4,6}，B事件为点数大于3，B={4,5,6}。 很明显  P(A) = 1/2 \\ P(B) = 1/2 \\ P(AB) = 1/3现在假如我们已经知道了A事件发生了，也就是点数是偶数，这种情况下B发生的概率，就">
+<meta name="keywords" content="概率,人工智能,机器学习,分类,朴素贝叶斯,贝叶斯公式,MINIST，手写数字">
+<meta property="og:type" content="article">
+<meta property="og:title" content="基础机器学习算法：贝叶斯公式与朴素贝叶斯分类">
+<meta property="og:url" content="http://blog.ifool.top/2020/05/07/贝叶斯公式与朴素贝叶斯分类/index.html">
+<meta property="og:site_name" content="ifool的博客">
+<meta property="og:description" content="概率知识条件概率 用韦恩图可以比较方便的理解条件概率。我们以掷骰子出现的点数为例，总的样本空间集合为S={1,2,3,4,5,6}，假设事件A为点数为偶数，那么A集合就是A={2,4,6}，B事件为点数大于3，B={4,5,6}。 很明显  P(A) = 1/2 \\ P(B) = 1/2 \\ P(AB) = 1/3现在假如我们已经知道了A事件发生了，也就是点数是偶数，这种情况下B发生的概率，就">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://blog.ifool.top/2020/05/07/贝叶斯公式与朴素贝叶斯分类/20170715163129709">
+<meta property="og:image" content="http://blog.ifool.top/2020/05/07/贝叶斯公式与朴素贝叶斯分类/20170718153553216">
+<meta property="og:image" content="http://blog.ifool.top/2020/05/07/贝叶斯公式与朴素贝叶斯分类/20170718154223896">
+<meta property="og:image" content="http://blog.ifool.top/2020/05/07/贝叶斯公式与朴素贝叶斯分类/bf096b63f6246b60f883975dd03a134a500fa256.jpeg">
+<meta property="og:image" content="http://blog.ifool.top/2020/05/07/贝叶斯公式与朴素贝叶斯分类/u=2145802309,872179666&fm=15&gp=0.jpg">
+<meta property="og:image" content="http://blog.ifool.top/2020/05/07/贝叶斯公式与朴素贝叶斯分类/image-20200513170938962.png">
+<meta property="og:updated_time" content="2020-05-13T10:28:11.896Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="基础机器学习算法：贝叶斯公式与朴素贝叶斯分类">
+<meta name="twitter:description" content="概率知识条件概率 用韦恩图可以比较方便的理解条件概率。我们以掷骰子出现的点数为例，总的样本空间集合为S={1,2,3,4,5,6}，假设事件A为点数为偶数，那么A集合就是A={2,4,6}，B事件为点数大于3，B={4,5,6}。 很明显  P(A) = 1/2 \\ P(B) = 1/2 \\ P(AB) = 1/3现在假如我们已经知道了A事件发生了，也就是点数是偶数，这种情况下B发生的概率，就">
+<meta name="twitter:image" content="http://blog.ifool.top/2020/05/07/贝叶斯公式与朴素贝叶斯分类/20170715163129709">
+  <!-- Canonical links -->
+  <link rel="canonical" href="http://blog.ifool.top/2020/05/07/贝叶斯公式与朴素贝叶斯分类/index.html">
+  
+    <link rel="alternate" href="/atom.xml" title="ifool的博客" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png" type="image/x-icon">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+  
+  
+  
+</head>
+
+
+<body class="main-center theme-blue" itemscope itemtype="http://schema.org/WebPage">
+  <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+  <div class="slimContent">
+    <div class="navbar-header">
+      
+      
+      <div class="profile-block text-center">
+        <a id="avatar" href="https://github.com/XinliNiu" target="_blank">
+          <img class="img-circle img-rotate" src="/images/avatar.jpg" width="200" height="200">
+        </a>
+        <h2 id="name" class="hidden-xs hidden-sm">ifool</h2>
+        <h3 id="title" class="hidden-xs hidden-sm hidden-md">金融IT民工</h3>
+        <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i> Beijing, China</small>
+      </div>
+      
+      <div class="search" id="search-form-wrap">
+
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="Search">
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i class="icon icon-search"></i></button>
+            </span>
+        </div>
+    </form>
+    <div class="ins-search">
+  <div class="ins-search-mask"></div>
+  <div class="ins-search-container">
+    <div class="ins-input-wrapper">
+      <input type="text" class="ins-search-input" placeholder="Type something..." x-webkit-speech>
+      <button type="button" class="close ins-close ins-selectable" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="ins-section-wrapper">
+      <div class="ins-section-container"></div>
+    </div>
+  </div>
+</div>
+
+
+</div>
+      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+      <ul class="nav navbar-nav main-nav ">
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/.">
+            
+            <i class="icon icon-home-fill"></i>
+            
+            <span class="menu-title">Home</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives">
+            
+            <i class="icon icon-archives-fill"></i>
+            
+            <span class="menu-title">Archives</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories">
+            
+            <i class="icon icon-folder"></i>
+            
+            <span class="menu-title">Categories</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags">
+            
+            <i class="icon icon-tags"></i>
+            
+            <span class="menu-title">Tags</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-repository">
+          <a href="/repository">
+            
+            <i class="icon icon-project"></i>
+            
+            <span class="menu-title">Repository</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-books">
+          <a href="/books">
+            
+            <i class="icon icon-book-fill"></i>
+            
+            <span class="menu-title">Books</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-links">
+          <a href="/links">
+            
+            <i class="icon icon-friendship"></i>
+            
+            <span class="menu-title">Links</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about">
+            
+            <i class="icon icon-cup-fill"></i>
+            
+            <span class="menu-title">About</span>
+          </a>
+        </li>
+        
+      </ul>
+      
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/cofess" target="_blank" title="Github" data-toggle="tooltip" data-placement="top"><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="http://weibo.com/cofess" target="_blank" title="Weibo" data-toggle="tooltip" data-placement="top"><i class="icon icon-weibo"></i></a></li>
+        
+        <li><a href="https://twitter.com/iwebued" target="_blank" title="Twitter" data-toggle="tooltip" data-placement="top"><i class="icon icon-twitter"></i></a></li>
+        
+        <li><a href="https://www.behance.net/cofess" target="_blank" title="Behance" data-toggle="tooltip" data-placement="top"><i class="icon icon-behance"></i></a></li>
+        
+        <li><a href="/atom.xml" target="_blank" title="Rss" data-toggle="tooltip" data-placement="top"><i class="icon icon-rss"></i></a></li>
+        
+    </ul>
+
+    </nav>
+  </div>
+</header>
+
+  
+    <aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title">Board</h3>
+    <div class="widget-body">
+        <div id="board">
+            <div class="content">
+                <p>欢迎交流与分享经验!</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget-body">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Java和JVM/">Java和JVM</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Python/">Python</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Web与移动端安全/">Web与移动端安全</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/工具与效率/">工具与效率</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/数学与机器学习/">数学与机器学习</a><span class="category-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget-body">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Dubbo-拥堵-NIO-Netty-TCP缓冲区/">Dubbo,拥堵,NIO,Netty,TCP缓冲区</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hexo-mathjax/">Hexo,mathjax</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JVM-Btrace-Arthas-在线调试-生产案例/">JVM,Btrace, Arthas, 在线调试, 生产案例</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-IO-IO模型-NIO-Netty-Redis-IO多路复用-阻塞IO-非阻塞IO-异步IO-同步IO/">Java IO,IO模型,NIO,Netty,Redis,IO多路复用,阻塞IO,非阻塞IO,异步IO,同步IO</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-排序-Arrays-sort-TimSort-LegacyMergeSort/">Java, 排序, Arrays.sort, TimSort, LegacyMergeSort</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux-工具软件使用/">Linux,工具软件使用</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Python-Iterable-Iterator-Generator-迭代器-可迭代对象-生成器/">Python,Iterable,Iterator,Generator,迭代器,可迭代对象,生成器</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Python-推导式-python-list-comprehension-生成器-列表推导/">Python,推导式,python list comprehension, 生成器, 列表推导</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Typora-Hexo-Markdown-图片/">Typora, Hexo, Markdown, 图片</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android-adb/">android, adb</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android-root/">android,root</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/latex/">latex</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/代理-Fiddler-安全-抓包/">代理,Fiddler,安全,抓包</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/压缩图片/">压缩图片</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/概率-人工智能-机器学习-分类-朴素贝叶斯-贝叶斯公式-MINIST，手写数字/">概率,人工智能,机器学习,分类,朴素贝叶斯,贝叶斯公式,MINIST，手写数字</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/设计模式-单例-Singleton-DCL/">设计模式, 单例, Singleton, DCL</a><span class="tag-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget-body tagcloud">
+      <a href="/tags/Dubbo-拥堵-NIO-Netty-TCP缓冲区/" style="font-size: 13px;">Dubbo,拥堵,NIO,Netty,TCP缓冲区</a> <a href="/tags/Hexo-mathjax/" style="font-size: 13px;">Hexo,mathjax</a> <a href="/tags/JVM-Btrace-Arthas-在线调试-生产案例/" style="font-size: 13px;">JVM,Btrace, Arthas, 在线调试, 生产案例</a> <a href="/tags/Java-IO-IO模型-NIO-Netty-Redis-IO多路复用-阻塞IO-非阻塞IO-异步IO-同步IO/" style="font-size: 13px;">Java IO,IO模型,NIO,Netty,Redis,IO多路复用,阻塞IO,非阻塞IO,异步IO,同步IO</a> <a href="/tags/Java-排序-Arrays-sort-TimSort-LegacyMergeSort/" style="font-size: 13px;">Java, 排序, Arrays.sort, TimSort, LegacyMergeSort</a> <a href="/tags/Linux-工具软件使用/" style="font-size: 13px;">Linux,工具软件使用</a> <a href="/tags/Python-Iterable-Iterator-Generator-迭代器-可迭代对象-生成器/" style="font-size: 13px;">Python,Iterable,Iterator,Generator,迭代器,可迭代对象,生成器</a> <a href="/tags/Python-推导式-python-list-comprehension-生成器-列表推导/" style="font-size: 13px;">Python,推导式,python list comprehension, 生成器, 列表推导</a> <a href="/tags/Typora-Hexo-Markdown-图片/" style="font-size: 13px;">Typora, Hexo, Markdown, 图片</a> <a href="/tags/android-adb/" style="font-size: 13px;">android, adb</a> <a href="/tags/android-root/" style="font-size: 13px;">android,root</a> <a href="/tags/latex/" style="font-size: 13px;">latex</a> <a href="/tags/代理-Fiddler-安全-抓包/" style="font-size: 13px;">代理,Fiddler,安全,抓包</a> <a href="/tags/压缩图片/" style="font-size: 13px;">压缩图片</a> <a href="/tags/概率-人工智能-机器学习-分类-朴素贝叶斯-贝叶斯公式-MINIST，手写数字/" style="font-size: 13px;">概率,人工智能,机器学习,分类,朴素贝叶斯,贝叶斯公式,MINIST，手写数字</a> <a href="/tags/设计模式-单例-Singleton-DCL/" style="font-size: 13px;">设计模式, 单例, Singleton, DCL</a>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Archive</h3>
+    <div class="widget-body">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/07/">July 2020</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/05/">May 2020</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/04/">April 2020</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/03/">March 2020</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">October 2019</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/07/">July 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">March 2019</a><span class="archive-list-count">4</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget-body">
+      <ul class="recent-post-list list-unstyled no-thumbnail">
+        
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/Java和JVM/">Java和JVM</a>
+              </p>
+              <p class="item-title">
+                <a href="/2020/07/11/Dubbo/" class="title">一次Dubbo拥堵分析</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2020-07-11T07:43:27.000Z" itemprop="datePublished">2020-07-11</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2020/07/08/Java排序的一个问题/" class="title">Java排序的一个问题</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2020-07-08T14:27:36.000Z" itemprop="datePublished">2020-07-08</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/数学与机器学习/">数学与机器学习</a>
+              </p>
+              <p class="item-title">
+                <a href="/2020/05/07/贝叶斯公式与朴素贝叶斯分类/" class="title">基础机器学习算法：贝叶斯公式与朴素贝叶斯分类</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2020-05-07T09:09:37.000Z" itemprop="datePublished">2020-05-07</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/工具与效率/">工具与效率</a>
+              </p>
+              <p class="item-title">
+                <a href="/2020/04/20/压缩图片方法大全/" class="title">压缩图片方法大全</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2020-04-20T03:48:59.000Z" itemprop="datePublished">2020-04-20</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/Web与移动端安全/">Web与移动端安全</a>
+              </p>
+              <p class="item-title">
+                <a href="/2020/04/19/Fiddler安装与使用/" class="title">Fiddler安装与使用</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2020-04-19T10:15:09.000Z" itemprop="datePublished">2020-04-19</time>
+              </p>
+            </div>
+          </li>
+          
+      </ul>
+    </div>
+  </div>
+  
+
+    
+  </div>
+</aside>
+
+  
+  
+<main class="main" role="main">
+  <div class="content">
+  <article id="post-贝叶斯公式与朴素贝叶斯分类" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      
+        
+  
+    <h1 class="article-title" itemprop="name">
+      基础机器学习算法：贝叶斯公式与朴素贝叶斯分类
+    </h1>
+  
+
+      
+      <div class="article-meta">
+        <span class="article-date">
+    <i class="icon icon-calendar-check"></i>
+	<a href="/2020/05/07/贝叶斯公式与朴素贝叶斯分类/" class="article-date">
+	  <time datetime="2020-05-07T09:09:37.000Z" itemprop="datePublished">2020-05-07</time>
+	</a>
+</span>
+        
+  <span class="article-category">
+    <i class="icon icon-folder"></i>
+    <a class="article-category-link" href="/categories/数学与机器学习/">数学与机器学习</a>
+  </span>
+
+        
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>
+	<a class="article-tag-link" href="/tags/概率-人工智能-机器学习-分类-朴素贝叶斯-贝叶斯公式-MINIST，手写数字/">概率,人工智能,机器学习,分类,朴素贝叶斯,贝叶斯公式,MINIST，手写数字</a>
+  </span>
+
+
+        
+
+	<span class="article-read hidden-xs">
+    	<i class="icon icon-eye-fill" aria-hidden="true"></i>
+    	<span id="/2020/05/07/贝叶斯公式与朴素贝叶斯分类/" class="leancloud_visitors" data-flag-title="基础机器学习算法：贝叶斯公式与朴素贝叶斯分类">
+			<span class="leancloud-visitors-count">0</span>
+		</span>
+    </span>
+
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2020/05/07/贝叶斯公式与朴素贝叶斯分类/#comments" class="article-comment-link">Comments</a></span>
+        
+	
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">Word Count: 4.5k(words)</span>
+	
+	
+		<span class="post-readcount hidden-xs" itemprop="timeRequired">Read Count: 18(minutes)</span>
+	
+
+      </div>
+    </div>
+    <div class="article-entry marked-body" itemprop="articleBody">
+      
+        <h1 id="概率知识"><a href="#概率知识" class="headerlink" title="概率知识"></a>概率知识</h1><h2 id="条件概率"><a href="#条件概率" class="headerlink" title="条件概率"></a>条件概率</h2><p><img src="/2020/05/07/贝叶斯公式与朴素贝叶斯分类/20170715163129709" alt="img"></p>
+<p>用韦恩图可以比较方便的理解条件概率。我们以掷骰子出现的点数为例，总的样本空间集合为S={1,2,3,4,5,6}，假设事件A为点数为偶数，那么A集合就是A={2,4,6}，B事件为点数大于3，B={4,5,6}。</p>
+<p>很明显</p>
+<script type="math/tex; mode=display">
+P(A) = 1/2 \\
+P(B) = 1/2 \\
+P(AB) = 1/3</script><p>现在假如我们已经知道了A事件发生了，也就是点数是偶数，这种情况下B发生的概率，就是条件概率，记作 $ P(B|A) $，也就是在A事件发生的前提下，B事件发生的概率。</p>
+<p>既然A已经发生了，那么点数一定落在了A事件的样本空间中，这时候如果B发生，点数一定落在了AB的交集中，也就是AB发生了。</p>
+<script type="math/tex; mode=display">
+P(B|A) = \frac{P(AB)}{P(A)}</script><h2 id="全概率公式"><a href="#全概率公式" class="headerlink" title="全概率公式"></a>全概率公式</h2><p>来看一个问题，假如一个人每天出行上班，坐公交车的概率是0.8，坐地铁的概率是0.1，开车的概率是0.1，而坐公交出车祸死亡的概率是0.0001，坐地铁出车祸死亡的概率为0.00001，开车出车祸死亡的概率是0.01，求这个人出车祸死亡的概率。</p>
+<p>$ A_1 = 坐公交车 , A_2 = 坐地铁, A_3 = 开车 ,  B = 出车祸死亡 $</p>
+<p>根据已知条件</p>
+<script type="math/tex; mode=display">
+P(A_1) = 0.8, P(B|A_1) = 0.0001 \\
+P(A_2) = 0.1, P(B|A_2) = 0.00001 \\
+P(A_3) = 0.1, P(B|A_3) = 0.01</script><p>我们要求的是：</p>
+<script type="math/tex; mode=display">
+P(B) = ?</script><p>B事件就等价于“{坐公交车并且出车祸死亡}或者{坐地铁并且出车祸死亡}或者{开车并且出车祸死亡}”，那</p>
+<script type="math/tex; mode=display">
+P(B) = P(A_1B) + P(A_2B) + P(A_3B)</script><p>而根据前面的条件概率公式</p>
+<script type="math/tex; mode=display">
+P(B|A) = \frac{P(AB)}{P(A)} 可得P(AB) =P(A)P(B|A)</script><p>所以我们要求的结果就是:</p>
+<script type="math/tex; mode=display">
+P(B) = P(A_1)P(B|A_1) + P(A_2)*P(B|A_2) + P(A_3)P(B|A_3)=0.001081</script><p>全概率公式：</p>
+<p>  设事件<img src="/2020/05/07/贝叶斯公式与朴素贝叶斯分类/20170718153553216" alt="img">是一个完备事件组，则对于任意一个事件C，有如下公式成立：</p>
+<p><img src="/2020/05/07/贝叶斯公式与朴素贝叶斯分类/20170718154223896" alt="img"></p>
+<p>这个公式就是全概率公式，它的涵义就是一个事件可能由多个事件导致，最终的概率可由这些事件的概率计算得到。</p>
+<h2 id="贝叶斯公式"><a href="#贝叶斯公式" class="headerlink" title="贝叶斯公式"></a>贝叶斯公式</h2><p>全概率公式的作用是“由因推果”，根据各种原因计算结果的概率，而贝叶斯公式，则是“由果推因”，比如上面的例子，已知这个人出车祸死亡了，求他开车的概率，也就是求</p>
+<script type="math/tex; mode=display">
+P(A_3|B)=?</script><p>根据条件概率公式，</p>
+<script type="math/tex; mode=display">
+P(A_3|B) = \frac{P(A_3B)}{P(B)}=\frac{P(A_3)P(B|A_3)}{P(B)}</script><p>根据前面的计算结果，我们可以得到$P(A_3|B) = 0.9251$，也就是说，假如这个人出车祸死亡，那么它有92.51%的概率是开车的。</p>
+<p>其实贝叶斯公式很简单。</p>
+<script type="math/tex; mode=display">
+P(A|B) = \frac{P(B|A)P(A)}{P(B)}</script><p>我们再来举一个例子说明贝叶斯公式的应用。</p>
+<p>假设女神喜欢你的概率为仅0.01，女生对喜欢的人笑的概率是0.99，而女生所有人笑的概率为0.9，现在已经知道，女神对你笑了，求女神喜欢你的概率。</p>
+<p>假设 A = {女神喜欢你}，B={女神对人笑}，这两个概率已知，而且也知道女神对喜欢的人笑的概率,所以</p>
+<script type="math/tex; mode=display">
+P(A)= 0.01,P(B) = 0.9,P(B|A) = 0.99, 求P(A|B)?</script><p>用贝叶斯公式很容易求得</p>
+<script type="math/tex; mode=display">
+P(A|B) = \frac {P(B|A)P(A)}{P(B)} = (0.99*0.01)/0.9=0.011</script><p>所以，虽然女神对你笑了，但是喜欢你的概率还是很低，虽然稍微提高了一点，为什么呢？因为女神对90%的人都笑，女神都这样。假如女神对大部分人都不笑，对你笑的话，那喜欢你的概率就很大了。</p>
+<h1 id="深入理解贝叶斯"><a href="#深入理解贝叶斯" class="headerlink" title="深入理解贝叶斯"></a>深入理解贝叶斯</h1><p>我们先来看一个问题：</p>
+<p>某种病的发病率为0.1%，也就是平均1000个人里有一个人的病，有一个指标，对于99%的患者，都呈阳性，但是也有5%的假阳性，就是没得病的人也有5%的人指标呈阳性。现在某个人指标呈阳性，那他患病的概率有多大？</p>
+<p>凭直觉，我们会认为他患病的概率很大，我们来计算一下。</p>
+<p>A = {患病}， B = {结果呈阳性}  ，正常人和患者都有可能指标阳性，根据全概率公式</p>
+<script type="math/tex; mode=display">
+P(B) = 0.001*0.99 + 0.999*0.05 = 0.05094</script><p>而</p>
+<script type="math/tex; mode=display">
+P(A) = 0.01, P(B|A)=0.99</script><p>根据贝叶斯公式，</p>
+<script type="math/tex; mode=display">
+P(A|B) = \frac{P(B|A)P(A)}{P(B)} = (0.99*0.001)/0.05094=0.01943</script><p>也就是说，这个人的病的概率不到2%，为什么会这样呢？因为这个病的发病率太低，而假阳性的概率又过高。</p>
+<p>我们继续看这个贝叶斯公式。</p>
+<script type="math/tex; mode=display">
+P(A|B) = \frac{P(B|A)P(A)}{P(B)}</script><p>其中的几个参数重新定义一下：</p>
+<p><img src="/2020/05/07/贝叶斯公式与朴素贝叶斯分类/bf096b63f6246b60f883975dd03a134a500fa256.jpeg" alt="img"></p>
+<h2 id="先验概率"><a href="#先验概率" class="headerlink" title="先验概率"></a>先验概率</h2><p>我们把P(A)称为“先验概率“，即我们在不知道B事件的前提下，对A事件概率的主观判断。</p>
+<h2 id="可能性函数"><a href="#可能性函数" class="headerlink" title="可能性函数"></a>可能性函数</h2><p>公式里的P(B|A)/P(B)称为“可能性函数”，这是一个调整因子，即新信息B带来的调整，作用是使得先验概率更接近真实概率。</p>
+<p>如果“可能性函数”P(B|A)/P(B)&gt;1,意味着，“先验概率”被增强，事件A发生的可能性变大；<br>如果”可能性函数”=1，意味着B事件无助于判断事件A的可能性；<br>如果”可能性函数”&lt;1，意味着”先验概率”被削弱，事件A的可能性变小。</p>
+<p>什么情况下这个比值会增大呢？就是如果A发生导致B发生的可能性增大，那么就会导致比例增大，同样，如果A发生导致B发生的概率变小了，那比例也会变小。</p>
+<p>以前边女神笑为例，女神如果喜欢一个人，那么她笑的概率从0.9升到了0.99，那么这个比例就成了1.1，所以如果女神对你笑，那喜欢你的概率也增大到1.1倍。</p>
+<h2 id="后验概率"><a href="#后验概率" class="headerlink" title="后验概率"></a>后验概率</h2><p>P(A|B)称为”后验概率”，即在事件B发生之后，我们对A事件的概率的重新评估。</p>
+<h1 id="朴素贝叶斯分类"><a href="#朴素贝叶斯分类" class="headerlink" title="朴素贝叶斯分类"></a>朴素贝叶斯分类</h1><h2 id="通过实例理解"><a href="#通过实例理解" class="headerlink" title="通过实例理解"></a>通过实例理解</h2><p>贝叶斯分类是一种比较简单的机器学习分类方法，它依据的就是贝叶斯公式。我们把贝叶斯公式中的AB改一下：</p>
+<script type="math/tex; mode=display">
+P(类别|特征) = \frac{P(特征|类别)P(类别)}{P(特征)}</script><p>我们要求的就是已知特征，它属于某个类别的概率是多少，概率最大的那个类别就是分类器输出的结果。</p>
+<p>我们先看一个最简单的例子，假设我们统计了10000个适龄男性的特点（是否高富帅），然后随机找女生问愿不愿意嫁，得到了如下的数据。</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>是否高</th>
+<th>是否富</th>
+<th>是否帅</th>
+<th>是否嫁</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>高</td>
+<td>富</td>
+<td>帅</td>
+<td>嫁</td>
+</tr>
+<tr>
+<td>高</td>
+<td>富</td>
+<td>不帅</td>
+<td>嫁</td>
+</tr>
+<tr>
+<td>不高</td>
+<td>不富</td>
+<td>帅</td>
+<td>不嫁</td>
+</tr>
+<tr>
+<td>不高</td>
+<td>富</td>
+<td>帅</td>
+<td>嫁</td>
+</tr>
+<tr>
+<td>不高</td>
+<td>富</td>
+<td>不帅</td>
+<td>嫁</td>
+</tr>
+<tr>
+<td>高</td>
+<td>不富</td>
+<td>不帅</td>
+<td>不嫁</td>
+</tr>
+<tr>
+<td>不高</td>
+<td>不富</td>
+<td>不帅</td>
+<td>不嫁</td>
+</tr>
+<tr>
+<td>不高</td>
+<td>不富</td>
+<td>帅</td>
+<td>嫁</td>
+</tr>
+<tr>
+<td>高</td>
+<td>不富</td>
+<td>帅</td>
+<td>嫁</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>这只是一部分样本，一共有10000条数据，我们简化一下把1000条都表示出来。我们用X来表示高富帅三个属性，Y表示是否嫁。</p>
+<script type="math/tex; mode=display">
+X=(x_1,x_2,x_3),其中x_1,x_2,x_3分别代表高富帅，1代表是，0代表否 \\
+Y = y, 1表示嫁，0表示不嫁</script><p>经过我们整理，把数据整理成了下面的形式</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>X</th>
+<th>Y</th>
+<th>样本数</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>000</td>
+<td>0</td>
+<td>4275</td>
+</tr>
+<tr>
+<td>000</td>
+<td>1</td>
+<td>0</td>
+</tr>
+<tr>
+<td>001</td>
+<td>0</td>
+<td>1300</td>
+</tr>
+<tr>
+<td>001</td>
+<td>1</td>
+<td>125</td>
+</tr>
+<tr>
+<td>010</td>
+<td>0</td>
+<td>25</td>
+</tr>
+<tr>
+<td>010</td>
+<td>1</td>
+<td>200</td>
+</tr>
+<tr>
+<td>011</td>
+<td>0</td>
+<td>2</td>
+</tr>
+<tr>
+<td>011</td>
+<td>1</td>
+<td>73</td>
+</tr>
+<tr>
+<td>100</td>
+<td>0</td>
+<td>2700</td>
+</tr>
+<tr>
+<td>100</td>
+<td>1</td>
+<td>150</td>
+</tr>
+<tr>
+<td>101</td>
+<td>0</td>
+<td>30</td>
+</tr>
+<tr>
+<td>101</td>
+<td>1</td>
+<td>920</td>
+</tr>
+<tr>
+<td>110</td>
+<td>0</td>
+<td>4</td>
+</tr>
+<tr>
+<td>110</td>
+<td>1</td>
+<td>146</td>
+</tr>
+<tr>
+<td>111</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr>
+<td>111</td>
+<td>1</td>
+<td>50</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>数据很现实，非高非富非帅的没有一个愿意嫁的，而高富帅没有一个不愿意嫁的。</p>
+<p>有了这个表，我们就能得到一个分类器，输入为X,输出为y，y只有两个值，0和1。</p>
+<script type="math/tex; mode=display">
+y = arg\max \limits_{Y}(P(Y|X))</script><p>什么意思呢？就是对于一个输入X，我们求出所有的P(Y|X)，然后哪个的概率最大，那么输出就是对应的Y。举个例子，我们要计算X=(1,0,1)对应的输出值，根据上表，我们很容易的可以得到</p>
+<script type="math/tex; mode=display">
+P(1|101) = 0.968, P(0|101) = 0.032 \\</script><p>所以我们的分类器就能得到f(X=(1,0,1)) = 1，也就是高帅的人就可以嫁了。</p>
+<p>看来贝叶斯分类很简单啊，只要列出一个表来就行了。我们继续来看，假设我们用分数来刻画高富帅的程度，分数是1-10分，那我们列的表行数就是10x10x10x2=2000行了，如果2000行还可以接受，那假如分数是1-100，有10个属性，那行数就是2*100^10，这个列表就不好列了吧。再假设，这个分数不是离散的，而是连续的，那就没法列表了。</p>
+<p>我们暂时先不考虑连续的情况，先考虑离散的情况。我们需要做一个非常强的假设，就是这些属性是相互独立的，也就是</p>
+<script type="math/tex; mode=display">
+P(高富帅) = P(高)P(富)P(帅) \\
+P(不高 不富) = P(不高)P(不富) \\
+\dots \dots</script><p>有了这个假设，我们就能把上面的例子中的2x2x2x2行数据改成三个表，每个表4行，也就是2x2x3行，</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>是否高</th>
+<th>是否嫁</th>
+<th>样本数</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>0</td>
+<td>5602</td>
+</tr>
+<tr>
+<td>0</td>
+<td>1</td>
+<td>398</td>
+</tr>
+<tr>
+<td>1</td>
+<td>0</td>
+<td>2734</td>
+</tr>
+<tr>
+<td>1</td>
+<td>1</td>
+<td>1266</td>
+</tr>
+</tbody>
+</table>
+</div>
+<center>“高”的数据</center>
+
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>是否富</th>
+<th>是否嫁</th>
+<th>样本数</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>0</td>
+<td>8305</td>
+</tr>
+<tr>
+<td>0</td>
+<td>1</td>
+<td>1195</td>
+</tr>
+<tr>
+<td>1</td>
+<td>0</td>
+<td>31</td>
+</tr>
+<tr>
+<td>1</td>
+<td>1</td>
+<td>469</td>
+</tr>
+</tbody>
+</table>
+</div>
+<center>“富”的数据</center>
+
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>是否帅</th>
+<th>是否嫁</th>
+<th>样本数</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>0</td>
+<td>7004</td>
+</tr>
+<tr>
+<td>0</td>
+<td>1</td>
+<td>496</td>
+</tr>
+<tr>
+<td>1</td>
+<td>0</td>
+<td>1332</td>
+</tr>
+<tr>
+<td>1</td>
+<td>1</td>
+<td>1168</td>
+</tr>
+</tbody>
+</table>
+</div>
+<center>“帅”的数据</center>
+
+<p>这时候假如我们要求P(Y=1|X=(1,1,1))，我们没法直接根据样本数量进行计算，需要利用独立性做一些转换。</p>
+<script type="math/tex; mode=display">
+P(嫁|高富帅) = \frac{P(高富帅|嫁)P(嫁)}{P(高富帅)}\\
+因为高富帅是独立事件，所以\\
+P(高富帅) = P(高)P(富)P(帅)\\
+P(高富帅|嫁) = P(高|嫁)P(富|嫁)P(帅|嫁)\\
+所以 \\
+P(嫁|高富帅) = \frac{P(高|嫁)P(富|嫁)P(帅|嫁)P(嫁)}{P(高)P(富)P(帅)}\\</script><p>最后一个式子，我们都能从表中根据样本数算出来，最后的结果是P(嫁|高富帅) = 5！！为什么会出现概率大于1的情况呢？这是因为我们做了很强的假设，与实际效果不符，我们的P(嫁)用了整体的概率，但是其他的用了各自统计的概率。实际上</p>
+<script type="math/tex; mode=display">
+P(高|嫁)P(富|嫁)P(帅|嫁)P(嫁) = 0.1505 \\
+P(高富帅|嫁) = 0.03</script><p>所以我们假设的两个相等的概率，实际差了5倍，我们最终得到的结果不是准的，但是这并不影响我们分类。因为</p>
+<script type="math/tex; mode=display">
+P(嫁|高富帅) = \frac{P(高|嫁)P(富|嫁)P(帅|嫁)P(嫁)}{P(高)P(富)P(帅)}\\
+P(不嫁|高富帅) = \frac{P(高|不嫁)P(富|不嫁)P(帅|不嫁)P(不嫁)}{P(高)P(富)P(帅)}\\</script><p>我们发现它们两个的分母是一样的，所以我们不必求出分母，只比较分子即可。</p>
+<p>用了这种独立性假设后，假设每个属性是1-10分，我们只需要列3个表，每个表20行，一共60行，大大减小了问题的复杂度。所以我们把这种方法称为“朴素”贝叶斯(Naive Bayes)，就是天真的贝叶斯，把事情想得简单一点。</p>
+<h2 id="数学表示"><a href="#数学表示" class="headerlink" title="数学表示"></a>数学表示</h2><p>假设我们得到了一个训练集</p>
+<script type="math/tex; mode=display">
+T = \{(x_1,y_1),(x_2,y_2),(x_3,y_3),\cdots,(x_m,y_m)\}</script><p>其中x是一个n维向量</p>
+<script type="math/tex; mode=display">
+x_i=(x_i^1,x_i^2,x_i^3,\cdots,x_i^n)</script><p>里面的每一个值都是离散的，取值范围有限。</p>
+<p>y的取值范围是就是分类的数量</p>
+<script type="math/tex; mode=display">
+y \in (c_1,c_2,\cdots,c_k)</script><p>假如我们能得到P(X,Y)的联合分布，那么我们就能得到任意的P(Y|X)。</p>
+<p><img src="/2020/05/07/贝叶斯公式与朴素贝叶斯分类/u=2145802309,872179666&amp;fm=15&amp;gp=0.jpg" alt="img"></p>
+<script type="math/tex; mode=display">
+P(Y=c_k|X=x)=\frac {P(X=x|Y=c_k)P(Y=c_k)}{P(X=x)}</script><p>假设$x_i$的取值互相独立，那么</p>
+<script type="math/tex; mode=display">
+P(X=x|Y=c_k)=P(X=(x^1,x^2,\dots,x^n)|Y=c_k)=\prod_j^nP(X^j=x^j|Y=c_k)</script><p>所以，分类器$f(x)$为</p>
+<script type="math/tex; mode=display">
+f(x) =arg\max\limits_{c_k}P(Y=c_k|X=x)= arg\max\limits_{c_k} \frac {(\prod_j^nP(X^j=x^j|Y=c_k))P(Y=c_k)}{P(X=x)}</script><p>考虑到对于所有可能的取值，分母是一样的，所以</p>
+<script type="math/tex; mode=display">
+f(x) = arg \max \limits_{c_k}P(Y=c_k)\prod_{j}(P(X^j=x^j)|Y=c_k)</script><h2 id="拉普拉斯平滑"><a href="#拉普拉斯平滑" class="headerlink" title="拉普拉斯平滑"></a>拉普拉斯平滑</h2><p>我们在统计数据的时候，一些发生概率小的事件，很可能统计结果为0，这样就影响了我们对后验概率的计算，因为乘以0那结果必然为0了。</p>
+<p>为了减少这种统计数量为0带来的影响，我们把每个可能的取值发生的频数加上一个固定值$\lambda$，这样</p>
+<script type="math/tex; mode=display">
+P_{\lambda}(X^j=x^j) = \frac{count(X^j=x^j)+\lambda}{totalCount+K\lambda}</script><p>其中k是$X^j$的取值范围数量。当$\lambda=1$时，我们就称为拉普拉斯平滑。</p>
+<h2 id="实战：用朴素贝叶斯识别手写数字"><a href="#实战：用朴素贝叶斯识别手写数字" class="headerlink" title="实战：用朴素贝叶斯识别手写数字"></a>实战：用朴素贝叶斯识别手写数字</h2><p>先把MINIST手写数字集下载下来，地址是<a href="https://storage.googleapis.com/tensorflow/tf-keras-datasets/mnist.npz" target="_blank" rel="noopener">https://storage.googleapis.com/tensorflow/tf-keras-datasets/mnist.npz</a> ,</p>
+<p>我们可以用下面代码展示一下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"></span><br><span class="line">data = np.load(<span class="string">'mnist.npz'</span>) <span class="comment">#具体的路径</span></span><br><span class="line">x_train, y_train, x_test, y_test = data[<span class="string">'x_train'</span>], data[<span class="string">'y_train'</span>], data[<span class="string">'x_test'</span>], data[<span class="string">'y_test'</span>]</span><br><span class="line">print(x_train.shape)</span><br><span class="line">print(y_train.shape)</span><br><span class="line">plt.imshow(x_train[<span class="number">0</span>])</span><br><span class="line">plt.imshow(x_train[<span class="number">1</span>])</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+<p>我们可以看到，能从里面拿到4个数据集x_train, y_train, x_test, y_test，前面的是训练集，后面的是测试集。</p>
+<p>x_train的shape是(60000,28,28)，也就是60000条数据，每条数据是一个28x28的矩阵，也就是一个图片，每一个矩阵点的大小是0-255，代表一个像素。y_train是60000个标签，代表每个图是什么数字。我们用plt可以画出来。</p>
+<p><img src="/2020/05/07/贝叶斯公式与朴素贝叶斯分类/image-20200513170938962.png" alt="image-20200513170938962"></p>
+<p>下面是用来识别的完整代码</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line">data = np.load(<span class="string">'mnist.npz'</span>)</span><br><span class="line">x_train, y_train, x_test, y_test = data[<span class="string">'x_train'</span>], data[<span class="string">'y_train'</span>], data[<span class="string">'x_test'</span>], data[<span class="string">'y_test'</span>]</span><br><span class="line"></span><br><span class="line"><span class="comment">#把(60000,28,28)展开成(60000,784)，这样每个样例都是一维的，便于处理</span></span><br><span class="line">x_train = x_train.reshape(x_train.shape[<span class="number">0</span>],<span class="number">28</span>*<span class="number">28</span>,order=<span class="string">"C"</span>)</span><br><span class="line">x_test = x_test.reshape(x_test.shape[<span class="number">0</span>],<span class="number">28</span>*<span class="number">28</span>,order=<span class="string">"C"</span>)</span><br><span class="line">print(x_train.shape)</span><br><span class="line"></span><br><span class="line"><span class="comment">#training</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#对于每一个数字，都有一个矩阵,代表每个像素点每个像素值出现的次数</span></span><br><span class="line"><span class="comment"># 为了计算P(Xi = xi | Y=c),比如P(X0=0|Y=0)=0.99, P(X0=255|Y=0)=0.0001, P(X1=0|Y=0)=0.001，这是一个联合分布律</span></span><br><span class="line"><span class="comment"># 先把次数统计出来，后面计算概率</span></span><br><span class="line"><span class="string">'''</span></span><br><span class="line"><span class="string">数字0对应的矩阵</span></span><br><span class="line"><span class="string">      0    1    2    3    4    5    6    7    8    ...    255</span></span><br><span class="line"><span class="string">x0    100  3    0    0    0    0    0    0    0           0 </span></span><br><span class="line"><span class="string">x1    90   5    3    1    0    1    0    0    0           0</span></span><br><span class="line"><span class="string">x2</span></span><br><span class="line"><span class="string">x3</span></span><br><span class="line"><span class="string">...</span></span><br><span class="line"><span class="string">x784</span></span><br><span class="line"><span class="string">数字1对应的矩阵</span></span><br><span class="line"><span class="string">'''</span></span><br><span class="line"><span class="comment"># 所以该矩阵的shape是(10,784,256)，为了保证每个像素值出现的次数不为0，以1初始化</span></span><br><span class="line">distribution = np.ones(<span class="number">10</span>*<span class="number">784</span>*<span class="number">256</span>).reshape(<span class="number">10</span>,<span class="number">784</span>,<span class="number">256</span>) <span class="comment">#拉普拉斯平滑，认为每个值都至少出现了一次</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 统计每个数字出现的次数，以便计算P(Y=C)</span></span><br><span class="line">digit_count = np.zeros(<span class="number">10</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(x_train.shape[<span class="number">0</span>]):</span><br><span class="line">    digit_count[y_train[i]] = digit_count[y_train[i]] + <span class="number">1</span> <span class="comment"># 相应的数字个数加1</span></span><br><span class="line">    one_hot = np.eye(<span class="number">256</span>)[x_train[i]] <span class="comment"># 把这个训练数据(784,)，做one_hot编码，可以直接累加频数</span></span><br><span class="line">    distribution[y_train[i]] = distribution[y_train[i]] + one_hot</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">#计算条件概率,也就是把distribution从频数变为概率</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">10</span>):</span><br><span class="line">    distribution[i] = distribution[i] / digit_count[i]</span><br><span class="line">print(digit_count)</span><br><span class="line"></span><br><span class="line"><span class="comment">#计算P(Y=c)</span></span><br><span class="line">digit_prob = digit_count / <span class="number">60000</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#predict,拿100个测试样子试试</span></span><br><span class="line">errorcount = <span class="number">0</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">100</span>):</span><br><span class="line">    x = x_test[i]</span><br><span class="line">    one_hot = np.eye(<span class="number">256</span>)[x]</span><br><span class="line">    ret = distribution*one_hot <span class="comment">#这个地方有点不好理解，其实就是one hot了之后相乘，那么只能取到对应像素值的概率，其他位置都是0，相当于计算了所有P(Xi=xi|Y=c)的值</span></span><br><span class="line">    ret = ret.sum(axis=<span class="number">2</span>) <span class="comment">#每一行只有一个正值，其他是0，相加，减小维度，下面再相乘</span></span><br><span class="line"></span><br><span class="line">    p = np.ones(<span class="number">10</span>)</span><br><span class="line">    <span class="keyword">for</span> j <span class="keyword">in</span> range(<span class="number">10</span>):</span><br><span class="line">        <span class="keyword">for</span> pp <span class="keyword">in</span> ret[j]:</span><br><span class="line">            p[j] = p[j]*pp <span class="comment">#按公式里的进行累乘，因为x有784个feature，所以要乘784次</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    p = p * digit_prob</span><br><span class="line">    print(p)   <span class="comment"># 这个就是x对应的取y的概率</span></span><br><span class="line">    y = np.argmax(p) <span class="comment">#找到最大的下标即可</span></span><br><span class="line">    print(<span class="string">"predict:"</span>,y,<span class="string">",real:"</span>,y_test[i])</span><br><span class="line">    <span class="keyword">if</span> y != y_test[i]:</span><br><span class="line">        errorcount += <span class="number">1</span></span><br><span class="line">print(errorcount)</span><br></pre></td></tr></table></figure>
+<p>但是结果让人很失望，因为100个中错了66个，而且大部分都被预测成了0，我们看一下概率</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">[<span class="number">0.00000000e+000</span> <span class="number">9.77321365e-200</span> <span class="number">3.69171333e-259</span> <span class="number">4.08106118e-265</span></span><br><span class="line"> <span class="number">7.02894044e-274</span> <span class="number">5.64538703e-262</span> <span class="number">2.01724366e-279</span> <span class="number">2.77597583e-273</span></span><br><span class="line"> <span class="number">2.21950679e-254</span> <span class="number">1.14471578e-272</span>]</span><br><span class="line">predict: <span class="number">1</span> ,real: <span class="number">1</span></span><br><span class="line">[<span class="number">0.</span> <span class="number">0.</span> <span class="number">0.</span> <span class="number">0.</span> <span class="number">0.</span> <span class="number">0.</span> <span class="number">0.</span> <span class="number">0.</span> <span class="number">0.</span> <span class="number">0.</span>]</span><br><span class="line">predict: <span class="number">0</span> ,real: <span class="number">3</span></span><br><span class="line">[<span class="number">0.</span> <span class="number">0.</span> <span class="number">0.</span> <span class="number">0.</span> <span class="number">0.</span> <span class="number">0.</span> <span class="number">0.</span> <span class="number">0.</span> <span class="number">0.</span> <span class="number">0.</span>]</span><br><span class="line">predict: <span class="number">0</span> ,real: <span class="number">6</span></span><br><span class="line">[<span class="number">0.</span> <span class="number">0.</span> <span class="number">0.</span> <span class="number">0.</span> <span class="number">0.</span> <span class="number">0.</span> <span class="number">0.</span> <span class="number">0.</span> <span class="number">0.</span> <span class="number">0.</span>]</span><br><span class="line">predict: <span class="number">0</span> ,real: <span class="number">9</span></span><br><span class="line">[<span class="number">0.</span> <span class="number">0.</span> <span class="number">0.</span> <span class="number">0.</span> <span class="number">0.</span> <span class="number">0.</span> <span class="number">0.</span> <span class="number">0.</span> <span class="number">0.</span> <span class="number">0.</span>]</span><br><span class="line">predict: <span class="number">0</span> ,real: <span class="number">3</span></span><br><span class="line">[<span class="number">0.00000000e+000</span> <span class="number">4.73491927e-255</span> <span class="number">3.20480193e-309</span> <span class="number">1.78647460e-315</span></span><br><span class="line"> <span class="number">0.00000000e+000</span> <span class="number">3.72016980e-310</span> <span class="number">3.26325578e-311</span> <span class="number">0.00000000e+000</span></span><br><span class="line"> <span class="number">7.87593251e-310</span> <span class="number">0.00000000e+000</span>]</span><br><span class="line">predict: <span class="number">1</span> ,real: <span class="number">1</span></span><br><span class="line">[<span class="number">0.</span> <span class="number">0.</span> <span class="number">0.</span> <span class="number">0.</span> <span class="number">0.</span> <span class="number">0.</span> <span class="number">0.</span> <span class="number">0.</span> <span class="number">0.</span> <span class="number">0.</span>]</span><br><span class="line">predict: <span class="number">0</span> ,real: <span class="number">4</span></span><br></pre></td></tr></table></figure>
+<p>为什么会预测成0呢？因为概率相乘后，已经小到Python没法识别的精度了，基本上都是0，那肯定选第一个。之所以相乘后接近0，是因为有784个feature，784个小于1的数相乘，基本上很难不是0了，所以我们做下优化，我们在每次相乘的时候给乘一个大于1的数，这样结果不会太小。但是这个数也不能太大，否则又成了天文数字，这样的数就是我们需要手动调整的参数。我们在下面这行乘2试试</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">p[j] = p[j]*pp*<span class="number">2</span></span><br></pre></td></tr></table></figure>
+<p>现在100个只有15个识别错误，但是看概率乘积，还是比较小，再增大一点到3，14个错误，已经可以了。我们预测1000个，错188个，识别率超过80%，算是一种合格的算法。</p>
+
+      
+    </div>
+    <div class="article-footer">
+      <blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    
+    <li class="post-copyright-link hidden-xs">
+      <strong>本文链接：</strong>
+      <a href="http://blog.ifool.top/2020/05/07/贝叶斯公式与朴素贝叶斯分类/" title="基础机器学习算法：贝叶斯公式与朴素贝叶斯分类" target="_blank" rel="external">http://blog.ifool.top/2020/05/07/贝叶斯公式与朴素贝叶斯分类/</a>
+    </li>
+    
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong> 本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN协议</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+</blockquote>
+
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="https://github.com/XinliNiu" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="/images/avatar.jpg" class="img-rounded w-full" alt>
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="https://github.com/XinliNiu" target="_blank"><span class="text-dark">ifool</span><small class="ml-1x">金融IT民工</small></a></h3>
+        <div>Java工程师，对机器学习、云计算、安全都感兴趣</div>
+      </div>
+    </figure>
+  </div>
+</div>
+
+
+    </div>
+  </article>
+  
+    
+  <section id="comments">
+  	
+      <div id="vcomments"></div>
+    
+  </section>
+
+
+  
+</div>
+
+  <nav class="bar bar-footer clearfix" data-stick-bottom>
+  <div class="bar-inner">
+  
+  <ul class="pager pull-left">
+    
+    <li class="prev">
+      <a href="/2020/07/08/Java排序的一个问题/" title="Java排序的一个问题"><i class="icon icon-angle-left" aria-hidden="true"></i><span>&nbsp;&nbsp;Newer</span></a>
+    </li>
+    
+    
+    <li class="next">
+      <a href="/2020/04/20/压缩图片方法大全/" title="压缩图片方法大全"><span>Older&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
+    </li>
+    
+    
+  </ul>
+  
+  
+  <!-- Button trigger modal -->
+  <button type="button" class="btn btn-fancy btn-donate pop-onhover bg-gradient-warning" data-toggle="modal" data-target="#donateModal"><span>$</span></button>
+  <!-- <div class="wave-icon wave-icon-danger btn-donate" data-toggle="modal" data-target="#donateModal">
+    <div class="wave-circle"><span class="icon"><i class="icon icon-bill"></i></span></div>
+  </div> -->
+  
+  
+  <div class="bar-right">
+    
+    <div class="share-component" data-sites="weibo,qq,wechat,facebook,twitter" data-mobile-sites="weibo,qq,qzone"></div>
+    
+  </div>
+  </div>
+</nav>
+  
+<!-- Modal -->
+<div class="modal modal-center modal-small modal-xs-full fade" id="donateModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content donate">
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      <div class="modal-body">
+        <div class="donate-box">
+          <div class="donate-head">
+            <p>Maybe you could buy me a cup of coffee.</p>
+          </div>
+          <div class="tab-content">
+            <div role="tabpanel" class="tab-pane fade active in" id="alipay">
+              <div class="donate-payimg">
+                <img src="/images/donate/alipayimg.png" alt="Scan Qrcode" title="Scan">
+              </div>
+              <p class="text-muted mv">Scan this qrcode</p>
+              <p class="text-grey">Open alipay app scan this qrcode, buy me a coffee!</p>
+            </div>
+            <div role="tabpanel" class="tab-pane fade" id="wechatpay">
+              <div class="donate-payimg">
+                <img src="/images/donate/wechatpayimg.png" alt="Scan Qrcode" title="Scan">
+              </div>
+              <p class="text-muted mv">Scan this qrcode</p>
+              <p class="text-grey">Open wechat app scan this qrcode, buy me a coffee!</p>
+            </div>
+          </div>
+          <div class="donate-footer">
+            <ul class="nav nav-tabs nav-justified" role="tablist">
+              <li role="presentation" class="active">
+                <a href="#alipay" id="alipay-tab" role="tab" data-toggle="tab" aria-controls="alipay" aria-expanded="true"><i class="icon icon-alipay"></i> alipay</a>
+              </li>
+              <li role="presentation" class>
+                <a href="#wechatpay" role="tab" id="wechatpay-tab" data-toggle="tab" aria-controls="wechatpay" aria-expanded="false"><i class="icon icon-wepay"></i> wechat payment</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+</main>
+
+  <footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
+	
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/cofess" target="_blank" title="Github" data-toggle="tooltip" data-placement="top"><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="http://weibo.com/cofess" target="_blank" title="Weibo" data-toggle="tooltip" data-placement="top"><i class="icon icon-weibo"></i></a></li>
+        
+        <li><a href="https://twitter.com/iwebued" target="_blank" title="Twitter" data-toggle="tooltip" data-placement="top"><i class="icon icon-twitter"></i></a></li>
+        
+        <li><a href="https://www.behance.net/cofess" target="_blank" title="Behance" data-toggle="tooltip" data-placement="top"><i class="icon icon-behance"></i></a></li>
+        
+        <li><a href="/atom.xml" target="_blank" title="Rss" data-toggle="tooltip" data-placement="top"><i class="icon icon-rss"></i></a></li>
+        
+    </ul>
+
+    <div class="copyright">
+    	
+        <div class="publishby">
+        	Theme by <a href="https://github.com/cofess" target="_blank"> cofess </a>base on <a href="https://github.com/cofess/hexo-theme-pure" target="_blank">pure</a>.
+        </div>
+    </div>
+</footer>
+  <script src="//cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
+<script>
+window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+<script src="/js/plugin.min.js"></script>
+<script src="/js/application.js"></script>
+
+    <script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: 'Posts',
+            PAGES: 'Pages',
+            CATEGORIES: 'Categories',
+            TAGS: 'Tags',
+            UNTITLED: '(Untitled)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+<script src="/js/insight.js"></script>
+
+
+
+
+
+   
+
+
+
+
+   
+    
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/valine"></script>
+  <script type="text/javascript">
+  var GUEST = ['nick', 'mail', 'link'];
+  var meta = 'nick,mail,link';
+  meta = meta.split(',').filter(function(item) {
+    return GUEST.indexOf(item) > -1;
+  });
+  new Valine({
+    el: '#vcomments',
+    verify: false,
+    notify: false,
+    appId: 'rYClA1GFcOx37vpfNFDdtd1k-gzGzoHsz',
+    appKey: '6EzBL1zBskv6x5onoyDYQGiQ',
+    placeholder: 'Just go go',
+    avatar: 'mm',
+    meta: meta,
+    pageSize: '10' || 10,
+    visitor: true
+  });
+  </script>
+
+     
+
+
+
+
+
+
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<!-- <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script> -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+</body>
+</html>

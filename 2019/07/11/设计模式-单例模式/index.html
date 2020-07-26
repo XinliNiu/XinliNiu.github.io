@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform">
+  <meta http-equiv="Cache-Control" content="no-siteapp">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  <!-- Color theme for statusbar -->
+  <meta name="theme-color" content="#000000">
+  <!-- 强制页面在当前窗口以独立页面显示,防止别人在框架里调用页面 -->
+  <meta http-equiv="window-target" content="_top">
+  
+  
+  <title>设计模式-单例模式 | Hexo</title>
+  <meta name="description" content="单例模式（Singleton Pattern）是 Java 中最简单的设计模式之一。这种类型的设计模式属于创建型模式，它提供了一种创建对象的最佳方式。 这种模式涉及到一个单一的类，该类负责创建自己的对象，同时确保只有单个对象被创建。这个类提供了一种访问其唯一的对象的方式，可以直接访问，不需要实例化该类的对象。 意图：保证一个类仅有一个实例，并提供一个访问它的全局访问点。 主要解决：一个全局使用的类">
+<meta name="keywords" content="设计模式, 单例, Singleton, DCL">
+<meta property="og:type" content="article">
+<meta property="og:title" content="设计模式-单例模式">
+<meta property="og:url" content="http://blog.ifool.top/2019/07/11/设计模式-单例模式/index.html">
+<meta property="og:site_name" content="ifool的博客">
+<meta property="og:description" content="单例模式（Singleton Pattern）是 Java 中最简单的设计模式之一。这种类型的设计模式属于创建型模式，它提供了一种创建对象的最佳方式。 这种模式涉及到一个单一的类，该类负责创建自己的对象，同时确保只有单个对象被创建。这个类提供了一种访问其唯一的对象的方式，可以直接访问，不需要实例化该类的对象。 意图：保证一个类仅有一个实例，并提供一个访问它的全局访问点。 主要解决：一个全局使用的类">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://blog.ifool.top/2019/07/11/设计模式-单例模式/62576915-36E0-4B67-B078-704699CA980A.jpg">
+<meta property="og:image" content="http://blog.ifool.top/2019/07/11/设计模式-单例模式/d1f8879a471b1825ffd7adcac296f1df.png">
+<meta property="og:image" content="http://blog.ifool.top/2019/07/11/设计模式-单例模式/1e3667161c3307d95cf5d863dbe435fe_720w.jpg">
+<meta property="og:updated_time" content="2020-07-11T10:24:51.779Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="设计模式-单例模式">
+<meta name="twitter:description" content="单例模式（Singleton Pattern）是 Java 中最简单的设计模式之一。这种类型的设计模式属于创建型模式，它提供了一种创建对象的最佳方式。 这种模式涉及到一个单一的类，该类负责创建自己的对象，同时确保只有单个对象被创建。这个类提供了一种访问其唯一的对象的方式，可以直接访问，不需要实例化该类的对象。 意图：保证一个类仅有一个实例，并提供一个访问它的全局访问点。 主要解决：一个全局使用的类">
+<meta name="twitter:image" content="http://blog.ifool.top/2019/07/11/设计模式-单例模式/62576915-36E0-4B67-B078-704699CA980A.jpg">
+  <!-- Canonical links -->
+  <link rel="canonical" href="http://blog.ifool.top/2019/07/11/设计模式-单例模式/index.html">
+  
+    <link rel="alternate" href="/atom.xml" title="ifool的博客" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png" type="image/x-icon">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+  
+  
+  
+</head>
+
+
+<body class="main-center theme-blue" itemscope itemtype="http://schema.org/WebPage">
+  <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+  <div class="slimContent">
+    <div class="navbar-header">
+      
+      
+      <div class="profile-block text-center">
+        <a id="avatar" href="https://github.com/XinliNiu" target="_blank">
+          <img class="img-circle img-rotate" src="/images/avatar.jpg" width="200" height="200">
+        </a>
+        <h2 id="name" class="hidden-xs hidden-sm">ifool</h2>
+        <h3 id="title" class="hidden-xs hidden-sm hidden-md">金融IT民工</h3>
+        <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i> Beijing, China</small>
+      </div>
+      
+      <div class="search" id="search-form-wrap">
+
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="Search">
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i class="icon icon-search"></i></button>
+            </span>
+        </div>
+    </form>
+    <div class="ins-search">
+  <div class="ins-search-mask"></div>
+  <div class="ins-search-container">
+    <div class="ins-input-wrapper">
+      <input type="text" class="ins-search-input" placeholder="Type something..." x-webkit-speech>
+      <button type="button" class="close ins-close ins-selectable" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="ins-section-wrapper">
+      <div class="ins-section-container"></div>
+    </div>
+  </div>
+</div>
+
+
+</div>
+      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+      <ul class="nav navbar-nav main-nav ">
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/.">
+            
+            <i class="icon icon-home-fill"></i>
+            
+            <span class="menu-title">Home</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives">
+            
+            <i class="icon icon-archives-fill"></i>
+            
+            <span class="menu-title">Archives</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories">
+            
+            <i class="icon icon-folder"></i>
+            
+            <span class="menu-title">Categories</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags">
+            
+            <i class="icon icon-tags"></i>
+            
+            <span class="menu-title">Tags</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-repository">
+          <a href="/repository">
+            
+            <i class="icon icon-project"></i>
+            
+            <span class="menu-title">Repository</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-books">
+          <a href="/books">
+            
+            <i class="icon icon-book-fill"></i>
+            
+            <span class="menu-title">Books</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-links">
+          <a href="/links">
+            
+            <i class="icon icon-friendship"></i>
+            
+            <span class="menu-title">Links</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about">
+            
+            <i class="icon icon-cup-fill"></i>
+            
+            <span class="menu-title">About</span>
+          </a>
+        </li>
+        
+      </ul>
+      
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/cofess" target="_blank" title="Github" data-toggle="tooltip" data-placement="top"><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="http://weibo.com/cofess" target="_blank" title="Weibo" data-toggle="tooltip" data-placement="top"><i class="icon icon-weibo"></i></a></li>
+        
+        <li><a href="https://twitter.com/iwebued" target="_blank" title="Twitter" data-toggle="tooltip" data-placement="top"><i class="icon icon-twitter"></i></a></li>
+        
+        <li><a href="https://www.behance.net/cofess" target="_blank" title="Behance" data-toggle="tooltip" data-placement="top"><i class="icon icon-behance"></i></a></li>
+        
+        <li><a href="/atom.xml" target="_blank" title="Rss" data-toggle="tooltip" data-placement="top"><i class="icon icon-rss"></i></a></li>
+        
+    </ul>
+
+    </nav>
+  </div>
+</header>
+
+  
+    <aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title">Board</h3>
+    <div class="widget-body">
+        <div id="board">
+            <div class="content">
+                <p>欢迎交流与分享经验!</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget-body">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Java和JVM/">Java和JVM</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Python/">Python</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Web与移动端安全/">Web与移动端安全</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/工具与效率/">工具与效率</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/数学与机器学习/">数学与机器学习</a><span class="category-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget-body">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Dubbo-拥堵-NIO-Netty-TCP缓冲区/">Dubbo,拥堵,NIO,Netty,TCP缓冲区</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hexo-mathjax/">Hexo,mathjax</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JVM-Btrace-Arthas-在线调试-生产案例/">JVM,Btrace, Arthas, 在线调试, 生产案例</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-IO-IO模型-NIO-Netty-Redis-IO多路复用-阻塞IO-非阻塞IO-异步IO-同步IO/">Java IO,IO模型,NIO,Netty,Redis,IO多路复用,阻塞IO,非阻塞IO,异步IO,同步IO</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-排序-Arrays-sort-TimSort-LegacyMergeSort/">Java, 排序, Arrays.sort, TimSort, LegacyMergeSort</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux-工具软件使用/">Linux,工具软件使用</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Python-Iterable-Iterator-Generator-迭代器-可迭代对象-生成器/">Python,Iterable,Iterator,Generator,迭代器,可迭代对象,生成器</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Python-推导式-python-list-comprehension-生成器-列表推导/">Python,推导式,python list comprehension, 生成器, 列表推导</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Typora-Hexo-Markdown-图片/">Typora, Hexo, Markdown, 图片</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android-adb/">android, adb</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android-root/">android,root</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/latex/">latex</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/代理-Fiddler-安全-抓包/">代理,Fiddler,安全,抓包</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/压缩图片/">压缩图片</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/概率-人工智能-机器学习-分类-朴素贝叶斯-贝叶斯公式-MINIST，手写数字/">概率,人工智能,机器学习,分类,朴素贝叶斯,贝叶斯公式,MINIST，手写数字</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/设计模式-单例-Singleton-DCL/">设计模式, 单例, Singleton, DCL</a><span class="tag-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget-body tagcloud">
+      <a href="/tags/Dubbo-拥堵-NIO-Netty-TCP缓冲区/" style="font-size: 13px;">Dubbo,拥堵,NIO,Netty,TCP缓冲区</a> <a href="/tags/Hexo-mathjax/" style="font-size: 13px;">Hexo,mathjax</a> <a href="/tags/JVM-Btrace-Arthas-在线调试-生产案例/" style="font-size: 13px;">JVM,Btrace, Arthas, 在线调试, 生产案例</a> <a href="/tags/Java-IO-IO模型-NIO-Netty-Redis-IO多路复用-阻塞IO-非阻塞IO-异步IO-同步IO/" style="font-size: 13px;">Java IO,IO模型,NIO,Netty,Redis,IO多路复用,阻塞IO,非阻塞IO,异步IO,同步IO</a> <a href="/tags/Java-排序-Arrays-sort-TimSort-LegacyMergeSort/" style="font-size: 13px;">Java, 排序, Arrays.sort, TimSort, LegacyMergeSort</a> <a href="/tags/Linux-工具软件使用/" style="font-size: 13px;">Linux,工具软件使用</a> <a href="/tags/Python-Iterable-Iterator-Generator-迭代器-可迭代对象-生成器/" style="font-size: 13px;">Python,Iterable,Iterator,Generator,迭代器,可迭代对象,生成器</a> <a href="/tags/Python-推导式-python-list-comprehension-生成器-列表推导/" style="font-size: 13px;">Python,推导式,python list comprehension, 生成器, 列表推导</a> <a href="/tags/Typora-Hexo-Markdown-图片/" style="font-size: 13px;">Typora, Hexo, Markdown, 图片</a> <a href="/tags/android-adb/" style="font-size: 13px;">android, adb</a> <a href="/tags/android-root/" style="font-size: 13px;">android,root</a> <a href="/tags/latex/" style="font-size: 13px;">latex</a> <a href="/tags/代理-Fiddler-安全-抓包/" style="font-size: 13px;">代理,Fiddler,安全,抓包</a> <a href="/tags/压缩图片/" style="font-size: 13px;">压缩图片</a> <a href="/tags/概率-人工智能-机器学习-分类-朴素贝叶斯-贝叶斯公式-MINIST，手写数字/" style="font-size: 13px;">概率,人工智能,机器学习,分类,朴素贝叶斯,贝叶斯公式,MINIST，手写数字</a> <a href="/tags/设计模式-单例-Singleton-DCL/" style="font-size: 13px;">设计模式, 单例, Singleton, DCL</a>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Archive</h3>
+    <div class="widget-body">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/07/">July 2020</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/05/">May 2020</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/04/">April 2020</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/03/">March 2020</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">October 2019</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/07/">July 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">March 2019</a><span class="archive-list-count">4</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget-body">
+      <ul class="recent-post-list list-unstyled no-thumbnail">
+        
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/Java和JVM/">Java和JVM</a>
+              </p>
+              <p class="item-title">
+                <a href="/2020/07/11/Dubbo/" class="title">一次Dubbo拥堵分析</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2020-07-11T07:43:27.000Z" itemprop="datePublished">2020-07-11</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2020/07/08/Java排序的一个问题/" class="title">Java排序的一个问题</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2020-07-08T14:27:36.000Z" itemprop="datePublished">2020-07-08</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/数学与机器学习/">数学与机器学习</a>
+              </p>
+              <p class="item-title">
+                <a href="/2020/05/07/贝叶斯公式与朴素贝叶斯分类/" class="title">基础机器学习算法：贝叶斯公式与朴素贝叶斯分类</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2020-05-07T09:09:37.000Z" itemprop="datePublished">2020-05-07</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/工具与效率/">工具与效率</a>
+              </p>
+              <p class="item-title">
+                <a href="/2020/04/20/压缩图片方法大全/" class="title">压缩图片方法大全</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2020-04-20T03:48:59.000Z" itemprop="datePublished">2020-04-20</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/Web与移动端安全/">Web与移动端安全</a>
+              </p>
+              <p class="item-title">
+                <a href="/2020/04/19/Fiddler安装与使用/" class="title">Fiddler安装与使用</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2020-04-19T10:15:09.000Z" itemprop="datePublished">2020-04-19</time>
+              </p>
+            </div>
+          </li>
+          
+      </ul>
+    </div>
+  </div>
+  
+
+    
+  </div>
+</aside>
+
+  
+  
+<main class="main" role="main">
+  <div class="content">
+  <article id="post-设计模式-单例模式" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      
+        
+  
+    <h1 class="article-title" itemprop="name">
+      设计模式-单例模式
+    </h1>
+  
+
+      
+      <div class="article-meta">
+        <span class="article-date">
+    <i class="icon icon-calendar-check"></i>
+	<a href="/2019/07/11/设计模式-单例模式/" class="article-date">
+	  <time datetime="2019-07-11T02:44:08.000Z" itemprop="datePublished">2019-07-11</time>
+	</a>
+</span>
+        
+        
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>
+	<a class="article-tag-link" href="/tags/设计模式-单例-Singleton-DCL/">设计模式, 单例, Singleton, DCL</a>
+  </span>
+
+
+        
+
+	<span class="article-read hidden-xs">
+    	<i class="icon icon-eye-fill" aria-hidden="true"></i>
+    	<span id="/2019/07/11/设计模式-单例模式/" class="leancloud_visitors" data-flag-title="设计模式-单例模式">
+			<span class="leancloud-visitors-count">0</span>
+		</span>
+    </span>
+
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2019/07/11/设计模式-单例模式/#comments" class="article-comment-link">Comments</a></span>
+        
+	
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">Word Count: 2.1k(words)</span>
+	
+	
+		<span class="post-readcount hidden-xs" itemprop="timeRequired">Read Count: 8(minutes)</span>
+	
+
+      </div>
+    </div>
+    <div class="article-entry marked-body" itemprop="articleBody">
+      
+        <p>单例模式（Singleton Pattern）是 Java 中最简单的设计模式之一。这种类型的设计模式属于创建型模式，它提供了一种创建对象的最佳方式。</p>
+<p>这种模式涉及到一个单一的类，该类负责创建自己的对象，同时确保只有单个对象被创建。这个类提供了一种访问其唯一的对象的方式，可以直接访问，不需要实例化该类的对象。</p>
+<p><strong>意图：</strong>保证一个类仅有一个实例，并提供一个访问它的全局访问点。</p>
+<p><strong>主要解决：</strong>一个全局使用的类频繁地创建与销毁。</p>
+<p><strong>何时使用：</strong>当您想控制实例数目，节省系统资源的时候。</p>
+<p><strong>如何解决：</strong>判断系统是否已经有这个单例，如果有则返回，如果没有则创建。</p>
+<p><strong>关键代码：</strong>构造函数是私有的</p>
+<p><img src="/2019/07/11/设计模式-单例模式/62576915-36E0-4B67-B078-704699CA980A.jpg" alt="单例模式的 UML 图"></p>
+<h1 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h1><p>实现单例模式时，一定要注意因为多线程同时构造可能出现的实例多次初始化，最简单的方式是每次加锁，但是效率低。</p>
+<h2 id="1-使用静态变量"><a href="#1-使用静态变量" class="headerlink" title="1.使用静态变量"></a>1.使用静态变量</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">public class Singleton &#123;  </span><br><span class="line">    private static Singleton instance = new Singleton();  </span><br><span class="line">    private Singleton ()&#123;&#125;  </span><br><span class="line">    public static Singleton getInstance() &#123;  </span><br><span class="line">    return instance;  </span><br><span class="line">    &#125;  </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>特点： 在类加载时就初始化了，保证后续不会有线程安全问题，但是是非Lazy加载模式。即使getInstance不被调用，这个类也可能也会被加载。</p>
+<h2 id="2-使用DCL-double-check-locking-做lazy初始化"><a href="#2-使用DCL-double-check-locking-做lazy初始化" class="headerlink" title="2.使用DCL(double check locking)做lazy初始化"></a>2.使用DCL(double check locking)做lazy初始化</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">public class Singleton &#123;  </span><br><span class="line">    private volatile static Singleton singleton;  </span><br><span class="line">    private Singleton ()&#123;&#125;  </span><br><span class="line">    public static Singleton getSingleton() &#123;  </span><br><span class="line">    if (singleton == null) &#123;  </span><br><span class="line">        synchronized (Singleton.class) &#123;  </span><br><span class="line">        	if (singleton == null) &#123;  </span><br><span class="line">            	singleton = new Singleton();  </span><br><span class="line">        	&#125;  </span><br><span class="line">        &#125;  </span><br><span class="line">    &#125;  </span><br><span class="line">    return singleton;  </span><br><span class="line">    &#125;  </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="3-使用静态内部类做lazy初始化"><a href="#3-使用静态内部类做lazy初始化" class="headerlink" title="3.使用静态内部类做lazy初始化"></a>3.使用静态内部类做lazy初始化</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">public class Singleton &#123;  </span><br><span class="line">    private static class SingletonHolder &#123;  </span><br><span class="line">    	private static final Singleton INSTANCE = new Singleton();  </span><br><span class="line">    &#125;  </span><br><span class="line">    private Singleton ()&#123;&#125;  </span><br><span class="line">    public static final Singleton getInstance() &#123;  </span><br><span class="line">    	return SingletonHolder.INSTANCE;  </span><br><span class="line">    &#125;  </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>跟第一种不同的是，加载Singleton的时候，并不一定会调用初始化方法，只有调用getInstance的时候，加载SingletonHolder，才会初始化，而类加载机制是线程安全的，所以这个也是lazy模式，跟DCL效果是一样的。</p>
+<h2 id="4-使用枚举"><a href="#4-使用枚举" class="headerlink" title="4.使用枚举"></a>4.使用枚举</h2><p>单例的枚举实现在《Effective Java》中有提到，因为其功能完整、使用简洁、无偿地提供了序列化机制、在面对复杂的序列化或者反射攻击时仍然可以绝对防止多次实例化等优点，单元素的枚举类型被作者认为是实现Singleton的最佳方法。</p>
+<p>其实现非常简单，如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">public enum Singleton &#123;</span><br><span class="line">  	INSTANCE;</span><br><span class="line">  	private Singleton() &#123;&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>下面我们用一个枚举实现单个数据源例子来简单验证一下：<br>声明一个枚举，用于获取数据库连接。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">public enum DataSourceEnum &#123;</span><br><span class="line">    DATASOURCE;</span><br><span class="line">    private DBConnection connection = null;</span><br><span class="line">    private DataSourceEnum() &#123;</span><br><span class="line">        connection = new DBConnection();</span><br><span class="line">    &#125;</span><br><span class="line">    public DBConnection getConnection() &#123;</span><br><span class="line">        return connection;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>看一下是否是真的单例</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">public class Main &#123;</span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        DBConnection con1 = DataSourceEnum.DATASOURCE.getConnection();</span><br><span class="line">        DBConnection con2 = DataSourceEnum.DATASOURCE.getConnection();</span><br><span class="line">        System.out.println(con1 == con2);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>两个是一样的。</p>
+<p>在JDK5 中提供了大量的语法糖，枚举就是其中一种。<br>所谓 语法糖（Syntactic Sugar），也称糖衣语法，是由英国计算机学家 Peter.J.Landin 发明的一个术语，指在计算机语言中添加的某种语法，这种语法对语言的功能并没有影响，但是但是更方便程序员使用。只是在编译器上做了手脚，却没有提供对应的指令集来处理它。</p>
+<p>就拿枚举来说，其实Enum就是一个普通的类，它继承自java.lang.Enum类。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">public enum DataSourceEnum &#123;</span><br><span class="line">  DATASOURCE;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>把上面枚举编译后的字节码反编译，得到的代码如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">public final class DataSourceEnum extends Enum&lt;DataSourceEnum&gt; &#123;</span><br><span class="line">      public static final DataSourceEnum DATASOURCE;</span><br><span class="line">      public static DataSourceEnum[] values();</span><br><span class="line">      public static DataSourceEnum valueOf(String s);</span><br><span class="line">      static &#123;&#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>由反编译后的代码可知，DATASOURCE 被声明为 static 的，根据在【单例深思】饿汉式与类加载 中所描述的类加载过程，可以知道虚拟机会保证一个类的<clinit>() 方法在多线程环境中被正确的加锁、同步。所以，枚举实现是在实例化时是线程安全。</clinit></p>
+<p>接下来看看序列化问题：</p>
+<p>Java规范中规定，每一个枚举类型极其定义的枚举变量在JVM中都是唯一的，因此在枚举类型的序列化和反序列化上，Java做了特殊的规定。<br>在序列化的时候Java仅仅是将枚举对象的name属性输出到结果中，反序列化的时候则是通过 java.lang.Enum 的 valueOf() 方法来根据名字查找枚举对象。<br>也就是说，以下面枚举为例，序列化的时候只将 DATASOURCE 这个名称输出，反序列化的时候再通过这个名称，查找对于的枚举类型，因此反序列化后的实例也会和之前被序列化的对象实例相同。</p>
+<p>由此可知，枚举天生保证序列化单例。</p>
+<h1 id="DCL方式存在的问题以及解决方案"><a href="#DCL方式存在的问题以及解决方案" class="headerlink" title="DCL方式存在的问题以及解决方案"></a>DCL方式存在的问题以及解决方案</h1><p>我们看前面的DCL模式，静态变量前面加了一个volatile， 我们来分析一下为什么要加volatile。</p>
+<p>singleton = new Singleton(); </p>
+<p>这个语句其实可以分成三段：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">memory = allocate(); //分配内存用于初始化</span><br><span class="line">init(memory) ; //构建对象</span><br><span class="line">singleton = memory; //把memory赋值给singleton</span><br></pre></td></tr></table></figure>
+<p>实际上，JVM会对指令做重排。我们看看上面语句对应的ByteCode，</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">10: monitorenter</span><br><span class="line">11: getstatic     #31                 // Field instance:Lcom/cmbc/tools/DCL_Singleton;</span><br><span class="line">14: ifnonnull     27</span><br><span class="line">17: new           #1                  // class com/cmbc/tools/DCL_Singleton</span><br><span class="line">20: dup</span><br><span class="line">21: invokespecial #33                 // Method &quot;&lt;init&gt;&quot;:()V</span><br><span class="line">24: putstatic     #31                 // Field instance:Lcom/cmbc/tools/DCL_Singleton;</span><br><span class="line">27: aload_0</span><br><span class="line">28: monitorexit</span><br></pre></td></tr></table></figure>
+<p>首先，是monitorenter，进入同步块，然后拿到static字段，编号为31的，也就是instance，接下下来判断是否是为null，如果不是就跳到27行，否则继续往下走。</p>
+<p>接下来就new了一个对象，然后这个dup是复制了一份对象的this指针，供下面的init使用。接着就调用init方法初始化这个对象。然后再用putstatic赋值。如果发生了重排，可能在init方法执行完成之前，putstatic就执行了，导致其他线程看到instance不为null，这样它就直接使用了，但是可能会出问题。</p>
+<p><img src="/2019/07/11/设计模式-单例模式/d1f8879a471b1825ffd7adcac296f1df.png" alt="img"></p>
+<p>这些语句是在单个线程里执行的，重排的意义在哪呢？ 实际上单个CPU执行指令的时候，也并不是完全串行的，而是流水线式的。</p>
+<p><img src="/2019/07/11/设计模式-单例模式/1e3667161c3307d95cf5d863dbe435fe_720w.jpg" alt="img"></p>
+<p>一条指令由多个更小的阶段组成，这些小阶段是可以并行的。 但是如果两个指令有依赖关系，那么就必须等前一个所有的阶段都执行结束再来执行。所以假设abc三条指令在代码中是串行的，而c依赖a，c不依赖b，那么a不必等b执行完就能执行，甚至可以早于b执行。假设一条指令分4个阶段，也就是4个时钟周期，那么完全串行需要12个时钟周期，但是b和c可以有重叠的时钟周期，那只需要9个时钟周期就能执行完。</p>
+<p>如何防止重排呢？ 那就是在变量前面加上volatile进行修饰，对于volatile修饰的变量，对其的操作指令都不会被重排，具体原理不再赘述。 但是，访问一个volatile的对象，每次都要去主内存取，所以性能会差一点。 因此单例模式最好使用静态内部类或者枚举方式实现。</p>
+<p>实际上，这种问题在99%的情况下是没问题的，也很难复现，只是说研究细节的话可能会出现这个问题。</p>
+<h1 id="JDK中单例模式的例子"><a href="#JDK中单例模式的例子" class="headerlink" title="JDK中单例模式的例子"></a>JDK中单例模式的例子</h1><p>Jdk中最常见的一个例子就是Runtime，它用了饿汉式初始化方法，加载类的时候就初始化。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">public class Runtime &#123;</span><br><span class="line">    private static Runtime currentRuntime = new Runtime();</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * Returns the runtime object associated with the current Java application.</span><br><span class="line">     * Most of the methods of class &lt;code&gt;Runtime&lt;/code&gt; are instance</span><br><span class="line">     * methods and must be invoked with respect to the current runtime object.</span><br><span class="line">     *</span><br><span class="line">     * @return  the &lt;code&gt;Runtime&lt;/code&gt; object associated with the current</span><br><span class="line">     *          Java application.</span><br><span class="line">     */</span><br><span class="line">    public static Runtime getRuntime() &#123;</span><br><span class="line">        return currentRuntime;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /** Don&apos;t let anyone else instantiate this class */</span><br><span class="line">    private Runtime() &#123;&#125;</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    <div class="article-footer">
+      <blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    
+    <li class="post-copyright-link hidden-xs">
+      <strong>本文链接：</strong>
+      <a href="http://blog.ifool.top/2019/07/11/设计模式-单例模式/" title="设计模式-单例模式" target="_blank" rel="external">http://blog.ifool.top/2019/07/11/设计模式-单例模式/</a>
+    </li>
+    
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong> 本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN协议</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+</blockquote>
+
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="https://github.com/XinliNiu" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="/images/avatar.jpg" class="img-rounded w-full" alt>
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="https://github.com/XinliNiu" target="_blank"><span class="text-dark">ifool</span><small class="ml-1x">金融IT民工</small></a></h3>
+        <div>Java工程师，对机器学习、云计算、安全都感兴趣</div>
+      </div>
+    </figure>
+  </div>
+</div>
+
+
+    </div>
+  </article>
+  
+    
+  <section id="comments">
+  	
+      <div id="vcomments"></div>
+    
+  </section>
+
+
+  
+</div>
+
+  <nav class="bar bar-footer clearfix" data-stick-bottom>
+  <div class="bar-inner">
+  
+  <ul class="pager pull-left">
+    
+    <li class="prev">
+      <a href="/2019/10/11/用Typora写Hexo博客/" title="用Typora写Hexo博客"><i class="icon icon-angle-left" aria-hidden="true"></i><span>&nbsp;&nbsp;Newer</span></a>
+    </li>
+    
+    
+    <li class="next">
+      <a href="/2019/05/05/系统常用配置/" title="系统常用配置"><span>Older&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
+    </li>
+    
+    
+  </ul>
+  
+  
+  <!-- Button trigger modal -->
+  <button type="button" class="btn btn-fancy btn-donate pop-onhover bg-gradient-warning" data-toggle="modal" data-target="#donateModal"><span>$</span></button>
+  <!-- <div class="wave-icon wave-icon-danger btn-donate" data-toggle="modal" data-target="#donateModal">
+    <div class="wave-circle"><span class="icon"><i class="icon icon-bill"></i></span></div>
+  </div> -->
+  
+  
+  <div class="bar-right">
+    
+    <div class="share-component" data-sites="weibo,qq,wechat,facebook,twitter" data-mobile-sites="weibo,qq,qzone"></div>
+    
+  </div>
+  </div>
+</nav>
+  
+<!-- Modal -->
+<div class="modal modal-center modal-small modal-xs-full fade" id="donateModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content donate">
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      <div class="modal-body">
+        <div class="donate-box">
+          <div class="donate-head">
+            <p>Maybe you could buy me a cup of coffee.</p>
+          </div>
+          <div class="tab-content">
+            <div role="tabpanel" class="tab-pane fade active in" id="alipay">
+              <div class="donate-payimg">
+                <img src="/images/donate/alipayimg.png" alt="Scan Qrcode" title="Scan">
+              </div>
+              <p class="text-muted mv">Scan this qrcode</p>
+              <p class="text-grey">Open alipay app scan this qrcode, buy me a coffee!</p>
+            </div>
+            <div role="tabpanel" class="tab-pane fade" id="wechatpay">
+              <div class="donate-payimg">
+                <img src="/images/donate/wechatpayimg.png" alt="Scan Qrcode" title="Scan">
+              </div>
+              <p class="text-muted mv">Scan this qrcode</p>
+              <p class="text-grey">Open wechat app scan this qrcode, buy me a coffee!</p>
+            </div>
+          </div>
+          <div class="donate-footer">
+            <ul class="nav nav-tabs nav-justified" role="tablist">
+              <li role="presentation" class="active">
+                <a href="#alipay" id="alipay-tab" role="tab" data-toggle="tab" aria-controls="alipay" aria-expanded="true"><i class="icon icon-alipay"></i> alipay</a>
+              </li>
+              <li role="presentation" class>
+                <a href="#wechatpay" role="tab" id="wechatpay-tab" data-toggle="tab" aria-controls="wechatpay" aria-expanded="false"><i class="icon icon-wepay"></i> wechat payment</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+</main>
+
+  <footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
+	
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/cofess" target="_blank" title="Github" data-toggle="tooltip" data-placement="top"><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="http://weibo.com/cofess" target="_blank" title="Weibo" data-toggle="tooltip" data-placement="top"><i class="icon icon-weibo"></i></a></li>
+        
+        <li><a href="https://twitter.com/iwebued" target="_blank" title="Twitter" data-toggle="tooltip" data-placement="top"><i class="icon icon-twitter"></i></a></li>
+        
+        <li><a href="https://www.behance.net/cofess" target="_blank" title="Behance" data-toggle="tooltip" data-placement="top"><i class="icon icon-behance"></i></a></li>
+        
+        <li><a href="/atom.xml" target="_blank" title="Rss" data-toggle="tooltip" data-placement="top"><i class="icon icon-rss"></i></a></li>
+        
+    </ul>
+
+    <div class="copyright">
+    	
+        <div class="publishby">
+        	Theme by <a href="https://github.com/cofess" target="_blank"> cofess </a>base on <a href="https://github.com/cofess/hexo-theme-pure" target="_blank">pure</a>.
+        </div>
+    </div>
+</footer>
+  <script src="//cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
+<script>
+window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+<script src="/js/plugin.min.js"></script>
+<script src="/js/application.js"></script>
+
+    <script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: 'Posts',
+            PAGES: 'Pages',
+            CATEGORIES: 'Categories',
+            TAGS: 'Tags',
+            UNTITLED: '(Untitled)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+<script src="/js/insight.js"></script>
+
+
+
+
+
+   
+
+
+
+
+   
+    
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/valine"></script>
+  <script type="text/javascript">
+  var GUEST = ['nick', 'mail', 'link'];
+  var meta = 'nick,mail,link';
+  meta = meta.split(',').filter(function(item) {
+    return GUEST.indexOf(item) > -1;
+  });
+  new Valine({
+    el: '#vcomments',
+    verify: false,
+    notify: false,
+    appId: 'rYClA1GFcOx37vpfNFDdtd1k-gzGzoHsz',
+    appKey: '6EzBL1zBskv6x5onoyDYQGiQ',
+    placeholder: 'Just go go',
+    avatar: 'mm',
+    meta: meta,
+    pageSize: '10' || 10,
+    visitor: true
+  });
+  </script>
+
+     
+
+
+
+
+
+
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<!-- <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script> -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+</body>
+</html>

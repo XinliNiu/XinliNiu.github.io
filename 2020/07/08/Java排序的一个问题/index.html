@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform">
+  <meta http-equiv="Cache-Control" content="no-siteapp">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  <!-- Color theme for statusbar -->
+  <meta name="theme-color" content="#000000">
+  <!-- 强制页面在当前窗口以独立页面显示,防止别人在框架里调用页面 -->
+  <meta http-equiv="window-target" content="_top">
+  
+  
+  <title>Java排序的一个问题 | Hexo</title>
+  <meta name="description" content="问题描述一个开发人员写了一段明显有问题的排序代码，大致如下： 12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535455565758import java.util.ArrayList;import java.util.Collections;import">
+<meta name="keywords" content="Java, 排序, Arrays.sort, TimSort, LegacyMergeSort">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java排序的一个问题">
+<meta property="og:url" content="http://blog.ifool.top/2020/07/08/Java排序的一个问题/index.html">
+<meta property="og:site_name" content="ifool的博客">
+<meta property="og:description" content="问题描述一个开发人员写了一段明显有问题的排序代码，大致如下： 12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535455565758import java.util.ArrayList;import java.util.Collections;import">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2020-07-08T14:28:53.821Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Java排序的一个问题">
+<meta name="twitter:description" content="问题描述一个开发人员写了一段明显有问题的排序代码，大致如下： 12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535455565758import java.util.ArrayList;import java.util.Collections;import">
+  <!-- Canonical links -->
+  <link rel="canonical" href="http://blog.ifool.top/2020/07/08/Java排序的一个问题/index.html">
+  
+    <link rel="alternate" href="/atom.xml" title="ifool的博客" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png" type="image/x-icon">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+  
+  
+  
+</head>
+
+
+<body class="main-center theme-blue" itemscope itemtype="http://schema.org/WebPage">
+  <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+  <div class="slimContent">
+    <div class="navbar-header">
+      
+      
+      <div class="profile-block text-center">
+        <a id="avatar" href="https://github.com/XinliNiu" target="_blank">
+          <img class="img-circle img-rotate" src="/images/avatar.jpg" width="200" height="200">
+        </a>
+        <h2 id="name" class="hidden-xs hidden-sm">ifool</h2>
+        <h3 id="title" class="hidden-xs hidden-sm hidden-md">金融IT民工</h3>
+        <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i> Beijing, China</small>
+      </div>
+      
+      <div class="search" id="search-form-wrap">
+
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="Search">
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i class="icon icon-search"></i></button>
+            </span>
+        </div>
+    </form>
+    <div class="ins-search">
+  <div class="ins-search-mask"></div>
+  <div class="ins-search-container">
+    <div class="ins-input-wrapper">
+      <input type="text" class="ins-search-input" placeholder="Type something..." x-webkit-speech>
+      <button type="button" class="close ins-close ins-selectable" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="ins-section-wrapper">
+      <div class="ins-section-container"></div>
+    </div>
+  </div>
+</div>
+
+
+</div>
+      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+      <ul class="nav navbar-nav main-nav ">
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/.">
+            
+            <i class="icon icon-home-fill"></i>
+            
+            <span class="menu-title">Home</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives">
+            
+            <i class="icon icon-archives-fill"></i>
+            
+            <span class="menu-title">Archives</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories">
+            
+            <i class="icon icon-folder"></i>
+            
+            <span class="menu-title">Categories</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags">
+            
+            <i class="icon icon-tags"></i>
+            
+            <span class="menu-title">Tags</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-repository">
+          <a href="/repository">
+            
+            <i class="icon icon-project"></i>
+            
+            <span class="menu-title">Repository</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-books">
+          <a href="/books">
+            
+            <i class="icon icon-book-fill"></i>
+            
+            <span class="menu-title">Books</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-links">
+          <a href="/links">
+            
+            <i class="icon icon-friendship"></i>
+            
+            <span class="menu-title">Links</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about">
+            
+            <i class="icon icon-cup-fill"></i>
+            
+            <span class="menu-title">About</span>
+          </a>
+        </li>
+        
+      </ul>
+      
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/cofess" target="_blank" title="Github" data-toggle="tooltip" data-placement="top"><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="http://weibo.com/cofess" target="_blank" title="Weibo" data-toggle="tooltip" data-placement="top"><i class="icon icon-weibo"></i></a></li>
+        
+        <li><a href="https://twitter.com/iwebued" target="_blank" title="Twitter" data-toggle="tooltip" data-placement="top"><i class="icon icon-twitter"></i></a></li>
+        
+        <li><a href="https://www.behance.net/cofess" target="_blank" title="Behance" data-toggle="tooltip" data-placement="top"><i class="icon icon-behance"></i></a></li>
+        
+        <li><a href="/atom.xml" target="_blank" title="Rss" data-toggle="tooltip" data-placement="top"><i class="icon icon-rss"></i></a></li>
+        
+    </ul>
+
+    </nav>
+  </div>
+</header>
+
+  
+    <aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title">Board</h3>
+    <div class="widget-body">
+        <div id="board">
+            <div class="content">
+                <p>欢迎交流与分享经验!</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget-body">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Java和JVM/">Java和JVM</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Python/">Python</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Web与移动端安全/">Web与移动端安全</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/工具与效率/">工具与效率</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/数学与机器学习/">数学与机器学习</a><span class="category-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget-body">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Dubbo-拥堵-NIO-Netty-TCP缓冲区/">Dubbo,拥堵,NIO,Netty,TCP缓冲区</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hexo-mathjax/">Hexo,mathjax</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JVM-Btrace-Arthas-在线调试-生产案例/">JVM,Btrace, Arthas, 在线调试, 生产案例</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-IO-IO模型-NIO-Netty-Redis-IO多路复用-阻塞IO-非阻塞IO-异步IO-同步IO/">Java IO,IO模型,NIO,Netty,Redis,IO多路复用,阻塞IO,非阻塞IO,异步IO,同步IO</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-排序-Arrays-sort-TimSort-LegacyMergeSort/">Java, 排序, Arrays.sort, TimSort, LegacyMergeSort</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux-工具软件使用/">Linux,工具软件使用</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Python-Iterable-Iterator-Generator-迭代器-可迭代对象-生成器/">Python,Iterable,Iterator,Generator,迭代器,可迭代对象,生成器</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Python-推导式-python-list-comprehension-生成器-列表推导/">Python,推导式,python list comprehension, 生成器, 列表推导</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Typora-Hexo-Markdown-图片/">Typora, Hexo, Markdown, 图片</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android-adb/">android, adb</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android-root/">android,root</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/latex/">latex</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/代理-Fiddler-安全-抓包/">代理,Fiddler,安全,抓包</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/压缩图片/">压缩图片</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/概率-人工智能-机器学习-分类-朴素贝叶斯-贝叶斯公式-MINIST，手写数字/">概率,人工智能,机器学习,分类,朴素贝叶斯,贝叶斯公式,MINIST，手写数字</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/设计模式-单例-Singleton-DCL/">设计模式, 单例, Singleton, DCL</a><span class="tag-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget-body tagcloud">
+      <a href="/tags/Dubbo-拥堵-NIO-Netty-TCP缓冲区/" style="font-size: 13px;">Dubbo,拥堵,NIO,Netty,TCP缓冲区</a> <a href="/tags/Hexo-mathjax/" style="font-size: 13px;">Hexo,mathjax</a> <a href="/tags/JVM-Btrace-Arthas-在线调试-生产案例/" style="font-size: 13px;">JVM,Btrace, Arthas, 在线调试, 生产案例</a> <a href="/tags/Java-IO-IO模型-NIO-Netty-Redis-IO多路复用-阻塞IO-非阻塞IO-异步IO-同步IO/" style="font-size: 13px;">Java IO,IO模型,NIO,Netty,Redis,IO多路复用,阻塞IO,非阻塞IO,异步IO,同步IO</a> <a href="/tags/Java-排序-Arrays-sort-TimSort-LegacyMergeSort/" style="font-size: 13px;">Java, 排序, Arrays.sort, TimSort, LegacyMergeSort</a> <a href="/tags/Linux-工具软件使用/" style="font-size: 13px;">Linux,工具软件使用</a> <a href="/tags/Python-Iterable-Iterator-Generator-迭代器-可迭代对象-生成器/" style="font-size: 13px;">Python,Iterable,Iterator,Generator,迭代器,可迭代对象,生成器</a> <a href="/tags/Python-推导式-python-list-comprehension-生成器-列表推导/" style="font-size: 13px;">Python,推导式,python list comprehension, 生成器, 列表推导</a> <a href="/tags/Typora-Hexo-Markdown-图片/" style="font-size: 13px;">Typora, Hexo, Markdown, 图片</a> <a href="/tags/android-adb/" style="font-size: 13px;">android, adb</a> <a href="/tags/android-root/" style="font-size: 13px;">android,root</a> <a href="/tags/latex/" style="font-size: 13px;">latex</a> <a href="/tags/代理-Fiddler-安全-抓包/" style="font-size: 13px;">代理,Fiddler,安全,抓包</a> <a href="/tags/压缩图片/" style="font-size: 13px;">压缩图片</a> <a href="/tags/概率-人工智能-机器学习-分类-朴素贝叶斯-贝叶斯公式-MINIST，手写数字/" style="font-size: 13px;">概率,人工智能,机器学习,分类,朴素贝叶斯,贝叶斯公式,MINIST，手写数字</a> <a href="/tags/设计模式-单例-Singleton-DCL/" style="font-size: 13px;">设计模式, 单例, Singleton, DCL</a>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Archive</h3>
+    <div class="widget-body">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/07/">July 2020</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/05/">May 2020</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/04/">April 2020</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/03/">March 2020</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">October 2019</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/07/">July 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">March 2019</a><span class="archive-list-count">4</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget-body">
+      <ul class="recent-post-list list-unstyled no-thumbnail">
+        
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/Java和JVM/">Java和JVM</a>
+              </p>
+              <p class="item-title">
+                <a href="/2020/07/11/Dubbo/" class="title">一次Dubbo拥堵分析</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2020-07-11T07:43:27.000Z" itemprop="datePublished">2020-07-11</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2020/07/08/Java排序的一个问题/" class="title">Java排序的一个问题</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2020-07-08T14:27:36.000Z" itemprop="datePublished">2020-07-08</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/数学与机器学习/">数学与机器学习</a>
+              </p>
+              <p class="item-title">
+                <a href="/2020/05/07/贝叶斯公式与朴素贝叶斯分类/" class="title">基础机器学习算法：贝叶斯公式与朴素贝叶斯分类</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2020-05-07T09:09:37.000Z" itemprop="datePublished">2020-05-07</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/工具与效率/">工具与效率</a>
+              </p>
+              <p class="item-title">
+                <a href="/2020/04/20/压缩图片方法大全/" class="title">压缩图片方法大全</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2020-04-20T03:48:59.000Z" itemprop="datePublished">2020-04-20</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/Web与移动端安全/">Web与移动端安全</a>
+              </p>
+              <p class="item-title">
+                <a href="/2020/04/19/Fiddler安装与使用/" class="title">Fiddler安装与使用</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2020-04-19T10:15:09.000Z" itemprop="datePublished">2020-04-19</time>
+              </p>
+            </div>
+          </li>
+          
+      </ul>
+    </div>
+  </div>
+  
+
+    
+  </div>
+</aside>
+
+  
+  
+<main class="main" role="main">
+  <div class="content">
+  <article id="post-Java排序的一个问题" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Java排序的一个问题
+    </h1>
+  
+
+      
+      <div class="article-meta">
+        <span class="article-date">
+    <i class="icon icon-calendar-check"></i>
+	<a href="/2020/07/08/Java排序的一个问题/" class="article-date">
+	  <time datetime="2020-07-08T14:27:36.000Z" itemprop="datePublished">2020-07-08</time>
+	</a>
+</span>
+        
+        
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>
+	<a class="article-tag-link" href="/tags/Java-排序-Arrays-sort-TimSort-LegacyMergeSort/">Java, 排序, Arrays.sort, TimSort, LegacyMergeSort</a>
+  </span>
+
+
+        
+
+	<span class="article-read hidden-xs">
+    	<i class="icon icon-eye-fill" aria-hidden="true"></i>
+    	<span id="/2020/07/08/Java排序的一个问题/" class="leancloud_visitors" data-flag-title="Java排序的一个问题">
+			<span class="leancloud-visitors-count">0</span>
+		</span>
+    </span>
+
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2020/07/08/Java排序的一个问题/#comments" class="article-comment-link">Comments</a></span>
+        
+	
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">Word Count: 2.3k(words)</span>
+	
+	
+		<span class="post-readcount hidden-xs" itemprop="timeRequired">Read Count: 11(minutes)</span>
+	
+
+      </div>
+    </div>
+    <div class="article-entry marked-body" itemprop="articleBody">
+      
+        <h1 id="问题描述"><a href="#问题描述" class="headerlink" title="问题描述"></a>问题描述</h1><p>一个开发人员写了一段明显有问题的排序代码，大致如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br></pre></td><td class="code"><pre><span class="line">import java.util.ArrayList;</span><br><span class="line">import java.util.Collections;</span><br><span class="line">import java.util.Comparator;</span><br><span class="line">import java.util.HashMap;</span><br><span class="line"></span><br><span class="line">public class Test &#123;</span><br><span class="line">	</span><br><span class="line">	public static void main(String[] args) throws InterruptedException &#123;</span><br><span class="line">		//测试数据： List里放Map，按Map里的name字段排序</span><br><span class="line">		HashMap&lt;String, String&gt; a = new HashMap&lt;String, String&gt;();</span><br><span class="line">		a.put(&quot;name&quot;, &quot;二&quot;);</span><br><span class="line">		HashMap&lt;String, String&gt; b = new HashMap&lt;String, String&gt;();</span><br><span class="line">		b.put(&quot;name&quot;, &quot;一&quot;);</span><br><span class="line">		HashMap&lt;String, String&gt; c = new HashMap&lt;String, String&gt;();</span><br><span class="line">		c.put(&quot;name&quot;, &quot;一&quot;);</span><br><span class="line">		HashMap&lt;String, String&gt; d = new HashMap&lt;String, String&gt;();</span><br><span class="line">		d.put(&quot;name&quot;, &quot;四&quot;);</span><br><span class="line">		HashMap&lt;String, String&gt; e = new HashMap&lt;String, String&gt;();</span><br><span class="line">		e.put(&quot;name&quot;, &quot;二&quot;);</span><br><span class="line">		HashMap&lt;String, String&gt; f = new HashMap&lt;String, String&gt;();</span><br><span class="line">		f.put(&quot;name&quot;, &quot;三&quot;);</span><br><span class="line">		ArrayList&lt;HashMap&lt;String, String&gt;&gt; list = new ArrayList&lt;&gt;();</span><br><span class="line">		list.add(a);</span><br><span class="line">		list.add(b);</span><br><span class="line">		list.add(c);</span><br><span class="line">		list.add(d);</span><br><span class="line">		list.add(e);</span><br><span class="line">		list.add(f);</span><br><span class="line">	</span><br><span class="line">	</span><br><span class="line">        //排序：明显有问题，因为只返回-1和0，也就是比较的时候永远是小于等于</span><br><span class="line">		Collections.sort(list, new Comparator&lt;HashMap&lt;String, String&gt;&gt;() &#123;</span><br><span class="line">			@Override</span><br><span class="line">			public int compare(HashMap&lt;String, String&gt; o1, HashMap&lt;String, String&gt; o2) &#123;</span><br><span class="line">				String n1 = o1.get(&quot;name&quot;);</span><br><span class="line">				String n2 = o2.get(&quot;name&quot;);</span><br><span class="line">				if (n1.equals(&quot;一&quot;)) &#123;</span><br><span class="line">					return -1;</span><br><span class="line">				&#125;</span><br><span class="line">				if (n1.equals(&quot;二&quot;) &amp;&amp; !n2.equals(&quot;一&quot;)) &#123;</span><br><span class="line">					return -1;</span><br><span class="line">				&#125;</span><br><span class="line">				if (n1.equals(&quot;三&quot;) &amp;&amp; !&quot;一二&quot;.contains(n2)) &#123;</span><br><span class="line">					return -1;</span><br><span class="line">				&#125;</span><br><span class="line">				if (n1.equals(&quot;四&quot;) &amp;&amp; !&quot;一二三&quot;.contains(n2)) &#123;</span><br><span class="line">					return -1;</span><br><span class="line">				&#125;</span><br><span class="line">				return 0;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;);</span><br><span class="line"></span><br><span class="line">		for(HashMap&lt;String, String&gt; x : list) &#123;</span><br><span class="line">			System.out.print(x.get(&quot;name&quot;));</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>按理这个排序是有问题的，但是不管怎么改变测试数据，排序结果都是对的（测试数据量较小），上面代码的输出结果如下，用的jdk是1.7：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">一一二二三四</span><br></pre></td></tr></table></figure>
+<p>但是，生产上是有问题的。</p>
+<h1 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h1><p>Collections.sort，最终调用了Arrays.sort，在1.7中，Arrays.sort做了修改。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">public static &lt;T&gt; void sort(T[] a, Comparator&lt;? super T&gt; c) &#123;</span><br><span class="line">    if (c == null) &#123;</span><br><span class="line">        sort(a);</span><br><span class="line">    &#125; else &#123;</span><br><span class="line">        if (LegacyMergeSort.userRequested)</span><br><span class="line">            legacyMergeSort(a, c);</span><br><span class="line">        else</span><br><span class="line">            TimSort.sort(a, 0, a.length, c, null, 0, 0);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>如果配置了java.util.Arrays.useLegacyMergeSort这个参数，那么就走老的LegacyMergeSort，否则就走新的TimSort。</p>
+<p>我们在代码里加上下面一句话，输出结果就是乱序的，这符合预期。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">System.setProperty(&quot;java.util.Arrays.useLegacyMergeSort&quot;, &quot;true&quot;);</span><br></pre></td></tr></table></figure>
+<p>但是为什么走TimSort的结果是对的呢？继续分析TimSort的代码，发现有一个特殊情况的处理：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">// If array is small, do a &quot;mini-TimSort&quot; with no merges</span><br><span class="line">if (nRemaining &lt; MIN_MERGE) &#123; //MIN_MERGE是32</span><br><span class="line">    int initRunLen = countRunAndMakeAscending(a, lo, hi, c);</span><br><span class="line">    binarySort(a, lo, hi, lo + initRunLen, c);</span><br><span class="line">    return;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>也就是在数组小于32的时候，进入这个里面，然后没有归并。那我们先来测试一下大于32的情况。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">public class Test &#123;	</span><br><span class="line">	public static void main(String[] args) throws InterruptedException &#123;	</span><br><span class="line">		ArrayList&lt;HashMap&lt;String, String&gt;&gt; list = new ArrayList&lt;&gt;();</span><br><span class="line">		String[] xx = &#123;&quot;一&quot;,&quot;二&quot;,&quot;三&quot;,&quot;四&quot;&#125;;</span><br><span class="line">		for(int i = 0; i &lt; 35; i++) &#123;</span><br><span class="line">			HashMap&lt;String,String&gt; x = new HashMap&lt;String,String&gt;();</span><br><span class="line">			x.put(&quot;name&quot;, xx[(i+17)%4]);</span><br><span class="line">			list.add(x);</span><br><span class="line">		&#125;</span><br><span class="line">		Collections.sort(list, new Comparator&lt;HashMap&lt;String, String&gt;&gt;() &#123;</span><br><span class="line">			@Override</span><br><span class="line">			public int compare(HashMap&lt;String, String&gt; o1, HashMap&lt;String, String&gt; o2) &#123;</span><br><span class="line">				String n1 = o1.get(&quot;name&quot;);</span><br><span class="line">				String n2 = o2.get(&quot;name&quot;);</span><br><span class="line">				if (n1.equals(&quot;一&quot;)) &#123;</span><br><span class="line">					return -1;</span><br><span class="line">				&#125;</span><br><span class="line">				if (n1.equals(&quot;二&quot;) &amp;&amp; !n2.equals(&quot;一&quot;)) &#123;</span><br><span class="line">					return -1;</span><br><span class="line">				&#125;</span><br><span class="line">				if (n1.equals(&quot;三&quot;) &amp;&amp; !&quot;一二&quot;.contains(n2)) &#123;</span><br><span class="line">					return -1;</span><br><span class="line">				&#125;</span><br><span class="line">				if (n1.equals(&quot;四&quot;) &amp;&amp; !&quot;一二三&quot;.contains(n2)) &#123;</span><br><span class="line">					return -1;</span><br><span class="line">				&#125;</span><br><span class="line">				return 0;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;);</span><br><span class="line"></span><br><span class="line">		for(HashMap&lt;String, String&gt; x : list) &#123;</span><br><span class="line">			System.out.print(x.get(&quot;name&quot;));</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这次果然翻车了。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">一一一一二二二二二三三三三三四四四四一一一一二二二二三三三三四四四四四</span><br></pre></td></tr></table></figure>
+<p>我们通过代码来看一下为什么小于32的时候排序成功了。</p>
+<p>首先，我们的比较函数，只有在真正小于或者等于情况下返回了-1，其余情况返回了0，包括大于的情况也返回了0。</p>
+<p>比如</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>两个值</th>
+<th>结果</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>一一</td>
+<td>-1</td>
+</tr>
+<tr>
+<td>一二</td>
+<td>-1</td>
+</tr>
+<tr>
+<td>三二</td>
+<td>0</td>
+</tr>
+<tr>
+<td>四四</td>
+<td>-1</td>
+</tr>
+<tr>
+<td>三一</td>
+<td>0</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>为了简化，下面用阿拉伯数字代替</p>
+<p>以211423为例，</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">if (nRemaining &lt; MIN_MERGE) &#123;</span><br><span class="line">    int initRunLen = countRunAndMakeAscending(a, lo, hi, c);</span><br><span class="line">    binarySort(a, lo, hi, lo + initRunLen, c);</span><br><span class="line">    return;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>第一步，是找到严格递增或者递减的最大长度，如果是升序，就不处理，降序的话，就reverse。</p>
+<p>211423经过处理后变成了112 423，最大递减长度为3（因为1和1相比的结果为-1，所以也被当作严格递减），然后211被reverse成112</p>
+<pre><code>private static &lt;T&gt; int countRunAndMakeAscending(T[] a, int lo, int hi,
+                                                Comparator&lt;? super T&gt; c) {
+    assert lo &lt; hi;
+    int runHi = lo + 1;
+    if (runHi == hi)
+        return 1;
+    // Find end of run, and reverse range if descending
+    if (c.compare(a[runHi++], a[lo]) &lt; 0) { // Descending
+        while (runHi &lt; hi &amp;&amp; c.compare(a[runHi], a[runHi - 1]) &lt; 0)
+            runHi++;
+        reverseRange(a, lo, runHi);
+    } else {                              // Ascending
+        while (runHi &lt; hi &amp;&amp; c.compare(a[runHi], a[runHi - 1]) &gt;= 0)
+            runHi++;
+    }
+    return runHi - lo;
+}
+</code></pre><p>接下来，从第四个位置开始，找到它的位置，移动数据，让每一个数字找到合适的位置，具体的代码如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line">private static &lt;T&gt; void binarySort(T[] a, int lo, int hi, int start,</span><br><span class="line">                                   Comparator&lt;? super T&gt; c) &#123;</span><br><span class="line">    assert lo &lt;= start &amp;&amp; start &lt;= hi;</span><br><span class="line">    if (start == lo)</span><br><span class="line">        start++;</span><br><span class="line">    for ( ; start &lt; hi; start++) &#123;</span><br><span class="line">        T pivot = a[start];</span><br><span class="line"></span><br><span class="line">        // Set left (and right) to the index where a[start] (pivot) belongs</span><br><span class="line">        int left = lo;</span><br><span class="line">        int right = start;</span><br><span class="line">        assert left &lt;= right;</span><br><span class="line">        /*</span><br><span class="line">         * Invariants:</span><br><span class="line">         *   pivot &gt;= all in [lo, left).</span><br><span class="line">         *   pivot &lt;  all in [right, start).</span><br><span class="line">         */</span><br><span class="line">        while (left &lt; right) &#123;</span><br><span class="line">            int mid = (left + right) &gt;&gt;&gt; 1;</span><br><span class="line">            if (c.compare(pivot, a[mid]) &lt; 0)</span><br><span class="line">                right = mid;</span><br><span class="line">            else</span><br><span class="line">                left = mid + 1;</span><br><span class="line">        &#125;</span><br><span class="line">        assert left == right;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        int n = start - left;  // The number of elements to move</span><br><span class="line">        // Switch is just an optimization for arraycopy in default case</span><br><span class="line">        switch (n) &#123;</span><br><span class="line">            case 2:  a[left + 2] = a[left + 1];</span><br><span class="line">            case 1:  a[left + 1] = a[left];</span><br><span class="line">                     break;</span><br><span class="line">            default: System.arraycopy(a, left, a, left + 1, n);</span><br><span class="line">        &#125;</span><br><span class="line">        a[left] = pivot;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>对于112423的移动过程如下：</p>
+<p>第一次：112  4  23， 在左边找到合适4的位置，结果为1124  23</p>
+<p>第二次：1124  2  3， 在左边找到2合适的位置，结果11224  3</p>
+<p>第三次：11224  3，在左边找到3合适的位置，结果为112234，结束</p>
+<p>在整个函数中，我们发现了一个问题，那就是只用到了c.compare(pivot, a[mid]) &lt; 0，而大于0和等于0的情况没有用到，而我们的比较函数正好是返回小于0的时候是正确的，所以并不会影响这个函数的执行结果。也就是说，只要真正小于的时候返回了-1，不小于的时候返回了0或者1，对这个函数是没有影响的，正因为如此这个函数是个稳定排序。</p>
+<p>但是在countRunAndMakeAscending这个函数里用到了&gt;=0。我们看一下这种情况，也就是数组的开头是递增的时候，会用到&gt;=0</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">private static &lt;T&gt; int countRunAndMakeAscending(T[] a, int lo, int hi,</span><br><span class="line">                                                Comparator&lt;? super T&gt; c) &#123;</span><br><span class="line">    assert lo &lt; hi;</span><br><span class="line">    int runHi = lo + 1;</span><br><span class="line">    if (runHi == hi)</span><br><span class="line">        return 1;</span><br><span class="line">    // Find end of run, and reverse range if descending</span><br><span class="line">    if (c.compare(a[runHi++], a[lo]) &lt; 0) &#123; // Descending</span><br><span class="line">        while (runHi &lt; hi &amp;&amp; c.compare(a[runHi], a[runHi - 1]) &lt; 0)</span><br><span class="line">            runHi++;</span><br><span class="line">        reverseRange(a, lo, runHi);</span><br><span class="line">    &#125; else &#123;                              // Ascending</span><br><span class="line">        while (runHi &lt; hi &amp;&amp; c.compare(a[runHi], a[runHi - 1]) &gt;= 0)</span><br><span class="line">            runHi++;</span><br><span class="line">    &#125;</span><br><span class="line">    return runHi - lo;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>假设输入的是1234123，前边2和1相比结果是0，3和2也是0，4和3也是0，1和4是-1，所以最大递增序列是1234，同时不用reverse，传给下一个函数的输入为1234  123，结果三次插入，结果也是对的。</p>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>综上分析可以得出结论，就是因为在jdk 1.7中，如果数组小于32个元素，加入对于小于的比较都是-1， 其他的都是0，那么结果是正确的，这是因为算法本身的特性。但是大于32时，就不对了，会看到分段排好序了，这是因为归并的时候比较结果都是0，导致没有做归并。</p>
+<p>其实sort的Comparator是有坑的，必须把所有情况都考虑周到，而且要满足以下特性：</p>
+<p>1 ） 自反性： x ， y 的比较结果和 y ， x 的比较结果相反。<br>2 ） 传递性： x &gt; y , y &gt; z ,则 x &gt; z 。<br>3 ） 对称性： x = y ,则 x , z 比较结果和 y ， z 比较结果相同。</p>
+<p>上面的Comparator如果要写的对，应该这么写，把所有情况列出来，当然也可以通过一些条件简化，但是简化的后果就是上面的结果，需要充分测试。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">Collections.sort(list, new Comparator&lt;HashMap&lt;String, String&gt;&gt;() &#123;</span><br><span class="line">	@Override</span><br><span class="line">	public int compare(HashMap&lt;String, String&gt; o1, HashMap&lt;String, String&gt; o2) &#123;</span><br><span class="line">		String n1 = o1.get(&quot;name&quot;);</span><br><span class="line">		String n2 = o2.get(&quot;name&quot;);</span><br><span class="line">		if (n1.equals(&quot;一&quot;) &amp;&amp; n2.equals(&quot;一&quot;)) &#123;</span><br><span class="line">			return 0;</span><br><span class="line">		&#125;</span><br><span class="line">		if (n1.equals(&quot;一&quot;) &amp;&amp; n2.equals(&quot;二&quot;)) &#123;</span><br><span class="line">			return -1;</span><br><span class="line">		&#125;</span><br><span class="line">		if (n1.equals(&quot;一&quot;) &amp;&amp; n2.equals(&quot;三&quot;)) &#123;</span><br><span class="line">			return -1;</span><br><span class="line">		&#125;</span><br><span class="line">		if (n1.equals(&quot;一&quot;) &amp;&amp; n2.equals(&quot;四&quot;)) &#123;</span><br><span class="line">			return -1;</span><br><span class="line">		&#125;</span><br><span class="line">		if (n1.equals(&quot;二&quot;) &amp;&amp; n2.equals(&quot;一&quot;)) &#123;</span><br><span class="line">			return 1;</span><br><span class="line">		&#125;</span><br><span class="line">		......</span><br><span class="line">		</span><br><span class="line">	&#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+      
+    </div>
+    <div class="article-footer">
+      <blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    
+    <li class="post-copyright-link hidden-xs">
+      <strong>本文链接：</strong>
+      <a href="http://blog.ifool.top/2020/07/08/Java排序的一个问题/" title="Java排序的一个问题" target="_blank" rel="external">http://blog.ifool.top/2020/07/08/Java排序的一个问题/</a>
+    </li>
+    
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong> 本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN协议</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+</blockquote>
+
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="https://github.com/XinliNiu" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="/images/avatar.jpg" class="img-rounded w-full" alt>
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="https://github.com/XinliNiu" target="_blank"><span class="text-dark">ifool</span><small class="ml-1x">金融IT民工</small></a></h3>
+        <div>Java工程师，对机器学习、云计算、安全都感兴趣</div>
+      </div>
+    </figure>
+  </div>
+</div>
+
+
+    </div>
+  </article>
+  
+    
+  <section id="comments">
+  	
+      <div id="vcomments"></div>
+    
+  </section>
+
+
+  
+</div>
+
+  <nav class="bar bar-footer clearfix" data-stick-bottom>
+  <div class="bar-inner">
+  
+  <ul class="pager pull-left">
+    
+    <li class="prev">
+      <a href="/2020/07/11/Dubbo/" title="一次Dubbo拥堵分析"><i class="icon icon-angle-left" aria-hidden="true"></i><span>&nbsp;&nbsp;Newer</span></a>
+    </li>
+    
+    
+    <li class="next">
+      <a href="/2020/05/07/贝叶斯公式与朴素贝叶斯分类/" title="基础机器学习算法：贝叶斯公式与朴素贝叶斯分类"><span>Older&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
+    </li>
+    
+    
+  </ul>
+  
+  
+  <!-- Button trigger modal -->
+  <button type="button" class="btn btn-fancy btn-donate pop-onhover bg-gradient-warning" data-toggle="modal" data-target="#donateModal"><span>$</span></button>
+  <!-- <div class="wave-icon wave-icon-danger btn-donate" data-toggle="modal" data-target="#donateModal">
+    <div class="wave-circle"><span class="icon"><i class="icon icon-bill"></i></span></div>
+  </div> -->
+  
+  
+  <div class="bar-right">
+    
+    <div class="share-component" data-sites="weibo,qq,wechat,facebook,twitter" data-mobile-sites="weibo,qq,qzone"></div>
+    
+  </div>
+  </div>
+</nav>
+  
+<!-- Modal -->
+<div class="modal modal-center modal-small modal-xs-full fade" id="donateModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content donate">
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      <div class="modal-body">
+        <div class="donate-box">
+          <div class="donate-head">
+            <p>Maybe you could buy me a cup of coffee.</p>
+          </div>
+          <div class="tab-content">
+            <div role="tabpanel" class="tab-pane fade active in" id="alipay">
+              <div class="donate-payimg">
+                <img src="/images/donate/alipayimg.png" alt="Scan Qrcode" title="Scan">
+              </div>
+              <p class="text-muted mv">Scan this qrcode</p>
+              <p class="text-grey">Open alipay app scan this qrcode, buy me a coffee!</p>
+            </div>
+            <div role="tabpanel" class="tab-pane fade" id="wechatpay">
+              <div class="donate-payimg">
+                <img src="/images/donate/wechatpayimg.png" alt="Scan Qrcode" title="Scan">
+              </div>
+              <p class="text-muted mv">Scan this qrcode</p>
+              <p class="text-grey">Open wechat app scan this qrcode, buy me a coffee!</p>
+            </div>
+          </div>
+          <div class="donate-footer">
+            <ul class="nav nav-tabs nav-justified" role="tablist">
+              <li role="presentation" class="active">
+                <a href="#alipay" id="alipay-tab" role="tab" data-toggle="tab" aria-controls="alipay" aria-expanded="true"><i class="icon icon-alipay"></i> alipay</a>
+              </li>
+              <li role="presentation" class>
+                <a href="#wechatpay" role="tab" id="wechatpay-tab" data-toggle="tab" aria-controls="wechatpay" aria-expanded="false"><i class="icon icon-wepay"></i> wechat payment</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+</main>
+
+  <footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
+	
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/cofess" target="_blank" title="Github" data-toggle="tooltip" data-placement="top"><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="http://weibo.com/cofess" target="_blank" title="Weibo" data-toggle="tooltip" data-placement="top"><i class="icon icon-weibo"></i></a></li>
+        
+        <li><a href="https://twitter.com/iwebued" target="_blank" title="Twitter" data-toggle="tooltip" data-placement="top"><i class="icon icon-twitter"></i></a></li>
+        
+        <li><a href="https://www.behance.net/cofess" target="_blank" title="Behance" data-toggle="tooltip" data-placement="top"><i class="icon icon-behance"></i></a></li>
+        
+        <li><a href="/atom.xml" target="_blank" title="Rss" data-toggle="tooltip" data-placement="top"><i class="icon icon-rss"></i></a></li>
+        
+    </ul>
+
+    <div class="copyright">
+    	
+        <div class="publishby">
+        	Theme by <a href="https://github.com/cofess" target="_blank"> cofess </a>base on <a href="https://github.com/cofess/hexo-theme-pure" target="_blank">pure</a>.
+        </div>
+    </div>
+</footer>
+  <script src="//cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
+<script>
+window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+<script src="/js/plugin.min.js"></script>
+<script src="/js/application.js"></script>
+
+    <script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: 'Posts',
+            PAGES: 'Pages',
+            CATEGORIES: 'Categories',
+            TAGS: 'Tags',
+            UNTITLED: '(Untitled)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+<script src="/js/insight.js"></script>
+
+
+
+
+
+   
+
+
+
+
+   
+    
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/valine"></script>
+  <script type="text/javascript">
+  var GUEST = ['nick', 'mail', 'link'];
+  var meta = 'nick,mail,link';
+  meta = meta.split(',').filter(function(item) {
+    return GUEST.indexOf(item) > -1;
+  });
+  new Valine({
+    el: '#vcomments',
+    verify: false,
+    notify: false,
+    appId: 'rYClA1GFcOx37vpfNFDdtd1k-gzGzoHsz',
+    appKey: '6EzBL1zBskv6x5onoyDYQGiQ',
+    placeholder: 'Just go go',
+    avatar: 'mm',
+    meta: meta,
+    pageSize: '10' || 10,
+    visitor: true
+  });
+  </script>
+
+     
+
+
+
+
+
+
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<!-- <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script> -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+</body>
+</html>

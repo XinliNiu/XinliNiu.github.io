@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform">
+  <meta http-equiv="Cache-Control" content="no-siteapp">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  <!-- Color theme for statusbar -->
+  <meta name="theme-color" content="#000000">
+  <!-- 强制页面在当前窗口以独立页面显示,防止别人在框架里调用页面 -->
+  <meta http-equiv="window-target" content="_top">
+  
+  
+  <title>Python推导式详解 | Hexo</title>
+  <meta name="description" content="Python语言有一种独特的推导式语法，有点像语法糖，可以帮你在某些场合写出比较精简酷炫的代码，同时，它的性能可能会比我们写循环要好。它主要用于初始化一个列表，也可以用于初始化集合和字典。 1. 推导式分类与用法1.1 列表推导列表推导式是一种快速生成列表的方式。它一般用“[]”括起来，例如 12&amp;gt;&amp;gt;&amp;gt; [i for i in range(10)][0,1, 2, 3, 4, 5">
+<meta name="keywords" content="Python,推导式,python list comprehension, 生成器, 列表推导">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Python推导式详解">
+<meta property="og:url" content="http://blog.ifool.top/2020/03/25/Python推导式详解/index.html">
+<meta property="og:site_name" content="ifool的博客">
+<meta property="og:description" content="Python语言有一种独特的推导式语法，有点像语法糖，可以帮你在某些场合写出比较精简酷炫的代码，同时，它的性能可能会比我们写循环要好。它主要用于初始化一个列表，也可以用于初始化集合和字典。 1. 推导式分类与用法1.1 列表推导列表推导式是一种快速生成列表的方式。它一般用“[]”括起来，例如 12&amp;gt;&amp;gt;&amp;gt; [i for i in range(10)][0,1, 2, 3, 4, 5">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://blog.ifool.top/2020/03/25/Python推导式详解/src.PNG">
+<meta property="og:image" content="http://blog.ifool.top/2020/03/25/Python推导式详解/old.PNG">
+<meta property="og:image" content="http://blog.ifool.top/2020/03/25/Python推导式详解/new.PNG">
+<meta property="og:image" content="http://blog.ifool.top/2020/03/25/Python推导式详解/bytecode.PNG">
+<meta property="og:image" content="http://blog.ifool.top/2020/03/25/Python推导式详解/argue.PNG">
+<meta property="og:updated_time" content="2020-03-25T11:58:25.518Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Python推导式详解">
+<meta name="twitter:description" content="Python语言有一种独特的推导式语法，有点像语法糖，可以帮你在某些场合写出比较精简酷炫的代码，同时，它的性能可能会比我们写循环要好。它主要用于初始化一个列表，也可以用于初始化集合和字典。 1. 推导式分类与用法1.1 列表推导列表推导式是一种快速生成列表的方式。它一般用“[]”括起来，例如 12&amp;gt;&amp;gt;&amp;gt; [i for i in range(10)][0,1, 2, 3, 4, 5">
+<meta name="twitter:image" content="http://blog.ifool.top/2020/03/25/Python推导式详解/src.PNG">
+  <!-- Canonical links -->
+  <link rel="canonical" href="http://blog.ifool.top/2020/03/25/Python推导式详解/index.html">
+  
+    <link rel="alternate" href="/atom.xml" title="ifool的博客" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png" type="image/x-icon">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+  
+  
+  
+</head>
+
+
+<body class="main-center theme-blue" itemscope itemtype="http://schema.org/WebPage">
+  <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+  <div class="slimContent">
+    <div class="navbar-header">
+      
+      
+      <div class="profile-block text-center">
+        <a id="avatar" href="https://github.com/XinliNiu" target="_blank">
+          <img class="img-circle img-rotate" src="/images/avatar.jpg" width="200" height="200">
+        </a>
+        <h2 id="name" class="hidden-xs hidden-sm">ifool</h2>
+        <h3 id="title" class="hidden-xs hidden-sm hidden-md">金融IT民工</h3>
+        <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i> Beijing, China</small>
+      </div>
+      
+      <div class="search" id="search-form-wrap">
+
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="Search">
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i class="icon icon-search"></i></button>
+            </span>
+        </div>
+    </form>
+    <div class="ins-search">
+  <div class="ins-search-mask"></div>
+  <div class="ins-search-container">
+    <div class="ins-input-wrapper">
+      <input type="text" class="ins-search-input" placeholder="Type something..." x-webkit-speech>
+      <button type="button" class="close ins-close ins-selectable" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="ins-section-wrapper">
+      <div class="ins-section-container"></div>
+    </div>
+  </div>
+</div>
+
+
+</div>
+      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+      <ul class="nav navbar-nav main-nav ">
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/.">
+            
+            <i class="icon icon-home-fill"></i>
+            
+            <span class="menu-title">Home</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives">
+            
+            <i class="icon icon-archives-fill"></i>
+            
+            <span class="menu-title">Archives</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories">
+            
+            <i class="icon icon-folder"></i>
+            
+            <span class="menu-title">Categories</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags">
+            
+            <i class="icon icon-tags"></i>
+            
+            <span class="menu-title">Tags</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-repository">
+          <a href="/repository">
+            
+            <i class="icon icon-project"></i>
+            
+            <span class="menu-title">Repository</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-books">
+          <a href="/books">
+            
+            <i class="icon icon-book-fill"></i>
+            
+            <span class="menu-title">Books</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-links">
+          <a href="/links">
+            
+            <i class="icon icon-friendship"></i>
+            
+            <span class="menu-title">Links</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about">
+            
+            <i class="icon icon-cup-fill"></i>
+            
+            <span class="menu-title">About</span>
+          </a>
+        </li>
+        
+      </ul>
+      
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/cofess" target="_blank" title="Github" data-toggle="tooltip" data-placement="top"><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="http://weibo.com/cofess" target="_blank" title="Weibo" data-toggle="tooltip" data-placement="top"><i class="icon icon-weibo"></i></a></li>
+        
+        <li><a href="https://twitter.com/iwebued" target="_blank" title="Twitter" data-toggle="tooltip" data-placement="top"><i class="icon icon-twitter"></i></a></li>
+        
+        <li><a href="https://www.behance.net/cofess" target="_blank" title="Behance" data-toggle="tooltip" data-placement="top"><i class="icon icon-behance"></i></a></li>
+        
+        <li><a href="/atom.xml" target="_blank" title="Rss" data-toggle="tooltip" data-placement="top"><i class="icon icon-rss"></i></a></li>
+        
+    </ul>
+
+    </nav>
+  </div>
+</header>
+
+  
+    <aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title">Board</h3>
+    <div class="widget-body">
+        <div id="board">
+            <div class="content">
+                <p>欢迎交流与分享经验!</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget-body">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Java和JVM/">Java和JVM</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Python/">Python</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Web与移动端安全/">Web与移动端安全</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/工具与效率/">工具与效率</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/数学与机器学习/">数学与机器学习</a><span class="category-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget-body">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Dubbo-拥堵-NIO-Netty-TCP缓冲区/">Dubbo,拥堵,NIO,Netty,TCP缓冲区</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hexo-mathjax/">Hexo,mathjax</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JVM-Btrace-Arthas-在线调试-生产案例/">JVM,Btrace, Arthas, 在线调试, 生产案例</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-IO-IO模型-NIO-Netty-Redis-IO多路复用-阻塞IO-非阻塞IO-异步IO-同步IO/">Java IO,IO模型,NIO,Netty,Redis,IO多路复用,阻塞IO,非阻塞IO,异步IO,同步IO</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-排序-Arrays-sort-TimSort-LegacyMergeSort/">Java, 排序, Arrays.sort, TimSort, LegacyMergeSort</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux-工具软件使用/">Linux,工具软件使用</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Python-Iterable-Iterator-Generator-迭代器-可迭代对象-生成器/">Python,Iterable,Iterator,Generator,迭代器,可迭代对象,生成器</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Python-推导式-python-list-comprehension-生成器-列表推导/">Python,推导式,python list comprehension, 生成器, 列表推导</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Typora-Hexo-Markdown-图片/">Typora, Hexo, Markdown, 图片</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android-adb/">android, adb</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android-root/">android,root</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/latex/">latex</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/代理-Fiddler-安全-抓包/">代理,Fiddler,安全,抓包</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/压缩图片/">压缩图片</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/概率-人工智能-机器学习-分类-朴素贝叶斯-贝叶斯公式-MINIST，手写数字/">概率,人工智能,机器学习,分类,朴素贝叶斯,贝叶斯公式,MINIST，手写数字</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/设计模式-单例-Singleton-DCL/">设计模式, 单例, Singleton, DCL</a><span class="tag-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget-body tagcloud">
+      <a href="/tags/Dubbo-拥堵-NIO-Netty-TCP缓冲区/" style="font-size: 13px;">Dubbo,拥堵,NIO,Netty,TCP缓冲区</a> <a href="/tags/Hexo-mathjax/" style="font-size: 13px;">Hexo,mathjax</a> <a href="/tags/JVM-Btrace-Arthas-在线调试-生产案例/" style="font-size: 13px;">JVM,Btrace, Arthas, 在线调试, 生产案例</a> <a href="/tags/Java-IO-IO模型-NIO-Netty-Redis-IO多路复用-阻塞IO-非阻塞IO-异步IO-同步IO/" style="font-size: 13px;">Java IO,IO模型,NIO,Netty,Redis,IO多路复用,阻塞IO,非阻塞IO,异步IO,同步IO</a> <a href="/tags/Java-排序-Arrays-sort-TimSort-LegacyMergeSort/" style="font-size: 13px;">Java, 排序, Arrays.sort, TimSort, LegacyMergeSort</a> <a href="/tags/Linux-工具软件使用/" style="font-size: 13px;">Linux,工具软件使用</a> <a href="/tags/Python-Iterable-Iterator-Generator-迭代器-可迭代对象-生成器/" style="font-size: 13px;">Python,Iterable,Iterator,Generator,迭代器,可迭代对象,生成器</a> <a href="/tags/Python-推导式-python-list-comprehension-生成器-列表推导/" style="font-size: 13px;">Python,推导式,python list comprehension, 生成器, 列表推导</a> <a href="/tags/Typora-Hexo-Markdown-图片/" style="font-size: 13px;">Typora, Hexo, Markdown, 图片</a> <a href="/tags/android-adb/" style="font-size: 13px;">android, adb</a> <a href="/tags/android-root/" style="font-size: 13px;">android,root</a> <a href="/tags/latex/" style="font-size: 13px;">latex</a> <a href="/tags/代理-Fiddler-安全-抓包/" style="font-size: 13px;">代理,Fiddler,安全,抓包</a> <a href="/tags/压缩图片/" style="font-size: 13px;">压缩图片</a> <a href="/tags/概率-人工智能-机器学习-分类-朴素贝叶斯-贝叶斯公式-MINIST，手写数字/" style="font-size: 13px;">概率,人工智能,机器学习,分类,朴素贝叶斯,贝叶斯公式,MINIST，手写数字</a> <a href="/tags/设计模式-单例-Singleton-DCL/" style="font-size: 13px;">设计模式, 单例, Singleton, DCL</a>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Archive</h3>
+    <div class="widget-body">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/07/">July 2020</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/05/">May 2020</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/04/">April 2020</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/03/">March 2020</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">October 2019</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/07/">July 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">March 2019</a><span class="archive-list-count">4</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget-body">
+      <ul class="recent-post-list list-unstyled no-thumbnail">
+        
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/Java和JVM/">Java和JVM</a>
+              </p>
+              <p class="item-title">
+                <a href="/2020/07/11/Dubbo/" class="title">一次Dubbo拥堵分析</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2020-07-11T07:43:27.000Z" itemprop="datePublished">2020-07-11</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2020/07/08/Java排序的一个问题/" class="title">Java排序的一个问题</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2020-07-08T14:27:36.000Z" itemprop="datePublished">2020-07-08</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/数学与机器学习/">数学与机器学习</a>
+              </p>
+              <p class="item-title">
+                <a href="/2020/05/07/贝叶斯公式与朴素贝叶斯分类/" class="title">基础机器学习算法：贝叶斯公式与朴素贝叶斯分类</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2020-05-07T09:09:37.000Z" itemprop="datePublished">2020-05-07</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/工具与效率/">工具与效率</a>
+              </p>
+              <p class="item-title">
+                <a href="/2020/04/20/压缩图片方法大全/" class="title">压缩图片方法大全</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2020-04-20T03:48:59.000Z" itemprop="datePublished">2020-04-20</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/Web与移动端安全/">Web与移动端安全</a>
+              </p>
+              <p class="item-title">
+                <a href="/2020/04/19/Fiddler安装与使用/" class="title">Fiddler安装与使用</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2020-04-19T10:15:09.000Z" itemprop="datePublished">2020-04-19</time>
+              </p>
+            </div>
+          </li>
+          
+      </ul>
+    </div>
+  </div>
+  
+
+    
+  </div>
+</aside>
+
+  
+  
+<main class="main" role="main">
+  <div class="content">
+  <article id="post-Python推导式详解" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Python推导式详解
+    </h1>
+  
+
+      
+      <div class="article-meta">
+        <span class="article-date">
+    <i class="icon icon-calendar-check"></i>
+	<a href="/2020/03/25/Python推导式详解/" class="article-date">
+	  <time datetime="2020-03-25T11:55:06.000Z" itemprop="datePublished">2020-03-25</time>
+	</a>
+</span>
+        
+  <span class="article-category">
+    <i class="icon icon-folder"></i>
+    <a class="article-category-link" href="/categories/Python/">Python</a>
+  </span>
+
+        
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>
+	<a class="article-tag-link" href="/tags/Python-推导式-python-list-comprehension-生成器-列表推导/">Python,推导式,python list comprehension, 生成器, 列表推导</a>
+  </span>
+
+
+        
+
+	<span class="article-read hidden-xs">
+    	<i class="icon icon-eye-fill" aria-hidden="true"></i>
+    	<span id="/2020/03/25/Python推导式详解/" class="leancloud_visitors" data-flag-title="Python推导式详解">
+			<span class="leancloud-visitors-count">0</span>
+		</span>
+    </span>
+
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2020/03/25/Python推导式详解/#comments" class="article-comment-link">Comments</a></span>
+        
+	
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">Word Count: 2.3k(words)</span>
+	
+	
+		<span class="post-readcount hidden-xs" itemprop="timeRequired">Read Count: 10(minutes)</span>
+	
+
+      </div>
+    </div>
+    <div class="article-entry marked-body" itemprop="articleBody">
+      
+        <p>Python语言有一种独特的推导式语法，有点像语法糖，可以帮你在某些场合写出比较精简酷炫的代码，同时，它的性能可能会比我们写循环要好。它主要用于初始化一个列表，也可以用于初始化集合和字典。</p>
+<h1 id="1-推导式分类与用法"><a href="#1-推导式分类与用法" class="headerlink" title="1. 推导式分类与用法"></a>1. 推导式分类与用法</h1><h2 id="1-1-列表推导"><a href="#1-1-列表推导" class="headerlink" title="1.1 列表推导"></a>1.1 列表推导</h2><p>列表推导式是一种快速生成列表的方式。它一般用“[]”括起来，例如</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>[i <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">10</span>)]</span><br><span class="line">[<span class="number">0</span>,<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>, <span class="number">7</span>, <span class="number">8</span>, <span class="number">9</span>]</span><br></pre></td></tr></table></figure>
+<p>这是一种最基本的用法，列表推导式先执行for循环，再把遍历的元素（或者对元素的一些计算表达式）作为列表的元素返回一个列表。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>[i*i <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">10</span>)]</span><br><span class="line">[<span class="number">0</span>,<span class="number">1</span>, <span class="number">4</span>, <span class="number">9</span>, <span class="number">16</span>, <span class="number">25</span>, <span class="number">36</span>, <span class="number">49</span>, <span class="number">64</span>, <span class="number">81</span>]</span><br></pre></td></tr></table></figure>
+<p>它就相当于</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>l = []</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">10</span>):</span><br><span class="line"><span class="meta">... </span>  l.append(i*i)</span><br><span class="line">...</span><br><span class="line">&gt;&gt;&gt;</span><br></pre></td></tr></table></figure>
+<p>我们可以用列表推导快速初始化一个二维数组</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">m = [[<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>],</span><br><span class="line">     [<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>],</span><br><span class="line">     [<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>]</span><br><span class="line">     ]</span><br><span class="line"></span><br><span class="line">n = []</span><br><span class="line"><span class="keyword">for</span> row <span class="keyword">in</span> range(<span class="number">3</span>):</span><br><span class="line">    r = []</span><br><span class="line">    <span class="keyword">for</span> col <span class="keyword">in</span> range(<span class="number">3</span>):</span><br><span class="line">        r.append(<span class="number">0</span>)</span><br><span class="line">    n.append(r)</span><br><span class="line">print(n)</span><br></pre></td></tr></table></figure>
+<p>用下面的式子就可以得到这个二维数组</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>[[<span class="number">0</span>]*<span class="number">3</span> <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">3</span>)]</span><br><span class="line">[[<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>], [<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>], [<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>]]</span><br></pre></td></tr></table></figure>
+<p>列表推导式有很多种形式</p>
+<h4 id="for循环前面加if…else…"><a href="#for循环前面加if…else…" class="headerlink" title="for循环前面加if…else…"></a>for循环前面加if…else…</h4><p>这种生成的元素个数不会少，只是根据for循环的结果使用不同的表达式</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 如果i是5的倍数，结果是i，否则就是0</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>[i <span class="keyword">if</span> i % <span class="number">5</span> == <span class="number">0</span> <span class="keyword">else</span> <span class="number">0</span> <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">20</span>)]</span><br><span class="line">[<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">5</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">10</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">15</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>]</span><br><span class="line"></span><br><span class="line"><span class="comment"># 如果是偶数就加100，奇数就减100</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>[i+<span class="number">100</span> <span class="keyword">if</span> i % <span class="number">2</span> == <span class="number">0</span> <span class="keyword">else</span> i<span class="number">-100</span> <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">10</span>)]</span><br><span class="line">[<span class="number">100</span>, <span class="number">-99</span>, <span class="number">102</span>, <span class="number">-97</span>, <span class="number">104</span>, <span class="number">-95</span>, <span class="number">106</span>, <span class="number">-93</span>, <span class="number">108</span>, <span class="number">-91</span>]</span><br></pre></td></tr></table></figure>
+<h4 id="for循环后面加if…"><a href="#for循环后面加if…" class="headerlink" title="for循环后面加if…"></a>for循环后面加if…</h4><p>这种会只取符合条件的元素，所以元素个数跟条件相关</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># for循环的结果只选择是偶数的</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>[i <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">10</span>) <span class="keyword">if</span> i % <span class="number">2</span> == <span class="number">0</span>]</span><br><span class="line">[<span class="number">0</span>, <span class="number">2</span>, <span class="number">4</span>, <span class="number">6</span>, <span class="number">8</span>]</span><br><span class="line"><span class="comment"># for循环的结果只选择是2和3的倍数的</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>[i <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">10</span>) <span class="keyword">if</span> i % <span class="number">2</span> == <span class="number">0</span> <span class="keyword">and</span> i % <span class="number">3</span> == <span class="number">0</span>]</span><br><span class="line">[<span class="number">0</span>, <span class="number">6</span>]</span><br><span class="line"><span class="comment"># for循环的结果只选择偶数，并且应用str函数</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>[str(i) <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">10</span>) <span class="keyword">if</span> i % <span class="number">2</span> == <span class="number">0</span>]</span><br><span class="line">[<span class="string">'0'</span>, <span class="string">'2'</span>, <span class="string">'4'</span>, <span class="string">'6'</span>, <span class="string">'8'</span>]</span><br></pre></td></tr></table></figure>
+<h4 id="嵌套循环"><a href="#嵌套循环" class="headerlink" title="嵌套循环"></a>嵌套循环</h4><p>假如我们展开一个二维矩阵，如下面的m，我们可以用嵌套循环实现。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">m = [[<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>],</span><br><span class="line">     [<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>],</span><br><span class="line">     [<span class="number">7</span>,<span class="number">8</span>,<span class="number">9</span>]</span><br><span class="line">     ]</span><br><span class="line"></span><br><span class="line">n = []</span><br><span class="line"><span class="keyword">for</span> row <span class="keyword">in</span> range(<span class="number">3</span>):</span><br><span class="line">    <span class="keyword">for</span> col <span class="keyword">in</span> range(<span class="number">3</span>):</span><br><span class="line">		n.append(m[row][col])</span><br><span class="line">print(n)</span><br></pre></td></tr></table></figure>
+<p>用列表推导，最外层的for循环得到的row，可以在内层中使用</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">m = [[<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>],</span><br><span class="line">     [<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>],</span><br><span class="line">     [<span class="number">7</span>,<span class="number">8</span>,<span class="number">9</span>]</span><br><span class="line">     ]</span><br><span class="line">n = [col <span class="keyword">for</span> row <span class="keyword">in</span> m <span class="keyword">for</span> col <span class="keyword">in</span> row]</span><br><span class="line">print(n)</span><br></pre></td></tr></table></figure>
+<p>再比如下面这个例子</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>[a + b <span class="keyword">for</span> a <span class="keyword">in</span> <span class="string">'123'</span> <span class="keyword">for</span> b <span class="keyword">in</span> <span class="string">'abc'</span>]</span><br><span class="line">[<span class="string">'1a'</span>, <span class="string">'1b'</span>, <span class="string">'1c'</span>, <span class="string">'2a'</span>, <span class="string">'2b'</span>, <span class="string">'2c'</span>, <span class="string">'3a'</span>, <span class="string">'3b'</span>, <span class="string">'3c'</span>]</span><br></pre></td></tr></table></figure>
+<h4 id="更多用法"><a href="#更多用法" class="headerlink" title="更多用法"></a>更多用法</h4><p>列表推导的用法比较灵活，我们不一定要把所有的都掌握，但是要能看懂。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>dic = &#123;<span class="string">"k1"</span>:<span class="string">"v1"</span>,<span class="string">"k2"</span>:<span class="string">"v2"</span>&#125;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a = [k+<span class="string">":"</span>+v <span class="keyword">for</span> k,v <span class="keyword">in</span> dic.items()]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a</span><br><span class="line">[<span class="string">'k1:v1'</span>, <span class="string">'k2:v2'</span>]</span><br></pre></td></tr></table></figure>
+<h2 id="1-2-集合推导"><a href="#1-2-集合推导" class="headerlink" title="1.2 集合推导"></a>1.2 集合推导</h2><p>集合推导的语法与列表推导一样，只是它是用”{}“，而且，集合会自动去重</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>&#123; i <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">10</span>)&#125;</span><br><span class="line">&#123;<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>, <span class="number">7</span>, <span class="number">8</span>, <span class="number">9</span>&#125;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>&#123; <span class="number">0</span> <span class="keyword">if</span> i % <span class="number">2</span> == <span class="number">0</span> <span class="keyword">else</span> <span class="number">1</span> <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">10</span>)&#125;</span><br><span class="line">&#123;<span class="number">0</span>, <span class="number">1</span>&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="1-3-字典推导"><a href="#1-3-字典推导" class="headerlink" title="1.3 字典推导"></a>1.3 字典推导</h2><p>字典推导的语法也与其他的类似，只不过在最前面的格式是key:value，而且也是会去重</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>&#123; i : i.upper() <span class="keyword">for</span> i <span class="keyword">in</span> <span class="string">'hello world'</span>&#125;</span><br><span class="line">&#123;<span class="string">'h'</span>: <span class="string">'H'</span>, <span class="string">'e'</span>: <span class="string">'E'</span>, <span class="string">'l'</span>: <span class="string">'L'</span>, <span class="string">'o'</span>: <span class="string">'O'</span>, <span class="string">' '</span>: <span class="string">' '</span>, <span class="string">'w'</span>: <span class="string">'W'</span>, <span class="string">'r'</span>: <span class="string">'R'</span>, <span class="string">'d'</span>: <span class="string">'D'</span>&#125;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>&#123; str(i) : i*i <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">10</span>)&#125;</span><br><span class="line">&#123;<span class="string">'0'</span>: <span class="number">0</span>, <span class="string">'1'</span>: <span class="number">1</span>, <span class="string">'2'</span>: <span class="number">4</span>, <span class="string">'3'</span>: <span class="number">9</span>, <span class="string">'4'</span>: <span class="number">16</span>, <span class="string">'5'</span>: <span class="number">25</span>, <span class="string">'6'</span>: <span class="number">36</span>, <span class="string">'7'</span>: <span class="number">49</span>, <span class="string">'8'</span>: <span class="number">64</span>, <span class="string">'9'</span>: <span class="number">81</span>&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="1-4-元组推导？不存在的"><a href="#1-4-元组推导？不存在的" class="headerlink" title="1.4 元组推导？不存在的"></a>1.4 元组推导？不存在的</h2><p>既然用[]就能做列表推导，那用()是不是就能做元组推导了？不是的，因为()被用在了一种特殊的对象上：生成器(generator)。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>a = (i <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">10</span>))</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>print(a)</span><br><span class="line">&lt;generator object &lt;genexpr&gt; at <span class="number">0x000001A6100869C8</span>&gt;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>type(a)</span><br><span class="line">&lt;<span class="class"><span class="keyword">class</span> '<span class="title">generator</span>'&gt;</span></span><br></pre></td></tr></table></figure>
+<p>生成器是一个顺序产生元素的对象，只能顺序访问，只能前进，而且只能遍历一次。</p>
+<p>可以使用next()函数取下一个元素，取不到就会报StopIteration异常，也可以使用for循环遍历。</p>
+<p>生成式没法用下标访问，用next访问直到报异常</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>a = (i <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">0</span>,<span class="number">2</span>))</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a[<span class="number">0</span>]</span><br><span class="line">Traceback (most recent call last):</span><br><span class="line">  File <span class="string">"&lt;stdin&gt;"</span>, line <span class="number">1</span>, <span class="keyword">in</span> &lt;module&gt;</span><br><span class="line">TypeError: <span class="string">'generator'</span> object <span class="keyword">is</span> <span class="keyword">not</span> subscriptable</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>next(a)</span><br><span class="line"><span class="number">0</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>next(a)</span><br><span class="line"><span class="number">1</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>next(a)</span><br><span class="line">Traceback (most recent call last):</span><br><span class="line">  File <span class="string">"&lt;stdin&gt;"</span>, line <span class="number">1</span>, <span class="keyword">in</span> &lt;module&gt;</span><br><span class="line">StopIteration</span><br></pre></td></tr></table></figure>
+<p>用for循环遍历</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>a = (i <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">0</span>,<span class="number">2</span>))</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">for</span> i <span class="keyword">in</span> a:</span><br><span class="line"><span class="meta">... </span>  print(i)</span><br><span class="line">...</span><br><span class="line"><span class="number">0</span></span><br><span class="line"><span class="number">1</span></span><br></pre></td></tr></table></figure>
+<p>先用next访问，再用for循环</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>a = (i <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">0</span>,<span class="number">3</span>))</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>next(a)</span><br><span class="line"><span class="number">0</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">for</span> i <span class="keyword">in</span> a:</span><br><span class="line"><span class="meta">... </span>  print(i)</span><br><span class="line">...</span><br><span class="line"><span class="number">1</span></span><br><span class="line"><span class="number">2</span></span><br></pre></td></tr></table></figure>
+<p>我们可以加上list,tuple,set等做强转，但是list和set就没必要了，如果想初始化成tuple，就用tuple做强转。强转的时候不需要再加多余的括号。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>a = tuple(i <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">0</span>,<span class="number">3</span>))</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a</span><br><span class="line">(<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a = tuple( (i <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">0</span>,<span class="number">3</span>)) )</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a</span><br><span class="line">(<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>)</span><br></pre></td></tr></table></figure>
+<p>生成式是惰式计算的，就是你确实用到这个元素了，它才去计算，好处就是节省了内存，但是坏处是不能随机访问。</p>
+<h2 id="2-推导式的性能"><a href="#2-推导式的性能" class="headerlink" title="2. 推导式的性能"></a>2. 推导式的性能</h2><h2 id="2-1-列表推导式与循环的性能"><a href="#2-1-列表推导式与循环的性能" class="headerlink" title="2.1 列表推导式与循环的性能"></a>2.1 列表推导式与循环的性能</h2><p>我们用timeit模块去比较一下性能。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> timeit</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">getlist1</span><span class="params">()</span>:</span>   </span><br><span class="line">    l = []   </span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">10000</span>):</span><br><span class="line">        l.append(i)</span><br><span class="line">    <span class="keyword">return</span> l</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">getlist2</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="keyword">return</span> [i <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">10000</span>)]</span><br><span class="line"></span><br><span class="line"><span class="comment"># 各执行10000次</span></span><br><span class="line">t1 = timeit.timeit(<span class="string">'getlist1()'</span>,<span class="string">"from __main__ import getlist1"</span>, number=<span class="number">10000</span>)</span><br><span class="line">t2 = timeit.timeit(<span class="string">'getlist2()'</span>,<span class="string">"from __main__ import getlist2"</span>, number=<span class="number">10000</span>)</span><br><span class="line"></span><br><span class="line">print(<span class="string">'循环方式：'</span>,t1)</span><br><span class="line">print(<span class="string">'推导式方式：'</span>,t2)</span><br></pre></td></tr></table></figure>
+<p>执行结果如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">循环方式： <span class="number">5.343517699991935</span></span><br><span class="line">推导式方式： <span class="number">2.6003115000057733</span></span><br></pre></td></tr></table></figure>
+<p>可见循环的方式比推导式慢了一倍，为什么会有这个问题呢？我们直接反编译看这两个的区别，用dis模块可以反编译Python代码，产生字节码。</p>
+<p>源代码及行数如下</p>
+<p><img src="/2020/03/25/Python推导式详解/src.PNG" alt></p>
+<p>getlist1的反编译如下，左边红色对应源代码的行数，蓝色圈内就是第6行代码对应的字节码，我们可以看到，它有一个传参并且调用方法append的过程，调用函数的代价是比较大的。</p>
+<p><img src="/2020/03/25/Python推导式详解/old.PNG" alt></p>
+<p>再来看一下列表推断的反编译结果</p>
+<p><img src="/2020/03/25/Python推导式详解/new.PNG" alt></p>
+<p>首先从字节码数量上来比列表推断就比用循环调append要少的多，而且列表推断没有使用方法调用，直接用了这个指令LIST_APPEND，在Python官网上的解释是这样的。</p>
+<p><img src="/2020/03/25/Python推导式详解/bytecode.PNG" alt></p>
+<p>实际上这个解释是有误导性，字节码中使用LIST_APPEND和在Python代码中调用append是完全不一样的，只不过这种底层的东西没有很多人关心，它们的功能是一样的。在2008年的时候就有人给Python代码提patch，希望能自动将list.append()进行优化，直接优化成LIST_APPEND而不是通过函数调用，但是目前还没被采纳(<a href="https://bugs.python.org/issue4264" target="_blank" rel="noopener">https://bugs.python.org/issue4264</a>)</p>
+<p><img src="/2020/03/25/Python推导式详解/argue.PNG" alt></p>
+<p>提出者希望能在编译的时候加一些选项，比如像gcc可以使用-O1,-O2等进行不同级别的优化，但是目前CPython是没有这些选项的，因为大多数的Python开发者并不关心性能。</p>
+<p>如果我们把上面的列表换成集合或者字典，差别会更大，所以能用推导式的地方尽量用推导式，可以提高性能。</p>
+<h2 id="2-2-列表推导式与生成器推导式的性能"><a href="#2-2-列表推导式与生成器推导式的性能" class="headerlink" title="2.2 列表推导式与生成器推导式的性能"></a>2.2 列表推导式与生成器推导式的性能</h2><p>其实这两个并不具备可比性，因为生成的结果并不是一个东西。我们可以很容易的预测，产生生成器的推导式性能要好于列表推导式，但是用的时候生成器就不如列表了。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> timeit</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">getlist1</span><span class="params">()</span>:</span>   </span><br><span class="line">    <span class="keyword">return</span> [i <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">10000</span>)]</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">getlist2</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="keyword">return</span> (i <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">10000</span>))</span><br><span class="line"></span><br><span class="line"><span class="comment"># 各执行10000次</span></span><br><span class="line">t1 = timeit.timeit(<span class="string">'getlist1()'</span>,<span class="string">"from __main__ import getlist1"</span>, number=<span class="number">10000</span>)</span><br><span class="line">t2 = timeit.timeit(<span class="string">'getlist2()'</span>,<span class="string">"from __main__ import getlist2"</span>, number=<span class="number">10000</span>)</span><br><span class="line"></span><br><span class="line">print(<span class="string">'列表：'</span>,t1)</span><br><span class="line">print(<span class="string">'生成器：'</span>,t2)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">getlist11</span><span class="params">()</span>:</span>   </span><br><span class="line">    a = [i <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">10000</span>)]</span><br><span class="line">    sum = <span class="number">0</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> a:</span><br><span class="line">        sum += i</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">getlist22</span><span class="params">()</span>:</span></span><br><span class="line">    a = (i <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">10000</span>))</span><br><span class="line">    sum = <span class="number">0</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> a:</span><br><span class="line">        sum += i</span><br><span class="line"></span><br><span class="line"><span class="comment"># 各执行10000次</span></span><br><span class="line">t1 = timeit.timeit(<span class="string">'getlist11()'</span>,<span class="string">"from __main__ import getlist11"</span>, number=<span class="number">10000</span>)</span><br><span class="line">t2 = timeit.timeit(<span class="string">'getlist22()'</span>,<span class="string">"from __main__ import getlist22"</span>, number=<span class="number">10000</span>)</span><br><span class="line"></span><br><span class="line">print(<span class="string">'列表：'</span>,t1)</span><br><span class="line">print(<span class="string">'生成器：'</span>,t2)</span><br></pre></td></tr></table></figure>
+<p>执行结果：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">列表： <span class="number">2.5977418000111356</span></span><br><span class="line">生成器： <span class="number">0.006076899997424334</span></span><br><span class="line">列表： <span class="number">6.336311199993361</span></span><br><span class="line">生成器： <span class="number">9.181903699995019</span></span><br></pre></td></tr></table></figure>
+<p>生成器产生的性能远大于列表，但是遍历的时候不如列表，但是总体上看好像生成器好。不过不要忘了，生成器不能随机访问，而且只能用一次。所以这两种对象，就是在合适的地方用合适的类型，不一定哪一种比哪一种更好。</p>
+
+      
+    </div>
+    <div class="article-footer">
+      <blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    
+    <li class="post-copyright-link hidden-xs">
+      <strong>本文链接：</strong>
+      <a href="http://blog.ifool.top/2020/03/25/Python推导式详解/" title="Python推导式详解" target="_blank" rel="external">http://blog.ifool.top/2020/03/25/Python推导式详解/</a>
+    </li>
+    
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong> 本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN协议</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+</blockquote>
+
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="https://github.com/XinliNiu" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="/images/avatar.jpg" class="img-rounded w-full" alt>
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="https://github.com/XinliNiu" target="_blank"><span class="text-dark">ifool</span><small class="ml-1x">金融IT民工</small></a></h3>
+        <div>Java工程师，对机器学习、云计算、安全都感兴趣</div>
+      </div>
+    </figure>
+  </div>
+</div>
+
+
+    </div>
+  </article>
+  
+    
+  <section id="comments">
+  	
+      <div id="vcomments"></div>
+    
+  </section>
+
+
+  
+</div>
+
+  <nav class="bar bar-footer clearfix" data-stick-bottom>
+  <div class="bar-inner">
+  
+  <ul class="pager pull-left">
+    
+    <li class="prev">
+      <a href="/2020/03/25/Latex-cheatsheet/" title="Latex cheatsheet"><i class="icon icon-angle-left" aria-hidden="true"></i><span>&nbsp;&nbsp;Newer</span></a>
+    </li>
+    
+    
+    <li class="next">
+      <a href="/2020/03/25/Python迭代器详解/" title="Python迭代器详解"><span>Older&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
+    </li>
+    
+    
+  </ul>
+  
+  
+  <!-- Button trigger modal -->
+  <button type="button" class="btn btn-fancy btn-donate pop-onhover bg-gradient-warning" data-toggle="modal" data-target="#donateModal"><span>$</span></button>
+  <!-- <div class="wave-icon wave-icon-danger btn-donate" data-toggle="modal" data-target="#donateModal">
+    <div class="wave-circle"><span class="icon"><i class="icon icon-bill"></i></span></div>
+  </div> -->
+  
+  
+  <div class="bar-right">
+    
+    <div class="share-component" data-sites="weibo,qq,wechat,facebook,twitter" data-mobile-sites="weibo,qq,qzone"></div>
+    
+  </div>
+  </div>
+</nav>
+  
+<!-- Modal -->
+<div class="modal modal-center modal-small modal-xs-full fade" id="donateModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content donate">
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      <div class="modal-body">
+        <div class="donate-box">
+          <div class="donate-head">
+            <p>Maybe you could buy me a cup of coffee.</p>
+          </div>
+          <div class="tab-content">
+            <div role="tabpanel" class="tab-pane fade active in" id="alipay">
+              <div class="donate-payimg">
+                <img src="/images/donate/alipayimg.png" alt="Scan Qrcode" title="Scan">
+              </div>
+              <p class="text-muted mv">Scan this qrcode</p>
+              <p class="text-grey">Open alipay app scan this qrcode, buy me a coffee!</p>
+            </div>
+            <div role="tabpanel" class="tab-pane fade" id="wechatpay">
+              <div class="donate-payimg">
+                <img src="/images/donate/wechatpayimg.png" alt="Scan Qrcode" title="Scan">
+              </div>
+              <p class="text-muted mv">Scan this qrcode</p>
+              <p class="text-grey">Open wechat app scan this qrcode, buy me a coffee!</p>
+            </div>
+          </div>
+          <div class="donate-footer">
+            <ul class="nav nav-tabs nav-justified" role="tablist">
+              <li role="presentation" class="active">
+                <a href="#alipay" id="alipay-tab" role="tab" data-toggle="tab" aria-controls="alipay" aria-expanded="true"><i class="icon icon-alipay"></i> alipay</a>
+              </li>
+              <li role="presentation" class>
+                <a href="#wechatpay" role="tab" id="wechatpay-tab" data-toggle="tab" aria-controls="wechatpay" aria-expanded="false"><i class="icon icon-wepay"></i> wechat payment</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+</main>
+
+  <footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
+	
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/cofess" target="_blank" title="Github" data-toggle="tooltip" data-placement="top"><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="http://weibo.com/cofess" target="_blank" title="Weibo" data-toggle="tooltip" data-placement="top"><i class="icon icon-weibo"></i></a></li>
+        
+        <li><a href="https://twitter.com/iwebued" target="_blank" title="Twitter" data-toggle="tooltip" data-placement="top"><i class="icon icon-twitter"></i></a></li>
+        
+        <li><a href="https://www.behance.net/cofess" target="_blank" title="Behance" data-toggle="tooltip" data-placement="top"><i class="icon icon-behance"></i></a></li>
+        
+        <li><a href="/atom.xml" target="_blank" title="Rss" data-toggle="tooltip" data-placement="top"><i class="icon icon-rss"></i></a></li>
+        
+    </ul>
+
+    <div class="copyright">
+    	
+        <div class="publishby">
+        	Theme by <a href="https://github.com/cofess" target="_blank"> cofess </a>base on <a href="https://github.com/cofess/hexo-theme-pure" target="_blank">pure</a>.
+        </div>
+    </div>
+</footer>
+  <script src="//cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
+<script>
+window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+<script src="/js/plugin.min.js"></script>
+<script src="/js/application.js"></script>
+
+    <script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: 'Posts',
+            PAGES: 'Pages',
+            CATEGORIES: 'Categories',
+            TAGS: 'Tags',
+            UNTITLED: '(Untitled)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+<script src="/js/insight.js"></script>
+
+
+
+
+
+   
+
+
+
+
+   
+    
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/valine"></script>
+  <script type="text/javascript">
+  var GUEST = ['nick', 'mail', 'link'];
+  var meta = 'nick,mail,link';
+  meta = meta.split(',').filter(function(item) {
+    return GUEST.indexOf(item) > -1;
+  });
+  new Valine({
+    el: '#vcomments',
+    verify: false,
+    notify: false,
+    appId: 'rYClA1GFcOx37vpfNFDdtd1k-gzGzoHsz',
+    appKey: '6EzBL1zBskv6x5onoyDYQGiQ',
+    placeholder: 'Just go go',
+    avatar: 'mm',
+    meta: meta,
+    pageSize: '10' || 10,
+    visitor: true
+  });
+  </script>
+
+     
+
+
+
+
+
+
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<!-- <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script> -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+</body>
+</html>

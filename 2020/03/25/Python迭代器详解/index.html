@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform">
+  <meta http-equiv="Cache-Control" content="no-siteapp">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  <!-- Color theme for statusbar -->
+  <meta name="theme-color" content="#000000">
+  <!-- 强制页面在当前窗口以独立页面显示,防止别人在框架里调用页面 -->
+  <meta http-equiv="window-target" content="_top">
+  
+  
+  <title>Python迭代器详解 | Hexo</title>
+  <meta name="description" content="从for循环说起我们都知道，在Python中，我们可以for循环去遍历一个列表，元组或者range对象。 1234for i in [1,2,3]:    print(i)for i in range(0,10):    print(i) 那底层的原理是什么样的呢？这其中涉及到了几个概念，“可迭代”，“迭代器”，“生成器”等，大部分人可能听过这些名词，但是他们具体的含义以及之间的关系可能没搞清楚，">
+<meta name="keywords" content="Python,Iterable,Iterator,Generator,迭代器,可迭代对象,生成器">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Python迭代器详解">
+<meta property="og:url" content="http://blog.ifool.top/2020/03/25/Python迭代器详解/index.html">
+<meta property="og:site_name" content="ifool的博客">
+<meta property="og:description" content="从for循环说起我们都知道，在Python中，我们可以for循环去遍历一个列表，元组或者range对象。 1234for i in [1,2,3]:    print(i)for i in range(0,10):    print(i) 那底层的原理是什么样的呢？这其中涉及到了几个概念，“可迭代”，“迭代器”，“生成器”等，大部分人可能听过这些名词，但是他们具体的含义以及之间的关系可能没搞清楚，">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://blog.ifool.top/2020/03/25/Python迭代器详解/可迭代对象关系图.jpg">
+<meta property="og:updated_time" content="2020-03-25T11:52:54.840Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Python迭代器详解">
+<meta name="twitter:description" content="从for循环说起我们都知道，在Python中，我们可以for循环去遍历一个列表，元组或者range对象。 1234for i in [1,2,3]:    print(i)for i in range(0,10):    print(i) 那底层的原理是什么样的呢？这其中涉及到了几个概念，“可迭代”，“迭代器”，“生成器”等，大部分人可能听过这些名词，但是他们具体的含义以及之间的关系可能没搞清楚，">
+<meta name="twitter:image" content="http://blog.ifool.top/2020/03/25/Python迭代器详解/可迭代对象关系图.jpg">
+  <!-- Canonical links -->
+  <link rel="canonical" href="http://blog.ifool.top/2020/03/25/Python迭代器详解/index.html">
+  
+    <link rel="alternate" href="/atom.xml" title="ifool的博客" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png" type="image/x-icon">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+  
+  
+  
+</head>
+
+
+<body class="main-center theme-blue" itemscope itemtype="http://schema.org/WebPage">
+  <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+  <div class="slimContent">
+    <div class="navbar-header">
+      
+      
+      <div class="profile-block text-center">
+        <a id="avatar" href="https://github.com/XinliNiu" target="_blank">
+          <img class="img-circle img-rotate" src="/images/avatar.jpg" width="200" height="200">
+        </a>
+        <h2 id="name" class="hidden-xs hidden-sm">ifool</h2>
+        <h3 id="title" class="hidden-xs hidden-sm hidden-md">金融IT民工</h3>
+        <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i> Beijing, China</small>
+      </div>
+      
+      <div class="search" id="search-form-wrap">
+
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="Search">
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i class="icon icon-search"></i></button>
+            </span>
+        </div>
+    </form>
+    <div class="ins-search">
+  <div class="ins-search-mask"></div>
+  <div class="ins-search-container">
+    <div class="ins-input-wrapper">
+      <input type="text" class="ins-search-input" placeholder="Type something..." x-webkit-speech>
+      <button type="button" class="close ins-close ins-selectable" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="ins-section-wrapper">
+      <div class="ins-section-container"></div>
+    </div>
+  </div>
+</div>
+
+
+</div>
+      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+      <ul class="nav navbar-nav main-nav ">
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/.">
+            
+            <i class="icon icon-home-fill"></i>
+            
+            <span class="menu-title">Home</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives">
+            
+            <i class="icon icon-archives-fill"></i>
+            
+            <span class="menu-title">Archives</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories">
+            
+            <i class="icon icon-folder"></i>
+            
+            <span class="menu-title">Categories</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags">
+            
+            <i class="icon icon-tags"></i>
+            
+            <span class="menu-title">Tags</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-repository">
+          <a href="/repository">
+            
+            <i class="icon icon-project"></i>
+            
+            <span class="menu-title">Repository</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-books">
+          <a href="/books">
+            
+            <i class="icon icon-book-fill"></i>
+            
+            <span class="menu-title">Books</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-links">
+          <a href="/links">
+            
+            <i class="icon icon-friendship"></i>
+            
+            <span class="menu-title">Links</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about">
+            
+            <i class="icon icon-cup-fill"></i>
+            
+            <span class="menu-title">About</span>
+          </a>
+        </li>
+        
+      </ul>
+      
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/cofess" target="_blank" title="Github" data-toggle="tooltip" data-placement="top"><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="http://weibo.com/cofess" target="_blank" title="Weibo" data-toggle="tooltip" data-placement="top"><i class="icon icon-weibo"></i></a></li>
+        
+        <li><a href="https://twitter.com/iwebued" target="_blank" title="Twitter" data-toggle="tooltip" data-placement="top"><i class="icon icon-twitter"></i></a></li>
+        
+        <li><a href="https://www.behance.net/cofess" target="_blank" title="Behance" data-toggle="tooltip" data-placement="top"><i class="icon icon-behance"></i></a></li>
+        
+        <li><a href="/atom.xml" target="_blank" title="Rss" data-toggle="tooltip" data-placement="top"><i class="icon icon-rss"></i></a></li>
+        
+    </ul>
+
+    </nav>
+  </div>
+</header>
+
+  
+    <aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title">Board</h3>
+    <div class="widget-body">
+        <div id="board">
+            <div class="content">
+                <p>欢迎交流与分享经验!</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget-body">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Java和JVM/">Java和JVM</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Python/">Python</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Web与移动端安全/">Web与移动端安全</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/工具与效率/">工具与效率</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/数学与机器学习/">数学与机器学习</a><span class="category-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget-body">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Dubbo-拥堵-NIO-Netty-TCP缓冲区/">Dubbo,拥堵,NIO,Netty,TCP缓冲区</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hexo-mathjax/">Hexo,mathjax</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JVM-Btrace-Arthas-在线调试-生产案例/">JVM,Btrace, Arthas, 在线调试, 生产案例</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-IO-IO模型-NIO-Netty-Redis-IO多路复用-阻塞IO-非阻塞IO-异步IO-同步IO/">Java IO,IO模型,NIO,Netty,Redis,IO多路复用,阻塞IO,非阻塞IO,异步IO,同步IO</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java-排序-Arrays-sort-TimSort-LegacyMergeSort/">Java, 排序, Arrays.sort, TimSort, LegacyMergeSort</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux-工具软件使用/">Linux,工具软件使用</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Python-Iterable-Iterator-Generator-迭代器-可迭代对象-生成器/">Python,Iterable,Iterator,Generator,迭代器,可迭代对象,生成器</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Python-推导式-python-list-comprehension-生成器-列表推导/">Python,推导式,python list comprehension, 生成器, 列表推导</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Typora-Hexo-Markdown-图片/">Typora, Hexo, Markdown, 图片</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android-adb/">android, adb</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android-root/">android,root</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/latex/">latex</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/代理-Fiddler-安全-抓包/">代理,Fiddler,安全,抓包</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/压缩图片/">压缩图片</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/概率-人工智能-机器学习-分类-朴素贝叶斯-贝叶斯公式-MINIST，手写数字/">概率,人工智能,机器学习,分类,朴素贝叶斯,贝叶斯公式,MINIST，手写数字</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/设计模式-单例-Singleton-DCL/">设计模式, 单例, Singleton, DCL</a><span class="tag-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget-body tagcloud">
+      <a href="/tags/Dubbo-拥堵-NIO-Netty-TCP缓冲区/" style="font-size: 13px;">Dubbo,拥堵,NIO,Netty,TCP缓冲区</a> <a href="/tags/Hexo-mathjax/" style="font-size: 13px;">Hexo,mathjax</a> <a href="/tags/JVM-Btrace-Arthas-在线调试-生产案例/" style="font-size: 13px;">JVM,Btrace, Arthas, 在线调试, 生产案例</a> <a href="/tags/Java-IO-IO模型-NIO-Netty-Redis-IO多路复用-阻塞IO-非阻塞IO-异步IO-同步IO/" style="font-size: 13px;">Java IO,IO模型,NIO,Netty,Redis,IO多路复用,阻塞IO,非阻塞IO,异步IO,同步IO</a> <a href="/tags/Java-排序-Arrays-sort-TimSort-LegacyMergeSort/" style="font-size: 13px;">Java, 排序, Arrays.sort, TimSort, LegacyMergeSort</a> <a href="/tags/Linux-工具软件使用/" style="font-size: 13px;">Linux,工具软件使用</a> <a href="/tags/Python-Iterable-Iterator-Generator-迭代器-可迭代对象-生成器/" style="font-size: 13px;">Python,Iterable,Iterator,Generator,迭代器,可迭代对象,生成器</a> <a href="/tags/Python-推导式-python-list-comprehension-生成器-列表推导/" style="font-size: 13px;">Python,推导式,python list comprehension, 生成器, 列表推导</a> <a href="/tags/Typora-Hexo-Markdown-图片/" style="font-size: 13px;">Typora, Hexo, Markdown, 图片</a> <a href="/tags/android-adb/" style="font-size: 13px;">android, adb</a> <a href="/tags/android-root/" style="font-size: 13px;">android,root</a> <a href="/tags/latex/" style="font-size: 13px;">latex</a> <a href="/tags/代理-Fiddler-安全-抓包/" style="font-size: 13px;">代理,Fiddler,安全,抓包</a> <a href="/tags/压缩图片/" style="font-size: 13px;">压缩图片</a> <a href="/tags/概率-人工智能-机器学习-分类-朴素贝叶斯-贝叶斯公式-MINIST，手写数字/" style="font-size: 13px;">概率,人工智能,机器学习,分类,朴素贝叶斯,贝叶斯公式,MINIST，手写数字</a> <a href="/tags/设计模式-单例-Singleton-DCL/" style="font-size: 13px;">设计模式, 单例, Singleton, DCL</a>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Archive</h3>
+    <div class="widget-body">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/07/">July 2020</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/05/">May 2020</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/04/">April 2020</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/03/">March 2020</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">October 2019</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/07/">July 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">March 2019</a><span class="archive-list-count">4</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget-body">
+      <ul class="recent-post-list list-unstyled no-thumbnail">
+        
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/Java和JVM/">Java和JVM</a>
+              </p>
+              <p class="item-title">
+                <a href="/2020/07/11/Dubbo/" class="title">一次Dubbo拥堵分析</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2020-07-11T07:43:27.000Z" itemprop="datePublished">2020-07-11</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2020/07/08/Java排序的一个问题/" class="title">Java排序的一个问题</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2020-07-08T14:27:36.000Z" itemprop="datePublished">2020-07-08</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/数学与机器学习/">数学与机器学习</a>
+              </p>
+              <p class="item-title">
+                <a href="/2020/05/07/贝叶斯公式与朴素贝叶斯分类/" class="title">基础机器学习算法：贝叶斯公式与朴素贝叶斯分类</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2020-05-07T09:09:37.000Z" itemprop="datePublished">2020-05-07</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/工具与效率/">工具与效率</a>
+              </p>
+              <p class="item-title">
+                <a href="/2020/04/20/压缩图片方法大全/" class="title">压缩图片方法大全</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2020-04-20T03:48:59.000Z" itemprop="datePublished">2020-04-20</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/Web与移动端安全/">Web与移动端安全</a>
+              </p>
+              <p class="item-title">
+                <a href="/2020/04/19/Fiddler安装与使用/" class="title">Fiddler安装与使用</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2020-04-19T10:15:09.000Z" itemprop="datePublished">2020-04-19</time>
+              </p>
+            </div>
+          </li>
+          
+      </ul>
+    </div>
+  </div>
+  
+
+    
+  </div>
+</aside>
+
+  
+  
+<main class="main" role="main">
+  <div class="content">
+  <article id="post-Python迭代器详解" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Python迭代器详解
+    </h1>
+  
+
+      
+      <div class="article-meta">
+        <span class="article-date">
+    <i class="icon icon-calendar-check"></i>
+	<a href="/2020/03/25/Python迭代器详解/" class="article-date">
+	  <time datetime="2020-03-25T11:45:43.000Z" itemprop="datePublished">2020-03-25</time>
+	</a>
+</span>
+        
+  <span class="article-category">
+    <i class="icon icon-folder"></i>
+    <a class="article-category-link" href="/categories/Python/">Python</a>
+  </span>
+
+        
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>
+	<a class="article-tag-link" href="/tags/Python-Iterable-Iterator-Generator-迭代器-可迭代对象-生成器/">Python,Iterable,Iterator,Generator,迭代器,可迭代对象,生成器</a>
+  </span>
+
+
+        
+
+	<span class="article-read hidden-xs">
+    	<i class="icon icon-eye-fill" aria-hidden="true"></i>
+    	<span id="/2020/03/25/Python迭代器详解/" class="leancloud_visitors" data-flag-title="Python迭代器详解">
+			<span class="leancloud-visitors-count">0</span>
+		</span>
+    </span>
+
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2020/03/25/Python迭代器详解/#comments" class="article-comment-link">Comments</a></span>
+        
+	
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">Word Count: 2.9k(words)</span>
+	
+	
+		<span class="post-readcount hidden-xs" itemprop="timeRequired">Read Count: 13(minutes)</span>
+	
+
+      </div>
+    </div>
+    <div class="article-entry marked-body" itemprop="articleBody">
+      
+        <h1 id="从for循环说起"><a href="#从for循环说起" class="headerlink" title="从for循环说起"></a>从for循环说起</h1><p>我们都知道，在Python中，我们可以for循环去遍历一个列表，元组或者range对象。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>]:</span><br><span class="line">    print(i)</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">0</span>,<span class="number">10</span>):</span><br><span class="line">    print(i)</span><br></pre></td></tr></table></figure>
+<p>那底层的原理是什么样的呢？这其中涉及到了几个概念，“可迭代”，“迭代器”，“生成器”等，大部分人可能听过这些名词，但是他们具体的含义以及之间的关系可能没搞清楚，以下就是它们之间的关系图，接下来我们就来分析这个关系图。</p>
+<p><img src="/2020/03/25/Python迭代器详解/可迭代对象关系图.jpg" alt></p>
+<h1 id="可迭代对象与迭代器-先不关心左边的生成器"><a href="#可迭代对象与迭代器-先不关心左边的生成器" class="headerlink" title="可迭代对象与迭代器(先不关心左边的生成器)"></a>可迭代对象与迭代器(先不关心左边的生成器)</h1><p>如果一个对象是可迭代对象，那么我们就可以用for循环去遍历它，比如列表、元组、字符串等都是可迭代对象。而我们用for循环去遍历它的原理就是，先获取了它的迭代器，然后使用迭代器的next方法去逐一遍历。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">a = [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>]</span><br><span class="line"><span class="comment"># for相当于下面的代码</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> a:</span><br><span class="line">    print(i)</span><br><span class="line"><span class="comment"># for循环分解(实际是通过Python底层C语言实现的，此处只是演示)</span></span><br><span class="line"></span><br><span class="line"><span class="comment">## 第一步： 获取迭代器</span></span><br><span class="line">iterator_a = iter(a)</span><br><span class="line"><span class="comment">## 第二步： 通过next逐个遍历</span></span><br><span class="line"><span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        print(next(iterator_a))</span><br><span class="line">    <span class="keyword">except</span> StopIteration:  <span class="comment">## 第三步：遇到StopIteration异常，停止</span></span><br><span class="line">        <span class="keyword">break</span></span><br></pre></td></tr></table></figure>
+<p>注意可迭代对象与迭代器的区别，如果一个对象是可迭代对象，那么我们就肯定能调用iter()方法获取它的迭代器，而如果一个对象是迭代器，我们就能用next()方法去拿下一个元素。 我们可以用isinstance判断一个对象是不是可迭代对象，是不是迭代器。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">from</span> collections.abc <span class="keyword">import</span> Iterable</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">from</span> collections.abc <span class="keyword">import</span> Iterator</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>isinstance([<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>],Iterable)</span><br><span class="line"><span class="literal">True</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>isinstance([<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>],Iterator)</span><br><span class="line"><span class="literal">False</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>i = iter([<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>])</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>isinstance(i, Iterable)</span><br><span class="line"><span class="literal">True</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>isinstance(i, Iterator)</span><br><span class="line"><span class="literal">True</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>type(i)</span><br><span class="line">&lt;<span class="class"><span class="keyword">class</span> '<span class="title">list_iterator</span>'&gt;</span></span><br></pre></td></tr></table></figure>
+<p>列表本身不是迭代器，它是可迭代对象，所以你不能用next()操作列表</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>a=[<span class="number">1</span>,<span class="number">2</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>next(a)</span><br><span class="line">Traceback (most recent call last):</span><br><span class="line">  File <span class="string">"&lt;stdin&gt;"</span>, line <span class="number">1</span>, <span class="keyword">in</span> &lt;module&gt;</span><br><span class="line">TypeError: <span class="string">'list'</span> object <span class="keyword">is</span> <span class="keyword">not</span> an iterator</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>iter_a = iter(a)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>next(iter_a)</span><br><span class="line"><span class="number">1</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>next(iter_a)</span><br><span class="line"><span class="number">2</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>next(iter_a)   <span class="comment"># 当没有剩余元素时，就抛出StopIteration异常</span></span><br><span class="line">Traceback (most recent call last):</span><br><span class="line">  File <span class="string">"&lt;stdin&gt;"</span>, line <span class="number">1</span>, <span class="keyword">in</span> &lt;module&gt;</span><br><span class="line">StopIteration</span><br></pre></td></tr></table></figure>
+<p>可迭代对象必须实现__iter__()函数，返回迭代器，调用对象自身的__iter__()函数与将iter()作用于对象效果是一样的，同理对__next__()和next()也一样。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>a=[<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>iter_a = a.__iter__()</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>next(iter_a)</span><br><span class="line"><span class="number">1</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>iter_a.__next__()</span><br><span class="line"><span class="number">2</span></span><br></pre></td></tr></table></figure>
+<p>有趣的是，迭代器也是一个可迭代的对象，所以它本身也需要实现__iter__()函数，但是，一个迭代器的迭代器，是它本身，所以可能也有些多余了。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>a=[<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>iter_a = iter(a)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>iter_b = iter(iter_a)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>iter_c = iter(iter_b)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>iter_a <span class="keyword">is</span> iter_b</span><br><span class="line"><span class="literal">True</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>iter_a == iter_c</span><br><span class="line"><span class="literal">True</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">for</span> x <span class="keyword">in</span> iter_a:</span><br><span class="line"><span class="meta">... </span>   print(x)</span><br><span class="line">...</span><br><span class="line"><span class="number">1</span></span><br><span class="line"><span class="number">2</span></span><br><span class="line"><span class="number">3</span></span><br></pre></td></tr></table></figure>
+<h1 id="一些的迭代器类型"><a href="#一些的迭代器类型" class="headerlink" title="一些的迭代器类型"></a>一些的迭代器类型</h1><p>我们经常会用到一些内置的迭代器，例如filter和map，注意range是可迭代对象，但不是迭代器。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">from</span> collections.abc <span class="keyword">import</span> Iterator</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">from</span> collections.abc <span class="keyword">import</span> Iterable</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a=range(<span class="number">10</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>isinstance(b, Iterable)</span><br><span class="line">Traceback (most recent call last):</span><br><span class="line">  File <span class="string">"&lt;stdin&gt;"</span>, line <span class="number">1</span>, <span class="keyword">in</span> &lt;module&gt;</span><br><span class="line">NameError: name <span class="string">'b'</span> <span class="keyword">is</span> <span class="keyword">not</span> defined</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>isinstance(a, Iterable)</span><br><span class="line"><span class="literal">True</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>isinstance(a, Iterator)</span><br><span class="line"><span class="literal">False</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>type(a)</span><br><span class="line">&lt;<span class="class"><span class="keyword">class</span> '<span class="title">range</span>'&gt;</span></span><br><span class="line"><span class="class">&gt;&gt;&gt; <span class="title">print</span><span class="params">(a)</span></span></span><br><span class="line"><span class="class"><span class="title">range</span><span class="params">(<span class="number">0</span>, <span class="number">10</span>)</span></span></span><br></pre></td></tr></table></figure>
+<h2 id="filter"><a href="#filter" class="headerlink" title="filter"></a>filter</h2><p>filter函数用于对一个列表进行过滤，传入一个函数和列表，这个函数返回值是True或者False，将列表的元素逐个传入这个函数，结果为True的保留，可以使用lambda函数。</p>
+<p>注：在Python2.x中返回值为list，在Python3.x中返回迭代器</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">from</span> collections.abc <span class="keyword">import</span> Iterator</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">from</span> collections.abc <span class="keyword">import</span> Iterable</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a=filter(<span class="keyword">lambda</span> x : x % <span class="number">2</span> == <span class="number">0</span>, [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>])</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>isinstance(a, Iterable)</span><br><span class="line"><span class="literal">True</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>isinstance(a, Iterator)</span><br><span class="line"><span class="literal">True</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>type(a)</span><br><span class="line">&lt;<span class="class"><span class="keyword">class</span> '<span class="title">filter</span>'&gt;</span></span><br><span class="line"><span class="class">&gt;&gt;&gt; <span class="title">print</span><span class="params">(a)</span></span></span><br><span class="line"><span class="class">&lt;<span class="title">filter</span> <span class="title">object</span> <span class="title">at</span> 0<span class="title">x000001A6100A2948</span>&gt;</span></span><br><span class="line"><span class="class">&gt;&gt;&gt; <span class="title">for</span> <span class="title">i</span> <span class="title">in</span> <span class="title">a</span>:</span></span><br><span class="line"><span class="meta">... </span> print(i)</span><br><span class="line">...</span><br><span class="line"><span class="number">2</span></span><br><span class="line"><span class="number">4</span></span><br><span class="line"><span class="number">6</span></span><br></pre></td></tr></table></figure>
+<p>如果我们要想通过下表访问，可以把它转换成list</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>a=filter(<span class="keyword">lambda</span> x : x % <span class="number">2</span> == <span class="number">0</span>, [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>])</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a = list(a)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a[<span class="number">0</span>]</span><br><span class="line"><span class="number">2</span></span><br></pre></td></tr></table></figure>
+<h2 id="map"><a href="#map" class="headerlink" title="map"></a>map</h2><p>map函数接收一个函数与一个列表，将这个函数作用域列表的每个元素，生成一个新的序列，返回迭代器。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">from</span> collections.abc <span class="keyword">import</span> Iterator</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">from</span> collections.abc <span class="keyword">import</span> Iterable</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a=map(<span class="keyword">lambda</span> x : x * x, [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>])</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>isinstance(a, Iterable)</span><br><span class="line"><span class="literal">True</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>isinstance(a, Iterator)</span><br><span class="line"><span class="literal">True</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>type(a)</span><br><span class="line">&lt;<span class="class"><span class="keyword">class</span> '<span class="title">map</span>'&gt;</span></span><br><span class="line"><span class="class">&gt;&gt;&gt;  <span class="title">print</span><span class="params">(i)</span></span></span><br><span class="line">  File "&lt;stdin&gt;", line 1</span><br><span class="line">    print(i)</span><br><span class="line">    ^</span><br><span class="line">IndentationError: unexpected indent</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>print(a)</span><br><span class="line">&lt;map object at <span class="number">0x000001A6100C5108</span>&gt;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">for</span> i <span class="keyword">in</span> a:</span><br><span class="line"><span class="meta">... </span>  print(i)</span><br><span class="line">...</span><br><span class="line"><span class="number">1</span></span><br><span class="line"><span class="number">4</span></span><br><span class="line"><span class="number">9</span></span><br></pre></td></tr></table></figure>
+<h1 id="实现一个可迭代对象与它的迭代器"><a href="#实现一个可迭代对象与它的迭代器" class="headerlink" title="实现一个可迭代对象与它的迭代器"></a>实现一个可迭代对象与它的迭代器</h1><p>我们将list做一个简单的封装，实现一个可迭代的mylist。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">mylist</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, l)</span>:</span></span><br><span class="line">        self.l = l</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__iter__</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">return</span> mylist_iterator(self.l)</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">mylist_iterator</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, l)</span>:</span></span><br><span class="line">        self.l = l</span><br><span class="line">        self.current = <span class="number">0</span>   <span class="comment"># 记录当前迭代到哪个元素了        </span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__iter__</span><span class="params">(self)</span>:</span> <span class="comment"># 迭代器的迭代器返回自己即可</span></span><br><span class="line">        <span class="keyword">return</span> self  </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__next__</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">if</span> self.current &lt; len(self.l):</span><br><span class="line">            self.current += <span class="number">1</span></span><br><span class="line">            <span class="keyword">return</span> self.l[self.current<span class="number">-1</span>]</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="keyword">raise</span> StopIteration</span><br><span class="line">            </span><br><span class="line">a = mylist([<span class="number">1</span>,<span class="number">2</span>])</span><br><span class="line"><span class="keyword">for</span> x <span class="keyword">in</span> a:</span><br><span class="line">    print(x)</span><br><span class="line"></span><br><span class="line">i = iter(a)</span><br><span class="line">print(next(i))</span><br><span class="line">print(next(i))</span><br><span class="line">print(next(i))</span><br></pre></td></tr></table></figure>
+<p>上述代码并没有实现迭代器带来的好处，因为我们事先传入了一个列表进去，假如这个列表很大，会占内存。假如我们要实现一个类似range()功能，我们可以使用更有效的方法。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">myrange</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, max_num)</span>:</span></span><br><span class="line">        self.max_num = max_num</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__iter__</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">return</span> myrange_iterator(self.max_num)</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">myrange_iterator</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, max_num)</span>:</span></span><br><span class="line">        self.max_num = max_num</span><br><span class="line">        self.current = <span class="number">0</span>   <span class="comment"># 记录当前迭代到哪个元素了        </span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__iter__</span><span class="params">(self)</span>:</span> <span class="comment"># 迭代器的迭代器返回自己即可</span></span><br><span class="line">        <span class="keyword">return</span> self  </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__next__</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">if</span> self.current &lt; self.max_num:</span><br><span class="line">            self.current += <span class="number">1</span></span><br><span class="line">            <span class="keyword">return</span> self.current<span class="number">-1</span></span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="keyword">raise</span> StopIteration</span><br><span class="line">            </span><br><span class="line">a = myrange(<span class="number">2</span>)</span><br><span class="line"><span class="keyword">for</span> x <span class="keyword">in</span> a:</span><br><span class="line">    print(x)</span><br><span class="line"></span><br><span class="line">i = iter(a)</span><br><span class="line">print(next(i))</span><br><span class="line">print(next(i))</span><br><span class="line">print(next(i))</span><br></pre></td></tr></table></figure>
+<p>需要注意的是，我们的myrange不能随机访问，只能一次性顺序遍历，只能前进，不能后退，实际Python的range()可以随机访问。</p>
+<h1 id="for循环是否只能用于可迭代对象？"><a href="#for循环是否只能用于可迭代对象？" class="headerlink" title="for循环是否只能用于可迭代对象？"></a>for循环是否只能用于可迭代对象？</h1><p>这个答案是No。for循环大部分情况都作用于可迭代对象，但是有一个例如，如果对象是可以通过下标访问的，也能用于for循环。</p>
+<p>一个对象如果不能用下标访问，那么就会报下面的错误，实际上它对应的是一个__getitem__()内置方法。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>a=&#123;<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>&#125;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a[<span class="number">0</span>]</span><br><span class="line">Traceback (most recent call last):</span><br><span class="line">  File <span class="string">"&lt;stdin&gt;"</span>, line <span class="number">1</span>, <span class="keyword">in</span> &lt;module&gt;</span><br><span class="line">TypeError: <span class="string">'set'</span> object <span class="keyword">is</span> <span class="keyword">not</span> subscriptable</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a.__getitem__(<span class="number">1</span>)</span><br><span class="line">Traceback (most recent call last):</span><br><span class="line">  File <span class="string">"&lt;stdin&gt;"</span>, line <span class="number">1</span>, <span class="keyword">in</span> &lt;module&gt;</span><br><span class="line">AttributeError: <span class="string">'set'</span> object has no attribute <span class="string">'__getitem__'</span></span><br></pre></td></tr></table></figure>
+<p>如果我们实现了__getitem__()，也能通过for循环遍历。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> collections.abc <span class="keyword">import</span> Iterator</span><br><span class="line"><span class="keyword">from</span> collections.abc <span class="keyword">import</span> Iterable</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">mylist1</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, l)</span>:</span></span><br><span class="line">        self.l = l</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__getitem__</span><span class="params">(self, i)</span>:</span></span><br><span class="line">        <span class="keyword">return</span> self.l[i]</span><br><span class="line">    </span><br><span class="line">print(isinstance(a, Iterable))</span><br><span class="line">print(isinstance(a, Iterator))</span><br><span class="line"></span><br><span class="line">a = mylist1([<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>])</span><br><span class="line"><span class="keyword">for</span> x <span class="keyword">in</span> a:</span><br><span class="line">    print(x)</span><br></pre></td></tr></table></figure>
+<p>结果如下，可以看到a既不是可迭代对象，也不是迭代器。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="literal">False</span></span><br><span class="line"><span class="literal">False</span></span><br><span class="line"><span class="number">1</span></span><br><span class="line"><span class="number">2</span></span><br><span class="line"><span class="number">3</span></span><br></pre></td></tr></table></figure>
+<p>for循环会先看对象是不是实现了__iter__()，如果是，就用迭代器的方式，如果没有的话，就看有没有__getitem__()，都没有就报错，报的错如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">for</span> x <span class="keyword">in</span> <span class="number">5</span>:</span><br><span class="line"><span class="meta">... </span>  print(x)</span><br><span class="line">...</span><br><span class="line">Traceback (most recent call last):</span><br><span class="line">  File <span class="string">"&lt;stdin&gt;"</span>, line <span class="number">1</span>, <span class="keyword">in</span> &lt;module&gt;</span><br><span class="line">TypeError: <span class="string">'int'</span> object <span class="keyword">is</span> <span class="keyword">not</span> iterable</span><br></pre></td></tr></table></figure>
+<p>那我们怎么知道它先去找__iter__()呢？我们在前面的代码里加上几行，</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> collections.abc <span class="keyword">import</span> Iterator</span><br><span class="line"><span class="keyword">from</span> collections.abc <span class="keyword">import</span> Iterable</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">mylist1</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, l)</span>:</span></span><br><span class="line">        self.l = l</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__getitem__</span><span class="params">(self, i)</span>:</span></span><br><span class="line">        <span class="keyword">return</span> self.l[i]</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__iter__</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">return</span> self</span><br><span class="line">print(isinstance(a, Iterable))</span><br><span class="line">print(isinstance(a, Iterator))</span><br><span class="line">a = mylist1([<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>])</span><br><span class="line"><span class="keyword">for</span> x <span class="keyword">in</span> a:</span><br><span class="line">    print(x)</span><br></pre></td></tr></table></figure>
+<p>结果如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="literal">True</span></span><br><span class="line"><span class="literal">False</span></span><br><span class="line">Traceback (most recent call last):</span><br><span class="line"></span><br><span class="line">  File <span class="string">"&lt;ipython-input-13-8e65b9d361a6&gt;"</span>, line <span class="number">1</span>, <span class="keyword">in</span> &lt;module&gt;</span><br><span class="line">    runfile(<span class="string">'C:/Users/xlniu/test123/test.py'</span>, wdir=<span class="string">'C:/Users/xlniu/test123'</span>)</span><br><span class="line"></span><br><span class="line">  File <span class="string">"C:\Users\xlniu\Anaconda3\lib\site-packages\spyder_kernels\customize\spydercustomize.py"</span>, line <span class="number">827</span>, <span class="keyword">in</span> runfile</span><br><span class="line">    execfile(filename, namespace)</span><br><span class="line"></span><br><span class="line">  File <span class="string">"C:\Users\xlniu\Anaconda3\lib\site-packages\spyder_kernels\customize\spydercustomize.py"</span>, line <span class="number">110</span>, <span class="keyword">in</span> execfile</span><br><span class="line">    exec(compile(f.read(), filename, <span class="string">'exec'</span>), namespace)</span><br><span class="line"></span><br><span class="line">  File <span class="string">"C:/Users/xlniu/test123/test.py"</span>, line <span class="number">49</span>, <span class="keyword">in</span> &lt;module&gt;</span><br><span class="line">    <span class="keyword">for</span> x <span class="keyword">in</span> a:</span><br><span class="line"></span><br><span class="line">TypeError: iter() returned non-iterator of type <span class="string">'mylist1'</span></span><br></pre></td></tr></table></figure>
+<h1 id="特殊的迭代器-生成器-generator"><a href="#特殊的迭代器-生成器-generator" class="headerlink" title="特殊的迭代器-生成器(generator)"></a>特殊的迭代器-生成器(generator)</h1><p>接下来我们看关系图的左边，生成器，生成器是迭代器，迭代器是可迭代对象，所以生成器肯定是可迭代对象了。哪些对象是生成器呢？</p>
+<p>生成器的来源主要有两个，一个是生成器表达式，例如(i for i in ‘hello, world’), (i for i in range(0,10) if i % 2 == 0)，另一个是生成器函数，生成器函数不使用return返回数据，而使用yield。</p>
+<p>我们来看一下前面说的filter是不是生成器。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">from</span> collections.abc <span class="keyword">import</span> Iterator</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">from</span> collections.abc <span class="keyword">import</span> Iterable</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">from</span> collections.abc <span class="keyword">import</span> Generator</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a = [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>b = filter(<span class="keyword">lambda</span> x : x % <span class="number">2</span> == <span class="number">0</span>, a)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>print(isinstance(b, Generator))</span><br><span class="line"><span class="literal">False</span></span><br></pre></td></tr></table></figure>
+<p>它并不是一个生成器。</p>
+<h2 id="生成器表达式"><a href="#生成器表达式" class="headerlink" title="生成器表达式"></a>生成器表达式</h2><p>生成器表达式与列表推断是差不多的，但是它用”()”括起来，而列表推断用的中括号，一般的语法就是：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">expr(val) <span class="keyword">for</span> val <span class="keyword">in</span> xxx <span class="keyword">if</span> yyy</span><br></pre></td></tr></table></figure>
+<p>例如</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">from</span> collections.abc <span class="keyword">import</span> Generator</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a = (i <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">0</span>, <span class="number">10</span>))</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>next(a)</span><br><span class="line"><span class="number">0</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>next(a)</span><br><span class="line"><span class="number">1</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>print(isinstance(a, Generator))</span><br><span class="line"><span class="literal">True</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>print(type(a))</span><br><span class="line">&lt;<span class="class"><span class="keyword">class</span> '<span class="title">generator</span>'&gt;</span></span><br><span class="line"><span class="class">&gt;&gt;&gt; <span class="title">print</span><span class="params">(a)</span></span></span><br><span class="line"><span class="class">&lt;<span class="title">generator</span> <span class="title">object</span> &lt;<span class="title">genexpr</span>&gt; <span class="title">at</span> 0<span class="title">x000001A61011B7C8</span>&gt;  #通过<span class="title">genexpr</span>得到的生成器</span></span><br><span class="line">&gt;&gt;&gt; b = (i.upper() for i in 'hello, world')</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>c = (x <span class="keyword">for</span> x <span class="keyword">in</span> range(<span class="number">0</span>,<span class="number">10</span>) <span class="keyword">if</span> x % <span class="number">5</span> == <span class="number">0</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">for</span> x <span class="keyword">in</span> b:</span><br><span class="line"><span class="meta">... </span> print(x)</span><br><span class="line">...</span><br><span class="line">H</span><br><span class="line">E</span><br><span class="line">L</span><br><span class="line">L</span><br><span class="line">O</span><br><span class="line">,</span><br><span class="line"></span><br><span class="line">W</span><br><span class="line">O</span><br><span class="line">R</span><br><span class="line">L</span><br><span class="line">D</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>d = [i <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">0</span>,<span class="number">10</span>)]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>print(type(d))</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>type(d)</span><br><span class="line">&lt;<span class="class"><span class="keyword">class</span> '<span class="title">list</span>'&gt;</span></span><br><span class="line"><span class="class">&gt;&gt;&gt; <span class="title">print</span><span class="params">(d)</span></span></span><br><span class="line">[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]</span><br></pre></td></tr></table></figure>
+<p>如果我们把生成器表达式用在其他的对象上，例如set，list等，它们会自动转换成相应类型。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>set(i <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">0</span>,<span class="number">5</span>))  <span class="comment"># 相当于set( (i for i in range(0,5)) )</span></span><br><span class="line">&#123;<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>&#125;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>set( (i <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">0</span>,<span class="number">5</span>)) )</span><br><span class="line">&#123;<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>&#125;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>tuple(i <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">0</span>,<span class="number">5</span>))</span><br><span class="line">(<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>list(i <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">0</span>,<span class="number">5</span>))</span><br><span class="line">[<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>]</span><br></pre></td></tr></table></figure>
+<h2 id="生成器函数"><a href="#生成器函数" class="headerlink" title="生成器函数"></a>生成器函数</h2><p>另外一种生成器通过生成器函数得到。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> collections.abc <span class="keyword">import</span> Iterator</span><br><span class="line"><span class="keyword">from</span> collections.abc <span class="keyword">import</span> Iterable</span><br><span class="line"><span class="keyword">from</span> collections.abc <span class="keyword">import</span> Generator</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">myrange</span><span class="params">(stop)</span>:</span></span><br><span class="line">    i = <span class="number">0</span></span><br><span class="line">    <span class="keyword">while</span> i &lt; stop:</span><br><span class="line">        <span class="keyword">yield</span> i     <span class="comment">#返回i，下次调用时会从这个地方继续向下执行</span></span><br><span class="line">        i += <span class="number">1</span></span><br><span class="line">        </span><br><span class="line">e = myrange(<span class="number">5</span>)</span><br><span class="line">print(isinstance(e, Iterable))</span><br><span class="line">print(isinstance(e, Iterator))</span><br><span class="line">print(isinstance(e, Generator))</span><br><span class="line">print(type(e))</span><br><span class="line">print(e)</span><br><span class="line">print(next(e))</span><br><span class="line"><span class="keyword">for</span> x <span class="keyword">in</span> e:</span><br><span class="line">    print(x)</span><br></pre></td></tr></table></figure>
+<p>运行结果如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="literal">True</span></span><br><span class="line"><span class="literal">True</span></span><br><span class="line"><span class="literal">True</span></span><br><span class="line">&lt;<span class="class"><span class="keyword">class</span> '<span class="title">generator</span>'&gt;</span></span><br><span class="line"><span class="class">&lt;<span class="title">generator</span> <span class="title">object</span> <span class="title">myrange</span> <span class="title">at</span> 0<span class="title">x000001CEC7342C48</span>&gt;</span></span><br><span class="line"><span class="class">0</span></span><br><span class="line"><span class="class">1</span></span><br><span class="line"><span class="class">2</span></span><br><span class="line"><span class="class">3</span></span><br><span class="line"><span class="class">4</span></span><br></pre></td></tr></table></figure>
+<p>在函数myrange中，有一个特殊的关键词，yield。这个与return类似，但是return后，下次调用会从头开始，但是使用了yield，我们的函数就会返回一个生成器，相当于每次执行，都记住了上次的位置，从上次的位置继续执行。<strong>生成器表达式可以认为是一种特殊的生成器函数</strong>，类似于lambda表达式和普通函数。但是和生成器一样，生成器表达式也是返回生成器generator对象，<strong>一次只返回一个值</strong>。</p>
+
+      
+    </div>
+    <div class="article-footer">
+      <blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    
+    <li class="post-copyright-link hidden-xs">
+      <strong>本文链接：</strong>
+      <a href="http://blog.ifool.top/2020/03/25/Python迭代器详解/" title="Python迭代器详解" target="_blank" rel="external">http://blog.ifool.top/2020/03/25/Python迭代器详解/</a>
+    </li>
+    
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong> 本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN协议</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+</blockquote>
+
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="https://github.com/XinliNiu" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="/images/avatar.jpg" class="img-rounded w-full" alt>
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="https://github.com/XinliNiu" target="_blank"><span class="text-dark">ifool</span><small class="ml-1x">金融IT民工</small></a></h3>
+        <div>Java工程师，对机器学习、云计算、安全都感兴趣</div>
+      </div>
+    </figure>
+  </div>
+</div>
+
+
+    </div>
+  </article>
+  
+    
+  <section id="comments">
+  	
+      <div id="vcomments"></div>
+    
+  </section>
+
+
+  
+</div>
+
+  <nav class="bar bar-footer clearfix" data-stick-bottom>
+  <div class="bar-inner">
+  
+  <ul class="pager pull-left">
+    
+    <li class="prev">
+      <a href="/2020/03/25/Python推导式详解/" title="Python推导式详解"><i class="icon icon-angle-left" aria-hidden="true"></i><span>&nbsp;&nbsp;Newer</span></a>
+    </li>
+    
+    
+    <li class="next">
+      <a href="/2019/10/13/异步处理ServletRequest引发的血案/" title="异步处理ServletRequest引发的血案"><span>Older&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
+    </li>
+    
+    
+  </ul>
+  
+  
+  <!-- Button trigger modal -->
+  <button type="button" class="btn btn-fancy btn-donate pop-onhover bg-gradient-warning" data-toggle="modal" data-target="#donateModal"><span>$</span></button>
+  <!-- <div class="wave-icon wave-icon-danger btn-donate" data-toggle="modal" data-target="#donateModal">
+    <div class="wave-circle"><span class="icon"><i class="icon icon-bill"></i></span></div>
+  </div> -->
+  
+  
+  <div class="bar-right">
+    
+    <div class="share-component" data-sites="weibo,qq,wechat,facebook,twitter" data-mobile-sites="weibo,qq,qzone"></div>
+    
+  </div>
+  </div>
+</nav>
+  
+<!-- Modal -->
+<div class="modal modal-center modal-small modal-xs-full fade" id="donateModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content donate">
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      <div class="modal-body">
+        <div class="donate-box">
+          <div class="donate-head">
+            <p>Maybe you could buy me a cup of coffee.</p>
+          </div>
+          <div class="tab-content">
+            <div role="tabpanel" class="tab-pane fade active in" id="alipay">
+              <div class="donate-payimg">
+                <img src="/images/donate/alipayimg.png" alt="Scan Qrcode" title="Scan">
+              </div>
+              <p class="text-muted mv">Scan this qrcode</p>
+              <p class="text-grey">Open alipay app scan this qrcode, buy me a coffee!</p>
+            </div>
+            <div role="tabpanel" class="tab-pane fade" id="wechatpay">
+              <div class="donate-payimg">
+                <img src="/images/donate/wechatpayimg.png" alt="Scan Qrcode" title="Scan">
+              </div>
+              <p class="text-muted mv">Scan this qrcode</p>
+              <p class="text-grey">Open wechat app scan this qrcode, buy me a coffee!</p>
+            </div>
+          </div>
+          <div class="donate-footer">
+            <ul class="nav nav-tabs nav-justified" role="tablist">
+              <li role="presentation" class="active">
+                <a href="#alipay" id="alipay-tab" role="tab" data-toggle="tab" aria-controls="alipay" aria-expanded="true"><i class="icon icon-alipay"></i> alipay</a>
+              </li>
+              <li role="presentation" class>
+                <a href="#wechatpay" role="tab" id="wechatpay-tab" data-toggle="tab" aria-controls="wechatpay" aria-expanded="false"><i class="icon icon-wepay"></i> wechat payment</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+</main>
+
+  <footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
+	
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/cofess" target="_blank" title="Github" data-toggle="tooltip" data-placement="top"><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="http://weibo.com/cofess" target="_blank" title="Weibo" data-toggle="tooltip" data-placement="top"><i class="icon icon-weibo"></i></a></li>
+        
+        <li><a href="https://twitter.com/iwebued" target="_blank" title="Twitter" data-toggle="tooltip" data-placement="top"><i class="icon icon-twitter"></i></a></li>
+        
+        <li><a href="https://www.behance.net/cofess" target="_blank" title="Behance" data-toggle="tooltip" data-placement="top"><i class="icon icon-behance"></i></a></li>
+        
+        <li><a href="/atom.xml" target="_blank" title="Rss" data-toggle="tooltip" data-placement="top"><i class="icon icon-rss"></i></a></li>
+        
+    </ul>
+
+    <div class="copyright">
+    	
+        <div class="publishby">
+        	Theme by <a href="https://github.com/cofess" target="_blank"> cofess </a>base on <a href="https://github.com/cofess/hexo-theme-pure" target="_blank">pure</a>.
+        </div>
+    </div>
+</footer>
+  <script src="//cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
+<script>
+window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+<script src="/js/plugin.min.js"></script>
+<script src="/js/application.js"></script>
+
+    <script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: 'Posts',
+            PAGES: 'Pages',
+            CATEGORIES: 'Categories',
+            TAGS: 'Tags',
+            UNTITLED: '(Untitled)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+<script src="/js/insight.js"></script>
+
+
+
+
+
+   
+
+
+
+
+   
+    
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/valine"></script>
+  <script type="text/javascript">
+  var GUEST = ['nick', 'mail', 'link'];
+  var meta = 'nick,mail,link';
+  meta = meta.split(',').filter(function(item) {
+    return GUEST.indexOf(item) > -1;
+  });
+  new Valine({
+    el: '#vcomments',
+    verify: false,
+    notify: false,
+    appId: 'rYClA1GFcOx37vpfNFDdtd1k-gzGzoHsz',
+    appKey: '6EzBL1zBskv6x5onoyDYQGiQ',
+    placeholder: 'Just go go',
+    avatar: 'mm',
+    meta: meta,
+    pageSize: '10' || 10,
+    visitor: true
+  });
+  </script>
+
+     
+
+
+
+
+
+
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<!-- <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script> -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+</body>
+</html>
